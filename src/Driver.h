@@ -4,8 +4,8 @@
 #include "Taxi.h"
 #include "Trip.h"
 #include "AvaliableNotifier.h"
-#include "client.h"
-#include "DriverProtocol.h"
+#include "../comunication/Client.h"
+#include "../comunication/DriverProtocol.h"
 
 /******************************************************************************
 * Status: enum for the driver mariatal status
@@ -17,7 +17,7 @@ enum Status {SINGLE, MARRIED, DIVORCED, WIDOWED};
 * of exprience. move on the map with taxi and get point from his trip.
 * have a satisfacation from the passengrs and know his location on the map
 ******************************************************************************/
-class Driver: public AvaliableNotifier, public client{
+class Driver: public AvaliableNotifier, public Client{
 private:
     int id;
     int age;
@@ -35,7 +35,7 @@ private:
 public:
     Driver(int id, int age, Status status, int exp, int taxiId):
             id(id), age(age),maritalStat(status), exp(exp), taxiId(taxiId),
-            trip(NULL), location(new Point(0,0)),client((Protocol*) new DriverProtocol(id, &location)){};
+            trip(NULL), location(new Point(0,0)),Client((Protocol*) new DriverProtocol(id, &location)){};
     ~Driver();
     int getId();
     void setMap(Map* map);
@@ -46,7 +46,6 @@ public:
     void newTrip(Trip* trip);
     void timePassed();
     void moveOneStep();
-    void setTaxiCenter(const char* ip_address, const int port_no);
     void addAvaliableListener(AvaliableListener* hl);
     void removeAvaliableListener(AvaliableListener* hl);
     void notifyAvaliable();

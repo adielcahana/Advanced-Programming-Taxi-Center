@@ -161,14 +161,11 @@ void Driver::notifyUnavaliable(){
 bool Driver::isAvaliable(){
     return (trip == NULL);
 }
-void Driver::setTaxiCenter(const char* ip_address, const int port_no){
-    setConnnection(ip_address, port_no);
-}
 
 int main(int argc, char** argv) {
     Parser pars;
     Driver *driver = pars.readDriver();
-    driver->setTaxiCenter(argv[1], atoi(argv[2])); //set the client connection
+    driver->initialize(argv[1], atoi(argv[2])); //set the Client connection
     int operation = 1;
     driver->send(operation); //send driver id
     do {

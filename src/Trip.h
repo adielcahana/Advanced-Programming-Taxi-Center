@@ -11,6 +11,7 @@
 class Trip {
 private:
     friend class TaxiCenter;
+    friend class Driver;
     int id;
     int totalMeterPassed;
     Point start;

@@ -8,15 +8,15 @@
 #include "Protocol.h"
 #include "Udp.h"
 
-class client {
+class Client {
 private:
     Protocol* protocol;
     Udp* udp;
 public:
     char buffer[1024];
-    client(Protocol* protocol, Udp* udp): udp(udp), protocol(protocol){};
-    ~client();
-    void initialize();
+    Client(Protocol* protocol): protocol(protocol){};
+    ~Client();
+    void initialize(const char* ip_address, const int port_num);
     void send(int numOfMsg);
     int receive(int scenario);
 };

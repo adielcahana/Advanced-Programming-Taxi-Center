@@ -6,21 +6,22 @@
 
 using namespace std;
 
-void client::initialize(){
+void Client::initialize(const char* ip_address, const int port_num){
+    this->udp = new Udp(false, port_num, ip_address);
     this->udp->initialize();
 }
 
-client::~client(){
+Client::~Client(){
     delete this->udp;
     delete this->protocol;
 }
 
-void client::send(int numOfMsg) {
+void Client::send(int numOfMsg) {
     string msg = protocol->createMsg(numOfMsg);
     this->udp->sendData(msg);
 }
 
-int client::receive(int scenario){
+int Client::receive(int scenario){
     this->udp->reciveData(buffer, 1024);
     return this->protocol->translate(buffer,scenario);
 }

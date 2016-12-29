@@ -13,9 +13,10 @@
 * The output: none										               *
 * The Function operation: creating new Udp socket						       *
 ***********************************************************************/
-Udp::Udp(bool isServers, int port_num) {
+Udp::Udp(bool isServers, int port_num, string ip_address = NULL) {
 	this->port_number = port_num;
 	this->isServer = isServers;
+	this->ip_address = ip_address;
 }
 
 /***********************************************************************

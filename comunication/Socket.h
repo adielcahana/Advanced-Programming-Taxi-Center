@@ -27,12 +27,11 @@ using namespace std;
 #define ERROR_ACCEPT 7
 #define CONNECTION_CLOSED 8
 
-#define IP "127.0.0.1"
 
 
 class Socket {
 protected:
-	//true is the socket is for a server, false if for a client
+	//true is the socket is for a server, false if for a Client
 	bool isServer;
 	//the socket descriptor return from sock()
 	int socketDescriptor;
