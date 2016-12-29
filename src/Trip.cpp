@@ -1,14 +1,20 @@
 #include "Trip.h"
+#include <sstream>
 
 /******************************************************************************
 * The function Operation: Trip constructor.
 ******************************************************************************/
-Trip::Trip(int id, Point start, Point end, int numOfPass, double price):
+Trip::Trip(int id, Point start, Point end, int numOfPass, double price, int time):
         id(id), start(start), end(end), numOfPass(numOfPass), price(price),
-        route(NULL), totalMeterPassed(0) {
+        time(time), route(NULL), totalMeterPassed(0) {
     for (int i = 0; i < this->numOfPass; i++) {
         passengers.push_back(new Passenger());
     }
+}
+
+
+int Trip::getId() {
+    return this->id;
 }
 
 /******************************************************************************
@@ -80,3 +86,17 @@ int Trip::sumOfSatisfaction() {
     }
     return sum;
 }
+
+string Trip::serialize() {
+    stringstream str;
+    str << this->id + ",";
+    str << this->start.serialize();
+    str << ",";
+    str << this->end.serialize();
+    str << "," + this->numOfPass;
+    str << ",";
+    str << this->price;
+    str << "," + this->time;
+    return str.str();
+}
+

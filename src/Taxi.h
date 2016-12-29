@@ -45,6 +45,7 @@ public:
     Point* getLocation();
     bool operator==(const Taxi &rhs) const;
     bool operator!=(const Taxi &rhs) const;
+    string serialize();
 };
 
 #endif

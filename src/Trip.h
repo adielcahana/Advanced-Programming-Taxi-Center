@@ -10,7 +10,6 @@
 ******************************************************************************/
 class Trip {
 private:
-    friend class Driver;
     friend class TaxiCenter;
     int id;
     int totalMeterPassed;
@@ -19,17 +18,18 @@ private:
     int numOfPass;
     vector <Point*>* route;
     double price;
+    int time;
     vector <Passenger*> passengers;
     void addMeter();
 public:
-    Trip(int id, Point start, Point end, int numOfPass, double price);
+    Trip(int id, Point start, Point end, int numOfPass, double price, int time);
     ~Trip();
+    int getId();
     Point* getNextPoint();
     double getPrice();
     int getNumPassengers();
     int sumOfSatisfaction();
-//    static Trip* deserialize(string s);
-//    const char* serialize();
+    string serialize();
 };
 
 #endif //ASS2_TRIP_H

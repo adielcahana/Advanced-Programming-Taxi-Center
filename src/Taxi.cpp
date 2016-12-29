@@ -1,3 +1,4 @@
+#include <sstream>
 #include "Taxi.h"
 
 /******************************************************************************
@@ -92,6 +93,45 @@ bool Taxi::operator!=(const Taxi &rhs) const {
     return !(rhs == *this);
 }
 
-
-
-
+string Taxi::serialize() {
+    stringstream str;
+    str << this->id + ",";
+    if(this->getVelocity() == 2) str << "2,";
+    else str << "1,";
+    switch(this->manufacturer){
+        case HONDA:
+            str << "H,";
+            break;
+        case SUBARO:
+            str << "S,";
+            break;
+        case TESLA:
+            str << "T,";
+            break;
+        case FIAT:
+            str << "F,";
+            break;
+        default:
+            cout << "no manufacturer exist" << endl;
+    }
+    switch(this->color){
+        case RED:
+            str << "R";
+            break;
+        case BLUE:
+            str << "B";
+            break;
+        case GREEN:
+            str << "G";
+            break;
+        case PINK:
+            str << "P";
+            break;
+        case WHITE:
+            str << "W";
+            break;
+        default:
+            cout << "no color exist" << endl;
+    }
+    return str.str();
+}

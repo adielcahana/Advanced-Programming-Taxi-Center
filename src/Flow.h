@@ -17,10 +17,11 @@ private:
     TaxiCenter* center;
 public:
     bool shouldStop;
-    Flow();
+    Flow(int port);
     ~Flow();
     void initialize();
     void run();
+    void talkWithDriver();
 };
 
 #endif //ASS2_FLOW_H

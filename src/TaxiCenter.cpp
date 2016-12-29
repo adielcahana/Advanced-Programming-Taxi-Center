@@ -3,11 +3,12 @@
 /******************************************************************************
 * The function Operation: TaxiCenter constructor.
 ******************************************************************************/
-TaxiCenter::TaxiCenter(Map* map){
-    drivers = new vector <Driver*>;
-    avaliableDrivers = new vector <Driver*>;
+TaxiCenter::TaxiCenter(Protocol *protocol, Udp *udp, Map *map) : Server(protocol, udp) {
+    drivers = new vector <DriverInfo*>;
+    avaliableDrivers = new vector <DriverInfo*>;
     avaliableCabs = new vector <Taxi*>();
-    avaliableDriversListener = new TripListener(avaliableDrivers);
+    trips = new vector <Trip*>();
+    //avaliableDriversListener = new TripListener(avaliableDrivers);
     this->map = map;
 }
 
@@ -16,13 +17,13 @@ TaxiCenter::TaxiCenter(Map* map){
 * delete the avaliable cabs, delete the listeners and the map
 ******************************************************************************/
 TaxiCenter::~TaxiCenter() {
-    for(int i = 0; i < drivers->size(); i++){
-        delete drivers->at(i)->getTaxi();
-        delete drivers->at(i);
-    }
     for(int i = 0; i < avaliableCabs->size(); i++){
         delete avaliableCabs->at(i);
     }
+    for(int i = 0; i < this->trips->size(); i++){
+        delete this->trips->at(i);
+    }
+    delete trips;
     delete drivers;
     delete avaliableDrivers;
     avaliableCabs->clear();
@@ -35,13 +36,9 @@ TaxiCenter::~TaxiCenter() {
 * The function Operation: get a driver and add him to the driver's vector
 * give the driver a cab by his taxi id
 ******************************************************************************/
-void TaxiCenter::addDriver(Driver *driver){
-    this->drivers->push_back(driver);
-    Taxi* taxi = searchTaxiById(driver->getTaxiId());
-    driver->setTaxi(taxi);
-    // the driver is avaliable
-    driver->addAvaliableListener(avaliableDriversListener);
-    avaliableDrivers->push_back(driver);
+void TaxiCenter::addDriverInfo(DriverInfo* driverInfo){
+    this->drivers->push_back(driverInfo);
+    this->avaliableDrivers->push_back(driverInfo);
 }
 
 /******************************************************************************
@@ -69,35 +66,39 @@ Taxi* TaxiCenter::searchTaxiById(int id){
 }
 
 /******************************************************************************
-* The function Operation: if there is a driver in the trip start point the
-* driver get the trip
-******************************************************************************/
-void TaxiCenter::notifyNewTrip(Trip* trip){
-    Driver *driver = NULL;
-    Point* location = NULL;
-    for(int i = 0; i < this->avaliableDrivers->size(); i++){
-        driver = this->avaliableDrivers->at(i);
-        location = driver->getLocation();
-        if(trip->start == *location){
-            driver->newTrip(trip);
-            delete location;
-            return;
-        }
-        delete location;
-    }
-    delete trip;
-}
-
-/******************************************************************************
 * The function Operation: get a trip create a route from it's start and end
 * points and check if some driver can get this trip
 ******************************************************************************/
 void TaxiCenter::addTrip(Trip* trip){
-    Point* start = new Point(trip->start);
-    Point* end = new Point(trip->end);
-    trip->route = map->getRoute(start, end);
-    notifyNewTrip(trip);
-    delete end;
+    this->trips->push_back(trip);
+    if(*Point::deserialize(this->buffer) == trip->start){
+        ((TaxiCenterProtocol*) this->protocol)->setTrip(trip);
+        this->send(4);
+    }
+}
+
+void TaxiCenter::setProtocolMap() {
+    ((TaxiCenterProtocol *) this->protocol)->setMap(this->map);
+}
+
+void TaxiCenter::setProtocolTaxi(int taxiId) {
+    for(int i = 0; i < this->avaliableCabs->size(); i++){
+        if(taxiId == this->avaliableCabs->at(i)->getId()){
+            ((TaxiCenterProtocol *) this->protocol)->setTaxi(this->avaliableCabs->at(i));
+            delete this->avaliableCabs->at(i);
+            return;
+        }
+    }
+}
+
+void TaxiCenter::setProtocolTrip(int tripId) {
+    for(int i = 0; i < this->trips->size(); i++){
+        if(tripId == this->trips->at(i)->getId()){
+            ((TaxiCenterProtocol *) this->protocol)->setTrip(this->trips->at(i));
+            delete this->trips->at(i);
+            return;
+        }
+    }
 }
 
 /******************************************************************************
@@ -105,7 +106,7 @@ void TaxiCenter::addTrip(Trip* trip){
 ******************************************************************************/
 void TaxiCenter::timePassed(){
     for(int i = 0; i < drivers->size(); i++){
-        drivers->at(i)->timePassed();
+        this->send(5);
     }
 }
 
@@ -120,14 +121,44 @@ bool TaxiCenter::shouldStop(){
 * The function Operation: get driver location by id
 ******************************************************************************/
 Point * TaxiCenter::getDriverLocation(int id){
-    Point* point = NULL;
-    Driver *driver = NULL;
-    for(int i = 0; i < this->drivers->size(); i++){
-        driver = this->drivers->at(i);
-        if(driver->getId() == id){
-            point = driver->getLocation();
-            return point;
+    /*DriverInfo* driverInfo = NULL;
+    for(int i = 0; i < drivers->size(); i++){
+        driverInfo = this->drivers->at(i);
+        if(driverInfo->getDriverId() == id){
+
+        }
+    }*/
+    this->send(6);
+    return Point::deserialize(this->buffer);
+}
+
+DriverInfo *TaxiCenter::createDriverInfo(string buffer) {
+    char *c = new char[buffer.length() + 1];
+    strcpy(c, buffer.c_str());
+    string str = strtok(c, ":");
+    int driverId  = stoi(strtok(NULL, " "));
+    string str1 = strtok(NULL, ":");
+    int taxiId = stoi(strtok(NULL, " "));
+    delete[](c);
+    return new DriverInfo(driverId, taxiId);
+}
+/*
+DriverInfo* TaxiCenter::findClosestDriver(Point start) {
+    int x = 0;
+    int y = 0;
+    int min = 0;
+    DriverInfo* info = NULL;
+    Point* corrent = NULL;
+    for(int i = 0; i < avaliableDrivers->size(); i++){
+        this->send(6);
+        corrent = Point::deserialize(this->buffer);
+        x = abs(start.getX() - corrent->getX());
+        y = abs(start.getY() - corrent->getY());
+        if(min > x + y){
+            min = x + y;
+            info = avaliableDrivers->at(i);
         }
     }
-    return NULL;
-}
+    return info;
+}*/
+
