@@ -33,6 +33,7 @@ public:
     void setProtocolTrip(int tripId);
     Point * getDriverLocation(int id);
     bool shouldStop();
+    void talkWithDriver();
 };
 
 #endif //ASS2_TAXICENTER_H

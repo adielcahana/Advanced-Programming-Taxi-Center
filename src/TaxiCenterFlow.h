@@ -11,17 +11,16 @@
 * Flow: handlesthe program flow. this class uses the input parser to
 * initialize and update the taxi center.
 ******************************************************************************/
-class Flow {
+class TaxiCenterFlow {
 private:
     Parser parser;
     TaxiCenter* center;
 public:
     bool shouldStop;
-    Flow(int port);
-    ~Flow();
+    TaxiCenterFlow(int port);
+    ~TaxiCenterFlow();
     void initialize();
     void run();
-    void talkWithDriver();
 };
 
 #endif //ASS2_FLOW_H

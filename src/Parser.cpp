@@ -168,7 +168,7 @@ Trip* Parser::readTrip(){
     Point end(atoi(x),atoi(y));
     int numOfPassengers = atoi(strtok(NULL, ","));
     float tariff = stof(strtok(NULL, ","));
-    int time = atoi(strtok(NULL, NULL));
+    int time = atoi(strtok(NULL, " "));
     delete[] (c);
     return new Trip(id, start, end, numOfPassengers, tariff, time);
 }

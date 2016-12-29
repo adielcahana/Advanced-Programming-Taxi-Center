@@ -1,8 +1,8 @@
-#include "Flow.h"
+#include "TaxiCenterFlow.h"
 /******************************************************************************
 * The Function Operation: flow ctor
 ******************************************************************************/
-Flow::Flow(int port){
+TaxiCenterFlow::TaxiCenterFlow(int port){
     Map* map = parser.readMap();
     this->center = new TaxiCenter(new TaxiCenterProtocol(), new Udp(true, port), map);
     this->shouldStop = false;
@@ -10,14 +10,14 @@ Flow::Flow(int port){
 /******************************************************************************
 * The Function Operation: flow dtor
 ******************************************************************************/
-Flow::~Flow(){
+TaxiCenterFlow::~TaxiCenterFlow(){
     delete center;
 }
 /******************************************************************************
 * The Function Operation: initialize the game while getting input and
 * parsing it
 ******************************************************************************/
-void Flow::initialize(){
+void TaxiCenterFlow::initialize(){
     int option;
     int time = 0;
     char dummy; // variable for '\n'
@@ -34,7 +34,7 @@ void Flow::initialize(){
                     center->initialize();
                     cout << "bind" << endl;
                 }
-                this->talkWithDriver();
+                this->center->talkWithDriver();
                 break;
             case 2:
                 center->addTrip(parser.readTrip());
@@ -73,47 +73,16 @@ void Flow::initialize(){
 /******************************************************************************
 * The Function Operation: run the gmae step by step
 ******************************************************************************/
-void Flow::run(){
+void TaxiCenterFlow::run(){
     while(!center->shouldStop()){
         center->timePassed();
     }
 }
 
-void Flow::talkWithDriver() {
-    int operation = 0;
-    DriverInfo* driverInfo = NULL;
-    do {
-        operation++;
-        operation = this->center->receive(operation);
-        cout << operation << endl;
-        switch (operation){
-            case 1:
-                driverInfo = this->center->createDriverInfo(this->center->buffer);
-                this->center->addDriverInfo(driverInfo);
-                this->center->send(1);
-                break;
-            case 2:
-                this->center->setProtocolMap();
-                this->center->send(2);
-                break;
-            case 3:
-                this->center->setProtocolTaxi(driverInfo->getTaxiId());
-                this->center->send(3);
-                break;
-            case 4:
-                this->center->setProtocolTrip(0);
-                this->center->send(4);
-                break;
-            default:
-                this->center->send(0);
-        }
-    }while(operation < 5);
-}
-
 int main(int argc, char* argv[]){
     // argv[1] = port number
     int port = atoi(argv[1]);
-    Flow flow(port);
+    TaxiCenterFlow flow(port);
     while (!flow.shouldStop) {
         flow.initialize();
         if (!flow.shouldStop) flow.run();

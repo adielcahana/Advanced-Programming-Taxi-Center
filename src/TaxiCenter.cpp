@@ -142,6 +142,39 @@ DriverInfo *TaxiCenter::createDriverInfo(string buffer) {
     delete[](c);
     return new DriverInfo(driverId, taxiId);
 }
+
+void TaxiCenter::talkWithDriver() {
+    int operation = 0;
+    DriverInfo* driverInfo = NULL;
+    do {
+        operation++;
+        operation = this->receive(operation);
+        cout << operation << endl;
+        switch (operation){
+            case 1:
+                driverInfo = this->createDriverInfo(this->buffer);
+                this->addDriverInfo(driverInfo);
+                this->send(1);
+                break;
+            case 2:
+                this->setProtocolMap();
+                this->send(2);
+                break;
+            case 3:
+                this->setProtocolTaxi(driverInfo->getTaxiId());
+                this->send(3);
+                break;
+            case 4:
+                this->setProtocolTrip(0);
+                this->send(4);
+                break;
+            default:
+                this->send(0);
+        }
+    }while(operation < 5);
+}
+
+
 /*
 DriverInfo* TaxiCenter::findClosestDriver(Point start) {
     int x = 0;

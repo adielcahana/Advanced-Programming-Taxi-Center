@@ -4,7 +4,7 @@ project(ex4)
 set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -lpthread")
 set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++11 -g")
 
-set(SOURCE_FILES src/Flow.cpp src/Flow.h
+set(SOURCE_FILES src/TaxiCenterFlow.h
         src/Driver.h src/Trip.cpp src/Trip.h
         src/Passenger.cpp src/Passenger.h src/TaxiCenter.cpp src/TaxiCenter.h
         src/LuxTaxi.cpp src/LuxTaxi.h src/Map.cpp src/Map.h src/Bfs.cpp src/Bfs.h
@@ -20,4 +20,4 @@ set(COMUNICATION_FILES
         comunication/Client.h comunication/Client.cpp)
 
 add_executable(client src/Driver.cpp ${SOURCE_FILES} ${COMUNICATION_FILES})
-add_executable(server src/Flow.cpp ${SOURCE_FILES} ${COMUNICATION_FILES})
+add_executable(server src/TaxiCenterFlow.cpp ${SOURCE_FILES} ${COMUNICATION_FILES})
