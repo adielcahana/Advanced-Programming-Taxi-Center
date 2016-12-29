@@ -11,5 +11,12 @@ set(SOURCE_FILES src/Flow.cpp src/Flow.h
         src/Taxi.cpp src/Taxi.h src/Parser.cpp src/Parser.h src/AvaliableNotifier.h src/AvaliableListener.h
         src/TripListener.cpp src/TripListener.h src/client.cpp src/client.h src/Protocol.h src/DriverProtocol.cpp src/DriverProtocol.h)
 
-add_executable(client src/Driver.cpp ${SOURCE_FILES} ${TEST_FILES})
-add_executable(server src/udp_server2.cpp)
+set(COMUNICATION_FILES
+        comunication/TaxiCenterProtocol.cpp comunication/TaxiCenterProtocol.h
+        comunication/Server.cpp comunication/Server.h comunication/Udp.h
+        comunication/Udp.cpp comunication/Socket.cpp comunication/Protocol.h
+        comunication/DriverProtocol.h comunication/DriverProtocol.cpp
+        comunication/Client.h comunication/Client.cpp)
+
+add_executable(client src/Driver.cpp ${SOURCE_FILES} ${COMUNICATION_FILES})
+add_executable(server src/main.cpp ${SOURCE_FILES} ${COMUNICATION_FILES})

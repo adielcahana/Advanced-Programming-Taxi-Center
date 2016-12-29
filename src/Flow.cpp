@@ -67,3 +67,11 @@ void Flow::run(){
         center->timePassed();
     }
 }
+
+int main(int argc, char* argv[]){
+    Flow flow(atoi(argv[1]));
+    while (!flow.shouldStop) {
+        flow.initialize();
+        if (!flow.shouldStop) flow.run();
+    }
+}
