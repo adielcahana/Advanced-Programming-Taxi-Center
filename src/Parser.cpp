@@ -167,9 +167,10 @@ Trip* Parser::readTrip(){
     y = strtok(NULL, ",");
     Point end(atoi(x),atoi(y));
     int numOfPassengers = atoi(strtok(NULL, ","));
-    double tariff = strtod(strtok(NULL, ","), NULL);
+    float tariff = stof(strtok(NULL, ","));
+    int time = atoi(strtok(NULL, NULL));
     delete[] (c);
-    return new Trip(id, start, end, numOfPassengers, tariff);
+    return new Trip(id, start, end, numOfPassengers, tariff, time);
 }
 /******************************************************************************
 * The Function Operation: read taxi input
