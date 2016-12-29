@@ -20,4 +20,4 @@ set(COMUNICATION_FILES
         comunication/Client.h comunication/Client.cpp)
 
 add_executable(client src/Driver.cpp ${SOURCE_FILES} ${COMUNICATION_FILES})
-add_executable(server src/main.cpp ${SOURCE_FILES} ${COMUNICATION_FILES})
+add_executable(server src/Flow.cpp ${SOURCE_FILES} ${COMUNICATION_FILES})

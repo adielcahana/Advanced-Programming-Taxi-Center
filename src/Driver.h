@@ -35,7 +35,7 @@ private:
 public:
     Driver(int id, int age, Status status, int exp, int taxiId):
             id(id), age(age),maritalStat(status), exp(exp), taxiId(taxiId),
-            trip(NULL), location(new Point(0,0)),Client((Protocol*) new DriverProtocol(id, &location)){};
+            trip(NULL), location(new Point(0,0)),Client((Protocol*) new DriverProtocol(id, &location), ){};
     ~Driver();
     int getId();
     void setMap(Map* map);

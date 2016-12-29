@@ -111,6 +111,7 @@ void Flow::talkWithDriver() {
 }
 
 int main(int argc, char* argv[]){
+    // argv[1] = port number
     int port = atoi(argv[1]);
     Flow flow(port);
     while (!flow.shouldStop) {
