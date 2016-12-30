@@ -43,7 +43,7 @@ string TaxiCenterProtocol::createMsg(int numOfMsg){
         case 0:
             return "send again";
         case 1:
-            return "hello I am sending your map";
+            return "hello i am sending your map";
         case 2:
             return this->map;
         case 3:

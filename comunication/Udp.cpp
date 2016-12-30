@@ -78,12 +78,13 @@ int Udp::sendData(string data) {
 	//send
 	int sent_bytes = sendto(this->socketDescriptor,
 			datas, data_len, 0, (struct sockaddr *) &sin, sizeof(sin));
-//	cout << sent_bytes << endl;
+
 	//check if send successfully
-	if (sent_bytes < 0) {
-		return ERROR_SEND;
-	}
-	//return correct if there were no problems
+    if (sent_bytes < 0) {
+        return ERROR_SEND;
+    }
+    cout << "message sent " << datas << endl;
+    //return correct if there were no problems
 	return CORRECT;
 }
 /***********************************************************************
@@ -101,14 +102,15 @@ int Udp::reciveData(char* buffer, int size) {
 	int bytes = recvfrom(this->socketDescriptor,
 			buffer, size, 0, (struct sockaddr *) &to, &to_len);
 	//set the port number to the new one which we get with the data
-	this->port_number = ntohs(to.sin_port);
-	//check if receive successfully
+    this->port_number = ntohs(to.sin_port);
+    //check if receive successfully
 
 //    cout << bytes << endl;
-	if (bytes < 0) {
-		return -1;
-	}
-	//print the data
+    if (bytes < 0) {
+        return -1;
+    }
+    cout << "message recieved " << buffer << endl;
+    //print the data
 //	cout<<buffer<<endl;
 	//return correct if there were no error
 	return bytes;
