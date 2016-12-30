@@ -4,7 +4,7 @@ using namespace std;
 int DriverProtocol::translate(char* msg, int scenario){
     switch(scenario) {
         case 1:
-            if (strcmp(msg, "hello I am sending your taxi") == 0) {
+            if (strcmp(msg, "hello I am sending your map") == 0) {
                 return 2;
             }
             break;
@@ -24,11 +24,11 @@ string DriverProtocol::createMsg(int numOfMsg){
         case 0:
             return "send again";
         case 1:
-            return "hello, I am a new driver, my Id is %d" + id;
+            return "hello, I am a new driver, my Id is:0 my taxi id is:0 ";
         case 2:
-            return "ok, waiting for taxi";
+            return "ok, waiting for map";
         case 3:
-            return "ok, waiting for trip";
+            return "ok, waiting for taxi";
         case 4:
             return "ok, waiting for go";
         case 5:

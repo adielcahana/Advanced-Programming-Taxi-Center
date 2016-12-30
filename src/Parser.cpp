@@ -8,7 +8,7 @@ bool Parser::isValidTripInput(){
     // flag for reading dot. only one time allowed for the tariff
     bool readDot = false;
     int commaCounter = 0;
-    for(int i=0; i<buffer.size() && commaCounter <= 6; i++){
+    for(int i = 0; i < buffer.size() && commaCounter <= 7; i++){
         if(readComma){ // after a comma, there should be only digits
             if(!isdigit(buffer[i])){
                 return false;
@@ -20,7 +20,7 @@ bool Parser::isValidTripInput(){
                 commaCounter++;
                 continue;
             // a dot can be only after the 6th comma, at tariff
-            }else if(commaCounter == 6 && buffer[i] == '.' && !readDot) {
+            }else if(commaCounter == 7 && buffer[i] == '.' && !readDot) {
                 readDot = true;
                 continue;
             } else if(!isdigit(buffer[i])){

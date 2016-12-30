@@ -6,7 +6,10 @@ int TaxiCenterProtocol::translate(char* msg, int scenario){
     cout << msg << endl;
     switch(scenario){
         case 1:
-            return 1;
+            if(strstr(msg, "hello, I am a new driver, my Id is")){
+                return 1;
+            }
+            break;
         case 2:
             if (strcmp(msg, "ok, waiting for map") == 0){
                 return 2;

@@ -95,9 +95,9 @@ bool Taxi::operator!=(const Taxi &rhs) const {
 
 string Taxi::serialize() {
     stringstream str;
-    str << this->id + ",";
-    if(this->getVelocity() == 2) str << "2,";
-    else str << "1,";
+    str << this->id;
+    if(this->getVelocity() == 2) str << ",2,";
+    else str << ",1,";
     switch(this->manufacturer){
         case HONDA:
             str << "H,";
