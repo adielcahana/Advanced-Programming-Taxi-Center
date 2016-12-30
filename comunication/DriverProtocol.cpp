@@ -8,9 +8,12 @@ int DriverProtocol::translate(char* msg, int scenario){
                 return 2;
             }
             break;
-        case 4:
-            if (strstr(msg, "advance, time is")) {
+        case 5:
+            if (strcmp(msg, "time passed") == 0) {
                 return 5;
+            }
+            else if(strcmp(msg, "send your location") == 0){
+                    return 6;
             }
             break;
         default:
@@ -20,20 +23,27 @@ int DriverProtocol::translate(char* msg, int scenario){
 }
 
 string DriverProtocol::createMsg(int numOfMsg){
+    stringstream str, str1;
+    str << this->driverId;
+    string id = str.str();
+    str1 << this->taxiId;
+    string taxi = str1.str();
     switch (numOfMsg){
         case 0:
             return "send again";
         case 1:
-            return "hello, I am a new driver, my Id is:0 my taxi id is:0 ";
+            return "hello, I am a new driver, my Id is:" + id + " my taxi id is:" + taxi;
         case 2:
             return "ok, waiting for map";
         case 3:
             return "ok, waiting for taxi";
         case 4:
-            return "ok, waiting for go";
+            return "ok, waiting to trip";
         case 5:
-            return (*location)->serialize();
+            return "ok, waiting for time passed";
         case 6:
+            return (*location)->serialize();
+        case 7:
             return "done";
         default:
             break;

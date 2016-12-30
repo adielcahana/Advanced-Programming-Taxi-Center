@@ -71,10 +71,7 @@ Taxi* TaxiCenter::searchTaxiById(int id){
 ******************************************************************************/
 void TaxiCenter::addTrip(Trip* trip){
     this->trips->push_back(trip);
-    if(*Point::deserialize(this->buffer) == trip->start){
-        ((TaxiCenterProtocol*) this->protocol)->setTrip(trip);
-        this->send(4);
-    }
+    ((TaxiCenterProtocol*) this->protocol)->setTrip(trip);
 }
 
 void TaxiCenter::setProtocolMap() {
@@ -147,8 +144,7 @@ void TaxiCenter::talkWithDriver() {
     int operation = 0;
     DriverInfo* driverInfo = NULL;
     do {
-        operation++;
-        operation = this->receive(operation);
+        operation = this->receive(++operation);
         cout << operation << endl;
         switch (operation){
             case 1:
@@ -167,6 +163,8 @@ void TaxiCenter::talkWithDriver() {
             case 4:
                 this->setProtocolTrip(0);
                 this->send(4);
+                break;
+            case 5:
                 break;
             default:
                 this->send(0);

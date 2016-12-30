@@ -29,7 +29,7 @@ bool Parser::isValidTripInput(){
         }
     }
     // if all the other tests passed, verify that there are only 6 comma
-    return commaCounter == 6;
+    return commaCounter == 7;
 }
 /******************************************************************************
 * The Function Operation: verify valid Taxi input

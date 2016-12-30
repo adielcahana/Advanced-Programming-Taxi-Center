@@ -12,7 +12,6 @@ Trip::Trip(int id, Point start, Point end, int numOfPass, double price, int time
     }
 }
 
-
 int Trip::getId() {
     return this->id;
 }
@@ -89,14 +88,17 @@ int Trip::sumOfSatisfaction() {
 
 string Trip::serialize() {
     stringstream str;
-    str << this->id + ",";
+    str << this->id;
+    str <<  ",";
     str << this->start.serialize();
     str << ",";
     str << this->end.serialize();
-    str << "," + this->numOfPass;
+    str <<  ",";
+    str << this->numOfPass;
     str << ",";
     str << this->price;
-    str << "," + this->time;
+    str << ",";
+    str << this->time;
     return str.str();
 }
 

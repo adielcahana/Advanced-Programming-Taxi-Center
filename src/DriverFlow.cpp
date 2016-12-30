@@ -57,11 +57,14 @@ int main(int argc, char** argv) {
         }
         driver->send(5);
         while (!driver->isAvaliable()) {
-            operation = driver->receive(4);
+            operation = driver->receive(5);
             if (operation == 5) {
                 driver->timePassed();
+                driver->send(5);
             }
-            driver->send(operation);
+            else if(operation == 6){
+                driver->send(6);
+            }
             if (driver->isAvaliable()) {
                 driver->send(7);
             }

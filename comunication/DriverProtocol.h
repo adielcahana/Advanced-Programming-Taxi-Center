@@ -13,10 +13,11 @@
 using namespace std;
 class DriverProtocol: public Protocol {
 private:
-    int id;
+    int driverId;
+    int taxiId;
     Point** location;
 public:
-    DriverProtocol(int id, Point** location): id(id), location(location){};
+    DriverProtocol(int id, int taxiId, Point** location): driverId(driverId), taxiId(taxiId), location(location){};
     virtual int translate(char* msg, int scenario);
     virtual string createMsg(int numOfMsg);
 };

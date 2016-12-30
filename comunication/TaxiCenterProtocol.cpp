@@ -3,7 +3,6 @@
 TaxiCenterProtocol::~TaxiCenterProtocol() {}
 
 int TaxiCenterProtocol::translate(char* msg, int scenario){
-    cout << msg << endl;
     switch(scenario){
         case 1:
             if(strstr(msg, "hello, I am a new driver, my Id is")){
@@ -21,13 +20,13 @@ int TaxiCenterProtocol::translate(char* msg, int scenario){
             }
             break;
         case 4:
-            if(strcmp(msg, "ok i am waiting for a trip") == 0){
+            if(strcmp(msg, "ok, waiting to trip") == 0){
                 return 4;
             }
             break;
         case 5:
-            if(strcmp(msg, "ok i am waiting to move") == 0){
-                return 6;
+            if(strcmp(msg, "ok, waiting for time passed") == 0){
+                return 5;
             }
             break;
         case 7:
@@ -46,7 +45,7 @@ string TaxiCenterProtocol::createMsg(int numOfMsg){
         case 0:
             return "send again";
         case 1:
-            return "hello i am sending your map";
+            return "hello I am sending your map";
         case 2:
             return this->map;
         case 3:
