@@ -2,18 +2,49 @@
 #include "DriverProtocol.h"
 using namespace std;
 int DriverProtocol::translate(char* msg, int scenario){
+    string str;
     switch(scenario) {
         case 1:
             if (strcmp(msg, "hello I am sending your map") == 0) {
                 return 2;
             }
             break;
+        case 2:
+            if (strstr(msg, "map")) {
+                str = string(msg);
+                str.erase(0,5);
+                strcpy(msg, str.c_str());
+                return 3;
+            }
+            break;
+        case 3:
+            if (strstr(msg, "taxi")) {
+                str = string(msg);
+                str.erase(0,6);
+                strcpy(msg, str.c_str());
+                return 4;
+            } else if (strcmp(msg, "time passed") == 0) {
+                return 6;
+            }
+            break;
+        case 4:
+            if (strstr(msg, "trip")) {
+                str = string(msg);
+                str.erase(0,6);
+                strcpy(msg, str.c_str());
+                return 5;
+            } else if (strcmp(msg, "time passed") == 0) {
+                return 6;
+            } else if(strcmp(msg, "send your location") == 0){
+                return 7;
+            }
+            break;
         case 5:
             if (strcmp(msg, "time passed") == 0) {
-                return 5;
+                return 6;
             }
             else if(strcmp(msg, "send your location") == 0){
-                    return 6;
+                return 7;
             }
             break;
         default:
@@ -38,12 +69,14 @@ string DriverProtocol::createMsg(int numOfMsg){
         case 3:
             return "ok, waiting for taxi";
         case 4:
-            return "ok, waiting to trip";
+            return "taxi accepted";
         case 5:
-            return "ok, waiting for time passed";
+            return "trip accepted";
         case 6:
-            return (*location)->serialize();
+            return "time passed";
         case 7:
+            return "point: " + string((*location)->serialize());
+        case 8:
             return "done";
         default:
             break;

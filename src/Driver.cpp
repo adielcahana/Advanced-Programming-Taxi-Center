@@ -47,10 +47,13 @@ void Driver::newTrip(Trip* trip){
 * The function Operation: if the driver have trip, move to next point.
 ******************************************************************************/
 void Driver::timePassed(){
+    time++;
     if(trip == NULL){
         return;
     }
-    moveOneStep();
+    if (trip->time <= time){
+        moveOneStep();
+    }
 }
 
 /******************************************************************************

@@ -102,8 +102,15 @@ void TaxiCenter::setProtocolTrip(int tripId) {
 * The function Operation: notify all the driver that time passed
 ******************************************************************************/
 void TaxiCenter::timePassed(){
+    int operation;
     for(int i = 0; i < drivers->size(); i++){
         this->send(5);
+        while ((operation = this->receive(7)) == 0){
+            this->send(0);
+        };
+        if (operation == 7) {
+            //todo: add to available drivers
+        }
     }
 }
 
@@ -126,6 +133,9 @@ Point * TaxiCenter::getDriverLocation(int id){
         }
     }*/
     this->send(6);
+    while (this->receive(6) != 6){
+        this->send(0);
+    };
     return Point::deserialize(this->buffer);
 }
 
@@ -145,7 +155,7 @@ void TaxiCenter::talkWithDriver() {
     DriverInfo* driverInfo = NULL;
     do {
         operation = this->receive(++operation);
-        cout << operation << endl;
+//        cout << operation << endl;
         switch (operation){
             case 1:
                 driverInfo = this->createDriverInfo(this->buffer);

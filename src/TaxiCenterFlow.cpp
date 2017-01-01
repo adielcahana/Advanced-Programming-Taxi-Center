@@ -49,8 +49,7 @@ void TaxiCenterFlow::initialize(){
                 if(p != NULL){
                     cout << *p << endl;
                     delete p;
-                }
-                else {
+                } else {
                     cout << "driver id doesn't exist" << endl;
                 }
                 break;

@@ -78,7 +78,7 @@ int Udp::sendData(string data) {
 	//send
 	int sent_bytes = sendto(this->socketDescriptor,
 			datas, data_len, 0, (struct sockaddr *) &sin, sizeof(sin));
-	cout << datas << endl;
+	cout << "msg sent:" << datas << endl;
 	//check if send successfully
 	if (sent_bytes < 0) {
 		cout << "send error" << endl;
@@ -106,7 +106,7 @@ int Udp::reciveData(char* buffer, int size) {
 		this->ip_address = "127.0.0.1";
         this->port_number = ntohs(to.sin_port);
     }
-	cout << buffer << endl;
+	cout << "got msg:" << buffer << endl;
     //check if receive successfully
 	if (bytes < 0) {
 		cout << "recive error" << endl;

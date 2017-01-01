@@ -20,17 +20,27 @@ int TaxiCenterProtocol::translate(char* msg, int scenario){
             }
             break;
         case 4:
-            if(strcmp(msg, "ok, waiting to trip") == 0){
+            if(strcmp(msg, "taxi accepted") == 0){
                 return 4;
             }
             break;
         case 5:
-            if(strcmp(msg, "ok, waiting for time passed") == 0){
+            if(strcmp(msg, "trip accepted") == 0){
                 return 5;
             }
             break;
+        case 6:
+            if (strstr(msg, "point")) {
+                string str = string(msg);
+                str.erase(0, 7);
+                strcpy(msg, str.c_str());
+                return 6;
+            }
+            break;
         case 7:
-            if(strcmp(msg, "done") == 0){
+            if (strcmp(msg, "time passed") == 0) {
+                return 5;
+            } else if(strcmp(msg, "done") == 0){
                 return 7;
             }
             break;
@@ -47,11 +57,11 @@ string TaxiCenterProtocol::createMsg(int numOfMsg){
         case 1:
             return "hello I am sending your map";
         case 2:
-            return this->map;
+            return "map: " + this->map;
         case 3:
-            return this->taxi;
+            return "taxi: " + this->taxi;
         case 4:
-            return this->trip;
+            return "trip: " + this->trip;
         case 5:
             return "time passed";
         case 6:

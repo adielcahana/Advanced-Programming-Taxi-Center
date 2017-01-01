@@ -13,10 +13,15 @@ int main(int argc, char** argv) {
     do {
         operation = driver->receive(1); //confirm msg delivery
         driver->send(operation); //send confirmation or ask again
-    } while (operation == 0);
+    } while (operation == 0); //while the msg is not "hello I am sending your map"
+
     Map* map = NULL;
     while(map == NULL){
-        driver->receive(0); //recieve taxi
+        operation = driver->receive(2); //recieve map
+        if (operation != 3) { //if msg isnt a map
+            driver->send(0); // request data again
+            continue;
+        }
         try {
             map = Map::deserialize(driver->buffer);
             driver->setMap(map);
@@ -24,26 +29,48 @@ int main(int argc, char** argv) {
             driver->send(0); // request data again
         }
     }
-    driver->send(3);
+
+    driver->send(operation); //request a taxi
+
     Taxi* taxi = NULL;
     while(taxi == NULL){
-        driver->receive(0); //recieve taxi
+        operation = driver->receive(operation); //recieve taxi
+        if (operation == 0) {
+            driver->send(0); //request data again
+            continue;
+        } else if (operation == 6) {
+            driver->timePassed();
+            driver->send(6);
+            continue;
+        }
         istringstream stream(driver->buffer);
         streambuf *cin_backup = cin.rdbuf(stream.rdbuf());
         cin.rdbuf(stream.rdbuf()); //redirect std::cin
         try {
             taxi = pars.readTaxi();
             driver->setTaxi(taxi);
+            driver->send(4);
         } catch (runtime_error){
             driver->send(0); // request data again
         }
         cin.rdbuf(cin_backup);
     }
+
     while(true) {
         Trip *trip = NULL;
-        driver->send(4);
         while (trip == NULL) {
-            driver->receive(0); //recieve trip
+            operation = driver->receive(4); //recieve trip or time passed
+            if (operation == 0) {
+                driver->send(0); //request data again
+                continue;
+            } else if (operation == 6) {
+                driver->timePassed();
+                driver->send(6);
+                continue;
+            } else if (operation == 7) {
+                driver->send(7);
+                continue;
+            }
             istringstream stream(driver->buffer);
             streambuf *cin_backup = cin.rdbuf(stream.rdbuf());
             cin.rdbuf(stream.rdbuf()); //redirect std::cin
@@ -55,19 +82,19 @@ int main(int argc, char** argv) {
             }
             cin.rdbuf(cin_backup);
         }
+
         driver->send(5);
         while (!driver->isAvaliable()) {
             operation = driver->receive(5);
-            if (operation == 5) {
+            if (operation == 6) {
                 driver->timePassed();
-                driver->send(5);
-            }
-            else if(operation == 6){
                 driver->send(6);
             }
-            if (driver->isAvaliable()) {
+            else if(operation == 7){
                 driver->send(7);
             }
         }
+        driver->receive(5);
+        driver->send(8);
     }
 }

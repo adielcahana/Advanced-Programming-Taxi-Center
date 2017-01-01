@@ -21,6 +21,7 @@ class Driver: public AvaliableNotifier, public Client{
 private:
     int id;
     int age;
+    int time;
     Status maritalStat;
     int exp;
     Taxi* taxi;
@@ -34,7 +35,7 @@ private:
     void addPassCount(int passengers);
 public:
     Driver(int id, int age, Status status, int exp, int taxiId):
-            id(id), age(age),maritalStat(status), exp(exp), taxiId(taxiId),
+            id(id), age(age), time(0), maritalStat(status), exp(exp), taxiId(taxiId),
             trip(NULL), location(new Point(0,0)),Client((Protocol*) new DriverProtocol(id, taxiId, &location)){};
     ~Driver();
     int getId();
