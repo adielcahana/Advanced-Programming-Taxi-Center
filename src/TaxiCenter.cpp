@@ -176,9 +176,8 @@ void TaxiCenter::talkWithDriver(int time) {
 }
 
 void TaxiCenter::addTripToDriver(int time){
-    cout << this->avaliableDrivers->size() << endl;
     for(int i = 0; i < this->trips->size(); i++){
-        if (time == this->trips->at(i)->time){
+        if (time >= this->trips->at(i)->time){
             this->setProtocolTrip(this->trips->at(i));
             this->send(4);
             this->receive(5);
