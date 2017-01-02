@@ -88,13 +88,11 @@ int Trip::sumOfSatisfaction() {
 
 string Trip::serialize() {
     stringstream str;
-    string start(this->start.serialize());
-    string end(this->end.serialize());
     str << this->id;
     str <<  ",";
-    str << start;
+    str << this->start.serialize();
     str << ",";
-    str << end;
+    str << this->end.serialize();
     str <<  ",";
     str << this->numOfPass;
     str << ",";

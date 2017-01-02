@@ -96,7 +96,7 @@ bool Map::isInMap(Point *p){
 ******************************************************************************/
 Map* Map::deserialize(string s){
     vector<char*> parts;
-    char *input = new char[s.length()];
+    char *input = new char[s.length() + 1];
     strcpy(input, s.c_str());
     char* part = strtok(input," ");
     parts.push_back(part);
@@ -111,7 +111,7 @@ Map* Map::deserialize(string s){
     }
     Map* map = new Map(maxPoint->getX(),maxPoint->getY(), obstacles);
     delete maxPoint;
-    delete input;
+    delete[](input);
     return map;
 }
 /******************************************************************************
@@ -205,10 +205,10 @@ Point* Point::deserialize(string s) {
 /******************************************************************************
 * The Function Operation: serialize a Point object to text x,y
 ******************************************************************************/
-const char* Point::serialize() {
+string Point::serialize() {
     stringstream strs;
     strs << x << "," << y;
-    return strs.str().c_str();
+    return strs.str();
 }
 
 /******************************************************************************

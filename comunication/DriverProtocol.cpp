@@ -73,14 +73,12 @@ int DriverProtocol::translate(char* msg, int scenario){
 string DriverProtocol::createMsg(int numOfMsg){
     stringstream str, str1;
     str << this->driverId;
-    string id = str.str();
     str1 << this->taxiId;
-    string taxi = str1.str();
     switch (numOfMsg){
         case 0:
             return "send again";
         case 1:
-            return "hello, I am a new driver, my Id is:" + id + " my taxi id is:" + taxi;
+            return "hello, I am a new driver, my Id is:" + str.str() + " my taxi id is:" + str.str();
         case 2:
             return "ok, waiting for map";
         case 3:
@@ -92,7 +90,7 @@ string DriverProtocol::createMsg(int numOfMsg){
         case 6:
             return "time passed";
         case 7:
-            return "point: " + string((*location)->serialize());
+            return "point: " + (*location)->serialize();
         case 8:
             return "done";
         default:

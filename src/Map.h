@@ -28,7 +28,7 @@ class Point: public Node{
         bool operator==(const Point &rhs) const;
         bool operator!=(const Point &rhs) const;
         static Point* deserialize(string s);
-		const char* serialize();
+		string serialize();
         /**********************************************************************
         * The Function Operation: print a represantation of a 2d point
         * we were unable to locate the function in the .cpp file

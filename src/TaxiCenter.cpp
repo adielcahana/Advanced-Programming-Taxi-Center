@@ -23,6 +23,9 @@ TaxiCenter::~TaxiCenter() {
     for(int i = 0; i < this->trips->size(); i++){
         delete this->trips->at(i);
     }
+    for(int i = 0; i < this->drivers->size(); i++){
+        delete drivers->at(i);
+    }
     delete trips;
     delete drivers;
     delete avaliableDrivers;
@@ -173,6 +176,7 @@ void TaxiCenter::talkWithDriver(int time) {
 }
 
 void TaxiCenter::addTripToDriver(int time){
+    cout << this->avaliableDrivers->size() << endl;
     for(int i = 0; i < this->trips->size(); i++){
         if (time == this->trips->at(i)->time){
             this->setProtocolTrip(this->trips->at(i));
@@ -180,8 +184,7 @@ void TaxiCenter::addTripToDriver(int time){
             this->receive(5);
             delete this->trips->at(i);
             this->trips->erase(trips->begin() + i);
-            delete this->avaliableDrivers->at(i);
-            this->avaliableDrivers->erase(avaliableDrivers->begin() + i);
+            this->avaliableDrivers->pop_back();
         }
     }
 }
