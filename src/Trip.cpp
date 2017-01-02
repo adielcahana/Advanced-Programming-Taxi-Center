@@ -90,9 +90,9 @@ string Trip::serialize() {
     stringstream str;
     str << this->id;
     str <<  ",";
-    str << this->start.serialize();
+    str << this->start.toSting();
     str << ",";
-    str << this->end.serialize();
+    str << this->end.toSting();
     str <<  ",";
     str << this->numOfPass;
     str << ",";

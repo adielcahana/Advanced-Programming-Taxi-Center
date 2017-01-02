@@ -90,7 +90,7 @@ string DriverProtocol::createMsg(int numOfMsg){
         case 6:
             return "time passed";
         case 7:
-            return "point: " + (*location)->serialize();
+            return "point: " + (*location)->toSting();
         case 8:
             return "done";
         default:

@@ -135,7 +135,7 @@ Point * TaxiCenter::getDriverLocation() {
     while (this->receive(6) != 6){
         this->send(0);
     }
-    return Point::deserialize(this->buffer);
+    return Point::fromString(this->buffer);
 }
 
 /******************************************************************************
@@ -214,7 +214,7 @@ DriverInfo* TaxiCenter::findClosestDriver(Point start) {
     Point* corrent = NULL;
     for(int i = 0; i < avaliableDrivers->size(); i++){
         this->send(6);
-        corrent = Point::deserialize(this->buffer);
+        corrent = Point::fromString(this->buffer);
         x = abs(start.getX() - corrent->getX());
         y = abs(start.getY() - corrent->getY());
         if(min > x + y){

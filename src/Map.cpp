@@ -94,7 +94,7 @@ bool Map::isInMap(Point *p){
 /******************************************************************************
 * The Function Operation: deserialize a Map object from text width_length
 ******************************************************************************/
-Map* Map::deserialize(string s){
+Map* Map::fromString(string s){
     vector<char*> parts;
     char *input = new char[s.length() + 1];
     strcpy(input, s.c_str());
@@ -103,11 +103,11 @@ Map* Map::deserialize(string s){
     while((part = strtok(NULL," ")) != NULL){
         parts.push_back(part);
     }
-    Point* maxPoint = Point::deserialize(parts.at(0));
+    Point* maxPoint = Point::fromString(parts.at(0));
     int size = atoi(parts.at(1));
     vector<Point*>* obstacles = new vector<Point*>();
     for(int i = 2; i < size; i++){
-        obstacles->push_back(Point::deserialize(parts.at(i)));
+        obstacles->push_back(Point::fromString(parts.at(i)));
     }
     Map* map = new Map(maxPoint->getX(),maxPoint->getY(), obstacles);
     delete maxPoint;
@@ -117,12 +117,12 @@ Map* Map::deserialize(string s){
 /******************************************************************************
 * The Function Operation: serialize a Map object to string
 ******************************************************************************/
-string Map::serialize(){
+string Map::toString(){
     stringstream strs;
     strs << width << "," << length << " ";
     strs << obstacles->size();
     for (int i = 0; i < obstacles->size(); i++){
-        strs << " " << obstacles->at(i)->serialize();
+        strs << " " << obstacles->at(i)->toSting();
     }
     return strs.str();
 }
@@ -178,7 +178,7 @@ bool Point::operator!=(const Point &other) const {
 /******************************************************************************
 * The Function Operation: deserialize a Point object from text x,y
 ******************************************************************************/
-Point* Point::deserialize(string s) {
+Point* Point::fromString(string s) {
     char *c = new char[s.length() + 1];
     strcpy(c, s.c_str());
     char *x, *y;
@@ -205,7 +205,7 @@ Point* Point::deserialize(string s) {
 /******************************************************************************
 * The Function Operation: serialize a Point object to text x,y
 ******************************************************************************/
-string Point::serialize() {
+string Point::toSting() {
     stringstream strs;
     strs << x << "," << y;
     return strs.str();

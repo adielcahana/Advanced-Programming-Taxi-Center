@@ -19,7 +19,7 @@ int main(int argc, char** argv) {
             continue;
         }
         try {
-            map = Map::deserialize(driver->buffer);
+            map = Map::fromString(driver->buffer);
             driver->setMap(map);
         } catch (runtime_error){
             driver->send(0); // request data again

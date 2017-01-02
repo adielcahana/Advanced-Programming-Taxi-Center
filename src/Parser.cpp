@@ -259,7 +259,7 @@ vector<Point*>* Parser::readObstacles(){
         try {
             //get point line
             getline(cin, buffer);
-            obstacles->push_back(Point::deserialize(buffer));
+            obstacles->push_back(Point::fromString(buffer));
         }
         catch (exception) {
             // deallocate all points

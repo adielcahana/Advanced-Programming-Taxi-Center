@@ -90,7 +90,7 @@ string TaxiCenterProtocol::createMsg(int numOfMsg){
 }
 
 void TaxiCenterProtocol::setMap(Map* map) {
-    this->map = map->serialize();
+    this->map = map->toString();
 }
 
 void TaxiCenterProtocol::setTaxi(Taxi* taxi) {

@@ -27,8 +27,8 @@ class Point: public Node{
 		int hash();
         bool operator==(const Point &rhs) const;
         bool operator!=(const Point &rhs) const;
-        static Point* deserialize(string s);
-		string serialize();
+        static Point* fromString(string s);
+		string toSting();
         /**********************************************************************
         * The Function Operation: print a represantation of a 2d point
         * we were unable to locate the function in the .cpp file
@@ -68,8 +68,8 @@ class Map: public Graph{
 		~Map();
 		vector<Point*>* getRoute(Point *start, Point *end);
 		queue<Node*>* getAdjacent(const Node *point);
-        static Map* deserialize(string s);
-        string serialize();
+        static Map* fromString(string s);
+        string toString();
         /**********************************************************************
         * The Function Operation: print a represantation of a 2d map
         * we were unable to locate the function in the .cpp file
@@ -85,7 +85,6 @@ class Map: public Graph{
             output << "  ";
             for (int i = 0; i < g.width; i++) output << i;
 			return output;
-
 		}
 };
 
