@@ -1,7 +1,11 @@
 #include "DriverFlow.h"
 
+/******************************************************************************
+* The function Operation: run the driver (client) program
+******************************************************************************/
 int main(int argc, char** argv) {
     Parser pars;
+    // create driver from input
     Driver *driver = pars.readDriver();
     driver->initialize(argv[1], atoi(argv[2])); //set the Client connection
     int operation = 1;
@@ -19,7 +23,7 @@ int main(int argc, char** argv) {
             continue;
         }
         try {
-            map = Map::fromString(driver->buffer);
+            map = Map::deserialize(driver->buffer);
             driver->setMap(map);
         } catch (runtime_error){
             driver->send(0); // request data again
@@ -34,7 +38,7 @@ int main(int argc, char** argv) {
         if (operation == 0) {
             driver->send(0); //request data again
             continue;
-        } else if (operation == 6) {
+        } else if (operation == 6) { // "time passed"
             driver->timePassed();
             driver->send(6);
             continue;
@@ -43,6 +47,7 @@ int main(int argc, char** argv) {
         streambuf *cin_backup = cin.rdbuf(stream.rdbuf());
         cin.rdbuf(stream.rdbuf()); //redirect std::cin
         try {
+            // create taxi that got from the taxi center
             taxi = pars.readTaxi();
             driver->setTaxi(taxi);
             driver->send(4);
@@ -51,22 +56,23 @@ int main(int argc, char** argv) {
         }
         cin.rdbuf(cin_backup);
     }
+    // run until the program end
     while(true) {
         Trip *trip = NULL;
         while (trip == NULL) {
             operation = driver->receive(4); //recieve trip or time passed
-            if(operation == 9){
+            if(operation == 9){ // finish the program
                 delete driver;
                 return 0;
             }
             if (operation == 0) {
                 driver->send(4); //request data again
                 continue;
-            } else if (operation == 6) {
+            } else if (operation == 6) { // "time passed"
                 driver->timePassed();
                 driver->send(6);
                 continue;
-            } else if (operation == 7) {
+            } else if (operation == 7) { // "send location"
                 driver->send(7);
                 continue;
             }
@@ -74,6 +80,7 @@ int main(int argc, char** argv) {
             streambuf *cin_backup = cin.rdbuf(stream.rdbuf());
             cin.rdbuf(stream.rdbuf()); //redirect std::cin
             try {
+                // create trip that got from the taxi center
                 trip = pars.readTrip();
                 driver->newTrip(trip);
             } catch (runtime_error) {
@@ -83,22 +90,23 @@ int main(int argc, char** argv) {
         }
 
         driver->send(5);
+        // run until the driver finish the trip or the program end
         while (!driver->isAvaliable()) {
             operation = driver->receive(5);
-            if(operation == 9){
+            if(operation == 9){ // finish the program
                 delete driver;
                 return 0;
             }
-            if (operation == 6) {
+            if (operation == 6) { // "time passed"
                 driver->timePassed();
-                if(driver->isAvaliable()){
+                if(driver->isAvaliable()){ // if the driver finish the trip
                     driver->send(8);
                     driver->receive(6);
                     break;
                 }
                 driver->send(6);
             }
-            else if(operation == 7){
+            else if(operation == 7){ // "send location"
                 driver->send(7);
             }
         }

@@ -6,7 +6,7 @@
 /******************************************************************************
 * Trip: the route of the driving have a start and end points and the number of
 * passengers int the trip, have a price for the trip, know how much meters
- * passed in the trip
+* passed in the trip
 ******************************************************************************/
 class Trip {
 private:
@@ -30,7 +30,7 @@ public:
     double getPrice();
     int getNumPassengers();
     int sumOfSatisfaction();
-    string serialize();
+    string toString();
 };
 
 #endif //ASS2_TRIP_H

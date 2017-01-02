@@ -3,7 +3,6 @@
 
 #include "Trip.h"
 #include "DriverInfo.h"
-#include "TripListener.h"
 #include "../comunication/Server.h"
 
 /******************************************************************************
@@ -17,7 +16,6 @@ private:
     vector <Taxi*>* avaliableCabs;
     vector <Trip*>* trips;
     Map* map;
-    TripListener* avaliableDriversListener;
 public:
     TaxiCenter(Protocol* protocol, Udp* udp, Map* map);
     ~TaxiCenter();

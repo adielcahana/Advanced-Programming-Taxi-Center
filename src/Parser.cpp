@@ -237,8 +237,9 @@ Taxi* Parser::readTaxi(){
         return new LuxTaxi(id, manufacturer, color);
     }
 }
+
 /******************************************************************************
-* The Function Operation: read Obstacles input, pont by point
+* The Function Operation: read Obstacles input, point by point
 ******************************************************************************/
 vector<Point*>* Parser::readObstacles(){
     vector<Point*>* obstacles = new vector<Point*>();
@@ -259,7 +260,7 @@ vector<Point*>* Parser::readObstacles(){
         try {
             //get point line
             getline(cin, buffer);
-            obstacles->push_back(Point::fromString(buffer));
+            obstacles->push_back(Point::deserialize(buffer));
         }
         catch (exception) {
             // deallocate all points

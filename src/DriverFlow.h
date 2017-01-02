@@ -8,6 +8,10 @@
 #include "Parser.h"
 #include <sstream>
 
+/******************************************************************************
+* Flow: handlesthe program flow. this class uses the input parser for driver
+* and run the driver program
+******************************************************************************/
 class DriverFlow {
 private:
     Parser parser;

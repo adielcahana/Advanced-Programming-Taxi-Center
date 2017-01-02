@@ -135,7 +135,7 @@ Point * TaxiCenter::getDriverLocation() {
     while (this->receive(6) != 6){
         this->send(0);
     }
-    return Point::fromString(this->buffer);
+    return Point::deserialize(this->buffer);
 }
 
 /******************************************************************************
@@ -167,16 +167,19 @@ void TaxiCenter::talkWithDriver() {
 //        cout << operation << endl;
         switch (operation){
             case 1:
-                // create driver
+                // create driver info
                 driverInfo = this->createDriverInfo(this->buffer);
                 this->addDriverInfo(driverInfo);
+                // send hello to driver
                 this->send(1);
                 break;
             case 2:
+                // send map to the driver
                 this->setProtocolMap();
                 this->send(2);
                 break;
             case 3:
+                // send taxi to driver
                 this->setProtocolTaxi(driverInfo->getTaxiId());
                 this->send(3);
                 break;
@@ -188,40 +191,23 @@ void TaxiCenter::talkWithDriver() {
     }while(operation < 4);
 }
 
+/******************************************************************************
+* The function Operation: send trip to the driver
+******************************************************************************/
 void TaxiCenter::addTripToDriver(int time){
     for(int i = 0; i < this->trips->size(); i++){
+        // if the time of the trip arrived
         if (time >= this->trips->at(i)->time){
             this->setProtocolTrip(this->trips->at(i));
+            // send trip to driver
             this->send(4);
+            // get message that trip accepted
             this->receive(5);
+            // delete the trip from the taxi center list
             delete this->trips->at(i);
             this->trips->erase(trips->begin() + i);
+            // driver is no longer avaliable
             this->avaliableDrivers->pop_back();
         }
     }
 }
-
-
-
-
-
-/*
-DriverInfo* TaxiCenter::findClosestDriver(Point start) {
-    int x = 0;
-    int y = 0;
-    int min = 0;
-    DriverInfo* info = NULL;
-    Point* corrent = NULL;
-    for(int i = 0; i < avaliableDrivers->size(); i++){
-        this->send(6);
-        corrent = Point::fromString(this->buffer);
-        x = abs(start.getX() - corrent->getX());
-        y = abs(start.getY() - corrent->getY());
-        if(min > x + y){
-            min = x + y;
-            info = avaliableDrivers->at(i);
-        }
-    }
-    return info;
-}*/
-

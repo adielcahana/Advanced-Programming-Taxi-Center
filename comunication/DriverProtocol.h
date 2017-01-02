@@ -11,6 +11,12 @@
 #include <iostream>
 
 using namespace std;
+
+/******************************************************************************
+* DriverProtocol: the operation protocol of the driver as a client, use
+* scenarios for sending messages and translate given messages, inherit from
+* protocol interface
+******************************************************************************/
 class DriverProtocol: public Protocol {
 private:
     int driverId;

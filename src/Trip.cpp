@@ -12,10 +12,6 @@ Trip::Trip(int id, Point start, Point end, int numOfPass, double price, int time
     }
 }
 
-int Trip::getId() {
-    return this->id;
-}
-
 /******************************************************************************
 * The function Operation: Trip destructor - delete the route if it's exist
 * delete the passengers
@@ -32,6 +28,13 @@ Trip::~Trip() {
         delete passengers.at(j);
     }
     passengers.clear();
+}
+
+/******************************************************************************
+* The function Operation: return the trip id
+******************************************************************************/
+int Trip::getId() {
+    return this->id;
 }
 
 /******************************************************************************
@@ -86,18 +89,27 @@ int Trip::sumOfSatisfaction() {
     return sum;
 }
 
-string Trip::serialize() {
+/******************************************************************************
+* The function Operation: serialize a trip
+******************************************************************************/
+string Trip::toString() {
     stringstream str;
+    // serialize trip id
     str << this->id;
     str <<  ",";
-    str << this->start.toSting();
+    // serialize start point
+    str << this->start.toString();
     str << ",";
-    str << this->end.toSting();
+    // serialize end point
+    str << this->end.toString();
     str <<  ",";
+    // serialize trip num of passengers
     str << this->numOfPass;
     str << ",";
+    // serialize trip price
     str << this->price;
     str << ",";
+    // serialize trip time
     str << this->time;
     return string(str.str());
 }

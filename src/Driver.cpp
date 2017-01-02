@@ -13,7 +13,8 @@ void Driver::calcAvg(){
 }
 
 /******************************************************************************
-* The function Operation: Driver destructor - delete the trip and the location.
+* The function Operation: Driver destructor - delete the trip and the location,
+* delete the map and the taxi if they exist
 ******************************************************************************/
 Driver::~Driver(){
     if (trip != NULL) {
@@ -42,7 +43,6 @@ void Driver::addPassCount(int passengers){
 * driver is not available.
 ******************************************************************************/
 void Driver::newTrip(Trip* trip){
-    notifyUnavaliable();
     Point* start = new Point(trip->start);
     Point* end = new Point(trip->end);
     trip->route = map->getRoute(start, end);
@@ -76,8 +76,6 @@ void Driver::moveOneStep() {
             this->calcAvg();
             delete trip;
             this->trip = NULL;
-            // the driver is available
-            notifyAvaliable();
             delete nextPoint;
             return;
         }
@@ -131,42 +129,8 @@ int Driver::getId() {
 }
 
 /******************************************************************************
-* The function Operation: add the driver to the available vector
+* The function Operation: return if the driver avaliable
 ******************************************************************************/
-void Driver::addAvaliableListener(AvaliableListener* al){
-    this->avaliableListeners.push_back(al);
-}
-
-/******************************************************************************
-* The function Operation: remove the driver from the available vector
-******************************************************************************/
-void Driver::removeAvaliableListener(AvaliableListener* al){
-    for(int i = 0; i< avaliableListeners.size(); i++){
-        if(avaliableListeners.at(i) == al){
-            avaliableListeners[i] = NULL;
-            avaliableListeners.erase(avaliableListeners.begin() + i);
-        }
-    }
-}
-
-/******************************************************************************
-* The function Operation: notify that the driver is available
-******************************************************************************/
-void Driver::notifyAvaliable(){
-    for(int i = 0; i< avaliableListeners.size(); i++){
-        avaliableListeners[i]->avaliableEvent(this);
-    }
-}
-
-/******************************************************************************
-* The function Operation: notify that the driver is not available
-******************************************************************************/
-void Driver::notifyUnavaliable(){
-    for(int i = 0; i< avaliableListeners.size(); i++){
-        avaliableListeners[i]->unavaliableEvent(this);
-    }
-}
-
 bool Driver::isAvaliable(){
     return (trip == NULL);
 }

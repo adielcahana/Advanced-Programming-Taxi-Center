@@ -49,9 +49,10 @@ int Udp::initialize() {
 		sin.sin_family = AF_INET;
 		sin.sin_addr.s_addr = INADDR_ANY;
 		sin.sin_port = htons(this->port_number);
+		this->ip_address = "127.0.0.1";
 		//bind
 		if (bind(this->socketDescriptor,
-				(struct sockaddr *) &sin, sizeof(sin)) < 0) {
+				 (struct sockaddr *) &sin, sizeof(sin)) < 0) {
 			return ERROR_BIND;
 		}
 	}
@@ -77,7 +78,7 @@ int Udp::sendData(string data) {
 	int data_len = data.length() + 1;
 	//send
 	int sent_bytes = sendto(this->socketDescriptor,
-			datas, data_len, 0, (struct sockaddr *) &sin, sizeof(sin));
+							datas, data_len, 0, (struct sockaddr *) &sin, sizeof(sin));
 	cout << "msg sent:" << datas << endl;
 	//check if send successfully
 	if (sent_bytes < 0) {
@@ -100,14 +101,13 @@ int Udp::reciveData(char* buffer, int size) {
 	//receive
 	memset(buffer, 0, size);
 	int bytes = recvfrom(this->socketDescriptor,
-			buffer, size, 0, (struct sockaddr *) &to, &to_len);
+						 buffer, size, 0, (struct sockaddr *) &to, &to_len);
 	//set the port number to the new one which we get with the data
-    if(isServer) {
-		this->ip_address = "127.0.0.1";
-        this->port_number = ntohs(to.sin_port);
-    }
+	if(isServer) {
+		this->port_number = ntohs(to.sin_port);
+	}
 	cout << "got msg:" << buffer << endl;
-    //check if receive successfully
+	//check if receive successfully
 	if (bytes < 0) {
 		cout << "recive error" << endl;
 		return -1;

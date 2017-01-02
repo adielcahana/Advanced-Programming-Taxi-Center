@@ -1,4 +1,5 @@
 #include "TaxiCenterFlow.h"
+
 /******************************************************************************
 * The Function Operation: flow ctor
 ******************************************************************************/
@@ -31,11 +32,13 @@ void TaxiCenterFlow::initialize(){
         switch (option) {
             case 1:
                 if (!wasInitialize) {
+                    // initialize the server
                     center->initialize();
                     cout << "bind" << endl;
                     cin >> option;
                     cin >> noskipws >> dummy;
                 }
+                // first talk with the driver
                 this->center->talkWithDriver();
                 break;
             case 2:
@@ -64,9 +67,10 @@ void TaxiCenterFlow::initialize(){
                 this->center->send(8);
                 break;
             case 9:
+                // set time passed and check if add trip to driver
                 time++;
-                this->center->timePassed();
                 this->center->addTripToDriver(time);
+                this->center->timePassed();
             default:
                 break;
         }

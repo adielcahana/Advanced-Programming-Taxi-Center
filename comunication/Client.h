@@ -8,6 +8,10 @@
 #include "Protocol.h"
 #include "Udp.h"
 
+/******************************************************************************
+* Client: the class for the client has a protocol and udp. client class manage
+* the comunication with the server for send and recive messages
+******************************************************************************/
 class Client {
 private:
     Protocol* protocol;

@@ -5,6 +5,10 @@
 #include "Udp.h"
 #include "TaxiCenterProtocol.h"
 
+/******************************************************************************
+* Server: the class for the server has a protocol and udp. server class manage
+* the comunication with clients for send and recive messages
+******************************************************************************/
 class Server {
 protected:
     Protocol* protocol;

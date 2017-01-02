@@ -93,11 +93,17 @@ bool Taxi::operator!=(const Taxi &rhs) const {
     return !(rhs == *this);
 }
 
-string Taxi::serialize() {
+/******************************************************************************
+* The function Operation: serialize a taxi
+******************************************************************************/
+string Taxi::toString() {
     stringstream str;
+    // serialize taxi id
     str << this->id;
+    // if lux taxi set type 2 else set 1
     if(this->getVelocity() == 2) str << ",2,";
     else str << ",1,";
+    // serialize taxi manufacturer
     switch(this->manufacturer){
         case HONDA:
             str << "H,";
@@ -114,6 +120,7 @@ string Taxi::serialize() {
         default:
             cout << "no manufacturer exist" << endl;
     }
+    // serialize taxi color
     switch(this->color){
         case RED:
             str << "R";
