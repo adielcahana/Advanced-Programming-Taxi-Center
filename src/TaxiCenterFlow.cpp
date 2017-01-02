@@ -36,7 +36,7 @@ void TaxiCenterFlow::initialize(){
                     cin >> option;
                     cin >> noskipws >> dummy;
                 }
-                this->center->talkWithDriver(time);
+                this->center->talkWithDriver();
                 break;
             case 2:
                 center->addTrip(parser.readTrip());
@@ -47,7 +47,7 @@ void TaxiCenterFlow::initialize(){
             case 4:
                 cin >> id;
                 cin >> noskipws >> dummy;
-                p = center->getDriverLocation(id);
+                p = center->getDriverLocation();
                 if(p != NULL){
                     cout << *p << endl;
                     delete p;

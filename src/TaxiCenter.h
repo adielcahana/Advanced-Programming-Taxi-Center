@@ -31,9 +31,9 @@ public:
     void setProtocolMap();
     void setProtocolTaxi(int taxiId);
     void setProtocolTrip(Trip* trip);
-    Point * getDriverLocation(int id);
+    Point *getDriverLocation();
     bool shouldStop();
-    void talkWithDriver(int time);
+    void talkWithDriver();
     void addTripToDriver(int time);
 };
 

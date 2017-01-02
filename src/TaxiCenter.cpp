@@ -8,7 +8,6 @@ TaxiCenter::TaxiCenter(Protocol *protocol, Udp *udp, Map *map) : Server(protocol
     avaliableDrivers = new vector <DriverInfo*>;
     avaliableCabs = new vector <Taxi*>();
     trips = new vector <Trip*>();
-    //avaliableDriversListener = new TripListener(avaliableDrivers);
     this->map = map;
 }
 
@@ -31,7 +30,6 @@ TaxiCenter::~TaxiCenter() {
     delete avaliableDrivers;
     avaliableCabs->clear();
     delete avaliableCabs;
-    delete avaliableDriversListener;
     delete map;
 }
 
@@ -77,14 +75,22 @@ void TaxiCenter::addTrip(Trip* trip){
     ((TaxiCenterProtocol*) this->protocol)->setTrip(trip);
 }
 
+/******************************************************************************
+* The function Operation: take the map and set it in the protocol
+******************************************************************************/
 void TaxiCenter::setProtocolMap() {
     ((TaxiCenterProtocol *) this->protocol)->setMap(this->map);
 }
 
+/******************************************************************************
+* The function Operation: get a taxi and set it in the protocol
+******************************************************************************/
 void TaxiCenter::setProtocolTaxi(int taxiId) {
     for(int i = 0; i < this->avaliableCabs->size(); i++){
+        // check for the right taxi
         if(taxiId == this->avaliableCabs->at(i)->getId()){
             ((TaxiCenterProtocol *) this->protocol)->setTaxi(this->avaliableCabs->at(i));
+            // taxi no longer avaliable
             delete this->avaliableCabs->at(i);
             this->avaliableCabs->erase(avaliableCabs->begin() + i);
             return;
@@ -92,6 +98,9 @@ void TaxiCenter::setProtocolTaxi(int taxiId) {
     }
 }
 
+/******************************************************************************
+* The function Operation: get a trip and set it in the protocol
+******************************************************************************/
 void TaxiCenter::setProtocolTrip(Trip* trip) {
             ((TaxiCenterProtocol *) this->protocol)->setTrip(trip);
 }
@@ -119,42 +128,46 @@ bool TaxiCenter::shouldStop(){
 }
 
 /******************************************************************************
-* The function Operation: get driver location by id
+* The function Operation: ask for driver location and retrun it
 ******************************************************************************/
-Point * TaxiCenter::getDriverLocation(int id){
-    /*DriverInfo* driverInfo = NULL;
-    for(int i = 0; i < drivers->size(); i++){
-        driverInfo = this->drivers->at(i);
-        if(driverInfo->getDriverId() == id){
-
-        }
-    }*/
+Point * TaxiCenter::getDriverLocation() {
     this->send(6);
     while (this->receive(6) != 6){
         this->send(0);
-    };
+    }
     return Point::deserialize(this->buffer);
 }
 
+/******************************************************************************
+* The function Operation: get string of Driver info and return Driver info
+******************************************************************************/
 DriverInfo *TaxiCenter::createDriverInfo(string buffer) {
     char *c = new char[buffer.length() + 1];
     strcpy(c, buffer.c_str());
     string str = strtok(c, ":");
+    // get the driver id
     int driverId  = stoi(strtok(NULL, " "));
     string str1 = strtok(NULL, ":");
+    // get the taxi id
     int taxiId = stoi(strtok(NULL, " "));
     delete[](c);
     return new DriverInfo(driverId, taxiId);
 }
 
-void TaxiCenter::talkWithDriver(int time) {
+/******************************************************************************
+* The function Operation: the first talk with the driver, create driver info
+* and send to the driver the map and the taxi
+******************************************************************************/
+void TaxiCenter::talkWithDriver() {
     int operation = 0;
     DriverInfo* driverInfo = NULL;
     do {
+        // first message from driver
         operation = this->receive(++operation);
 //        cout << operation << endl;
         switch (operation){
             case 1:
+                // create driver
                 driverInfo = this->createDriverInfo(this->buffer);
                 this->addDriverInfo(driverInfo);
                 this->send(1);
