@@ -83,19 +83,14 @@ void TaxiCenter::setProtocolTaxi(int taxiId) {
         if(taxiId == this->avaliableCabs->at(i)->getId()){
             ((TaxiCenterProtocol *) this->protocol)->setTaxi(this->avaliableCabs->at(i));
             delete this->avaliableCabs->at(i);
+            this->avaliableCabs->erase(avaliableCabs->begin() + i);
             return;
         }
     }
 }
 
-void TaxiCenter::setProtocolTrip(int tripId) {
-    for(int i = 0; i < this->trips->size(); i++){
-        if(tripId == this->trips->at(i)->getId()){
-            ((TaxiCenterProtocol *) this->protocol)->setTrip(this->trips->at(i));
-            delete this->trips->at(i);
-            return;
-        }
-    }
+void TaxiCenter::setProtocolTrip(Trip* trip) {
+            ((TaxiCenterProtocol *) this->protocol)->setTrip(trip);
 }
 
 /******************************************************************************
@@ -105,11 +100,10 @@ void TaxiCenter::timePassed(){
     int operation;
     for(int i = 0; i < drivers->size(); i++){
         this->send(5);
-        while ((operation = this->receive(7)) == 0){
-            this->send(0);
-        };
-        if (operation == 7) {
-            //todo: add to available drivers
+        operation = this->receive(7);
+        if(operation == 7){
+            this->avaliableDrivers->push_back((DriverInfo *&&) drivers->at(i));
+            this->send(7);
         }
     }
 }
@@ -150,7 +144,7 @@ DriverInfo *TaxiCenter::createDriverInfo(string buffer) {
     return new DriverInfo(driverId, taxiId);
 }
 
-void TaxiCenter::talkWithDriver() {
+void TaxiCenter::talkWithDriver(int time) {
     int operation = 0;
     DriverInfo* driverInfo = NULL;
     do {
@@ -171,16 +165,29 @@ void TaxiCenter::talkWithDriver() {
                 this->send(3);
                 break;
             case 4:
-                this->setProtocolTrip(0);
-                this->send(4);
-                break;
-            case 5:
                 break;
             default:
                 this->send(0);
         }
-    }while(operation < 5);
+    }while(operation < 4);
 }
+
+void TaxiCenter::addTripToDriver(int time){
+    for(int i = 0; i < this->trips->size(); i++){
+        if (time == this->trips->at(i)->time){
+            this->setProtocolTrip(this->trips->at(i));
+            this->send(4);
+            this->receive(5);
+            delete this->trips->at(i);
+            this->trips->erase(trips->begin() + i);
+            delete this->avaliableDrivers->at(i);
+            this->avaliableDrivers->erase(avaliableDrivers->begin() + i);
+        }
+    }
+}
+
+
+
 
 
 /*

@@ -121,9 +121,6 @@ vector <Node*>* Bfs::createRoute(Node* start ,Node* end, NodeComparator* compara
         route->push_back(temp);
         temp = temp->getFather();
     }
-    // push the start node (the first father).
-    start->setInRoute();
-    route->push_back(start);
     reverse(route->begin(), route->end());
     return route;
 }

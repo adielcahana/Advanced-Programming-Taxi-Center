@@ -65,6 +65,7 @@ class Map: public Graph{
         bool isInMap(Point *p);
 	public:
         Map(int width, int length, vector<Point*>* obstacles = NULL);
+		~Map();
 		vector<Point*>* getRoute(Point *start, Point *end);
 		queue<Node*>* getAdjacent(const Node *point);
         static Map* deserialize(string s);

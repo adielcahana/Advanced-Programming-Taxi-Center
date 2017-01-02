@@ -30,10 +30,11 @@ public:
 //    DriverInfo * findClosestDriver(Point start);
     void setProtocolMap();
     void setProtocolTaxi(int taxiId);
-    void setProtocolTrip(int tripId);
+    void setProtocolTrip(Trip* trip);
     Point * getDriverLocation(int id);
     bool shouldStop();
-    void talkWithDriver();
+    void talkWithDriver(int time);
+    void addTripToDriver(int time);
 };
 
 #endif //ASS2_TAXICENTER_H

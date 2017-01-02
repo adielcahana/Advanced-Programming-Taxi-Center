@@ -33,8 +33,10 @@ void TaxiCenterFlow::initialize(){
                 if (!wasInitialize) {
                     center->initialize();
                     cout << "bind" << endl;
+                    cin >> option;
+                    cin >> noskipws >> dummy;
                 }
-                this->center->talkWithDriver();
+                this->center->talkWithDriver(time);
                 break;
             case 2:
                 center->addTrip(parser.readTrip());
@@ -59,10 +61,12 @@ void TaxiCenterFlow::initialize(){
             case 7: // update the flow stop flag, and exit the loop
                 this->shouldStop = true;
                 shouldStop = true;
+                this->center->send(8);
                 break;
             case 9:
                 time++;
                 this->center->timePassed();
+                this->center->addTripToDriver(time);
             default:
                 break;
         }

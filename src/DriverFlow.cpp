@@ -1,7 +1,3 @@
-//
-// Created by adi on 30/12/16.
-//
-
 #include "DriverFlow.h"
 
 int main(int argc, char** argv) {
@@ -55,13 +51,16 @@ int main(int argc, char** argv) {
         }
         cin.rdbuf(cin_backup);
     }
-
     while(true) {
         Trip *trip = NULL;
         while (trip == NULL) {
             operation = driver->receive(4); //recieve trip or time passed
+            if(operation == 9){
+                delete driver;
+                return 0;
+            }
             if (operation == 0) {
-                driver->send(0); //request data again
+                driver->send(4); //request data again
                 continue;
             } else if (operation == 6) {
                 driver->timePassed();
@@ -86,15 +85,22 @@ int main(int argc, char** argv) {
         driver->send(5);
         while (!driver->isAvaliable()) {
             operation = driver->receive(5);
+            if(operation == 9){
+                delete driver;
+                return 0;
+            }
             if (operation == 6) {
                 driver->timePassed();
+                if(driver->isAvaliable()){
+                    driver->send(8);
+                    driver->receive(6);
+                    break;
+                }
                 driver->send(6);
             }
             else if(operation == 7){
                 driver->send(7);
             }
         }
-        driver->receive(5);
-        driver->send(8);
     }
 }

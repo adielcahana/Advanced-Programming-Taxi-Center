@@ -15,6 +15,8 @@ public:
     ~DriverInfo();
     int getDriverId();
     int getTaxiId();
+
+    DriverInfo(DriverInfo *&pInfo);
 };
 
 

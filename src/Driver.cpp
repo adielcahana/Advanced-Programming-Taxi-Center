@@ -19,6 +19,12 @@ Driver::~Driver(){
     if (trip != NULL) {
         delete trip;
     }
+    if (map != NULL) {
+        delete map;
+    }
+    if (taxi != NULL) {
+        delete taxi;
+    }
     if (location != NULL) {
         delete location;
     }
@@ -41,6 +47,7 @@ void Driver::newTrip(Trip* trip){
     Point* end = new Point(trip->end);
     trip->route = map->getRoute(start, end);
     this->trip = trip;
+    delete end;
 }
 
 /******************************************************************************
@@ -51,7 +58,7 @@ void Driver::timePassed(){
     if(trip == NULL){
         return;
     }
-    if (trip->time <= time){
+    if (trip->time < time){
         moveOneStep();
     }
 }

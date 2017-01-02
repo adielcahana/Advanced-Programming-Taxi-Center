@@ -7,26 +7,36 @@ int TaxiCenterProtocol::translate(char* msg, int scenario){
         case 1:
             if(strstr(msg, "hello, I am a new driver, my Id is")){
                 return 1;
+            } else if(strcmp(msg, "send again") == 0){
+                return scenario;
             }
             break;
         case 2:
             if (strcmp(msg, "ok, waiting for map") == 0){
                 return 2;
+            } else if(strcmp(msg, "send again") == 0){
+                return scenario;
             }
             break;
         case 3:
             if (strcmp(msg, "ok, waiting for taxi") == 0){
                 return 3;
+            } else if(strcmp(msg, "send again") == 0){
+                return scenario;
             }
             break;
         case 4:
             if(strcmp(msg, "taxi accepted") == 0){
                 return 4;
+            } else if(strcmp(msg, "send again") == 0){
+                return scenario;
             }
             break;
         case 5:
             if(strcmp(msg, "trip accepted") == 0){
                 return 5;
+            } else if(strcmp(msg, "send again") == 0){
+                return scenario;
             }
             break;
         case 6:
@@ -35,6 +45,8 @@ int TaxiCenterProtocol::translate(char* msg, int scenario){
                 str.erase(0, 7);
                 strcpy(msg, str.c_str());
                 return 6;
+            } else if(strcmp(msg, "send again") == 0){
+                return scenario;
             }
             break;
         case 7:
@@ -42,6 +54,8 @@ int TaxiCenterProtocol::translate(char* msg, int scenario){
                 return 5;
             } else if(strcmp(msg, "done") == 0){
                 return 7;
+            } else if(strcmp(msg, "send again") == 0){
+                return scenario;
             }
             break;
         default:
@@ -68,6 +82,8 @@ string TaxiCenterProtocol::createMsg(int numOfMsg){
             return "send your location";
         case 7:
             return "done";
+        case 8:
+            return "finish";
         default:
             return "send again";
     }

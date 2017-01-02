@@ -126,6 +126,14 @@ string Map::serialize(){
     }
     return strs.str();
 }
+
+Map::~Map() {
+    for(int i = 0; i < obstacles->size(); i++){
+        delete obstacles->at(i);
+    }
+    delete this->obstacles;
+}
+
 /******************************************************************************
 * The Function Operation: copy ctor
 ******************************************************************************/
@@ -202,6 +210,7 @@ const char* Point::serialize() {
     strs << x << "," << y;
     return strs.str().c_str();
 }
+
 /******************************************************************************
 * The Function Operation: evaluate if 2 points are equal by their == operator
 * used in order to provide a clean downcast and code writing

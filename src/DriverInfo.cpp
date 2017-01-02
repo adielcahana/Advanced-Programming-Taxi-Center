@@ -9,3 +9,8 @@ int DriverInfo::getDriverId() {
 int DriverInfo::getTaxiId() {
     return this->taxiId;
 }
+
+DriverInfo::DriverInfo(DriverInfo *&driverInfo) {
+    this->taxiId = driverInfo->taxiId;
+    this->driverId = driverInfo->driverId;
+}

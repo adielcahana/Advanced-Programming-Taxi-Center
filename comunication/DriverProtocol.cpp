@@ -3,10 +3,16 @@
 using namespace std;
 int DriverProtocol::translate(char* msg, int scenario){
     string str;
+    if(strcmp(msg, "finish") == 0){
+        return 9;
+    }
     switch(scenario) {
         case 1:
             if (strcmp(msg, "hello I am sending your map") == 0) {
                 return 2;
+            }
+            else if(strcmp(msg, "send again") == 0){
+                return scenario;
             }
             break;
         case 2:
@@ -15,6 +21,8 @@ int DriverProtocol::translate(char* msg, int scenario){
                 str.erase(0,5);
                 strcpy(msg, str.c_str());
                 return 3;
+            } else if(strcmp(msg, "send again") == 0){
+                return scenario;
             }
             break;
         case 3:
@@ -25,28 +33,37 @@ int DriverProtocol::translate(char* msg, int scenario){
                 return 4;
             } else if (strcmp(msg, "time passed") == 0) {
                 return 6;
+            } else if(strcmp(msg, "send again") == 0){
+                return scenario;
             }
             break;
         case 4:
-            if (strstr(msg, "trip")) {
+            if (strstr(msg, "trip:")) {
                 str = string(msg);
                 str.erase(0,6);
                 strcpy(msg, str.c_str());
                 return 5;
             } else if (strcmp(msg, "time passed") == 0) {
                 return 6;
-            } else if(strcmp(msg, "send your location") == 0){
+            } else if(strcmp(msg, "send your location") == 0) {
                 return 7;
+            } else if(strcmp(msg, "send again") == 0){
+                return scenario;
             }
             break;
         case 5:
             if (strcmp(msg, "time passed") == 0) {
                 return 6;
-            }
-            else if(strcmp(msg, "send your location") == 0){
+            } else if(strcmp(msg, "send your location") == 0){
                 return 7;
+            } else if(strcmp(msg, "send again") == 0){
+                return scenario;
             }
             break;
+        case 6:
+            if (strcmp(msg, "done") == 0) {
+                return 8;
+            }
         default:
             return 0;
     }
