@@ -111,6 +111,5 @@ string Trip::toString() {
     str << ",";
     // serialize trip time
     str << this->time;
-    return string(str.str());
+    return str.str();
 }
-

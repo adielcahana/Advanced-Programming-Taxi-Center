@@ -1,5 +1,14 @@
 #include "DriverFlow.h"
+#include <stdexcept>
 
+#include "boost/serialization/export.hpp"
+
+//BOOST_CLASS_EXPORT_GUID(LuxTaxi,"LuxTaxi")
+
+//string bufferToString(char* buffer, int len){
+//    string ret(buffer,len);
+//    return ret;
+//}
 /******************************************************************************
 * The function Operation: run the driver (client) program
 ******************************************************************************/
@@ -49,6 +58,12 @@ int main(int argc, char** argv) {
         try {
             // create taxi that got from the taxi center
             taxi = pars.readTaxi();
+//            char buffer[1024];
+//            string serial_str = bufferToString(buffer, sizeof(buffer));
+//            boost::iostreams::basic_array_source<char> device(serial_str.c_str(), serial_str.size());
+//            boost::iostreams::stream<boost::iostreams::basic_array_source<char> > s2(device);
+//            boost::archive::binary_iarchive ia(s2);
+//            ia >> *taxi;
             driver->setTaxi(taxi);
             driver->send(4);
         } catch (runtime_error){

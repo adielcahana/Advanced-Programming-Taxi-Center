@@ -72,7 +72,6 @@ Taxi* TaxiCenter::searchTaxiById(int id){
 ******************************************************************************/
 void TaxiCenter::addTrip(Trip* trip){
     this->trips->push_back(trip);
-    ((TaxiCenterProtocol*) this->protocol)->setTrip(trip);
 }
 
 /******************************************************************************
@@ -114,7 +113,8 @@ void TaxiCenter::timePassed(){
         this->send(5);
         operation = this->receive(7);
         if(operation == 7){
-            this->avaliableDrivers->push_back((DriverInfo *&&) drivers->at(i));
+            DriverInfo* driverInfo = drivers->at(i);
+            this->avaliableDrivers->push_back(driverInfo);
             this->send(7);
         }
     }
@@ -146,10 +146,10 @@ DriverInfo *TaxiCenter::createDriverInfo(string buffer) {
     strcpy(c, buffer.c_str());
     string str = strtok(c, ":");
     // get the driver id
-    int driverId  = stoi(strtok(NULL, " "));
+    int driverId  = atoi(strtok(NULL, " "));
     string str1 = strtok(NULL, ":");
     // get the taxi id
-    int taxiId = stoi(strtok(NULL, " "));
+    int taxiId = atoi(strtok(NULL, " "));
     delete[](c);
     return new DriverInfo(driverId, taxiId);
 }

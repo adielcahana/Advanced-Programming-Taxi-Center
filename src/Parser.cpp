@@ -1,4 +1,5 @@
 #include "Parser.h"
+#include <stdexcept>
 /******************************************************************************
 * The Function Operation: verify valid trip input
 ******************************************************************************/
@@ -167,7 +168,7 @@ Trip* Parser::readTrip(){
     y = strtok(NULL, ",");
     Point end(atoi(x),atoi(y));
     int numOfPassengers = atoi(strtok(NULL, ","));
-    float tariff = stof(strtok(NULL, ","));
+    float tariff = atof(strtok(NULL, ","));
     int time = atoi(strtok(NULL, " "));
     delete[] (c);
     return new Trip(id, start, end, numOfPassengers, tariff, time);

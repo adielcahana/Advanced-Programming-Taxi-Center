@@ -39,7 +39,9 @@ void TaxiCenterFlow::initialize(){
                     cin >> noskipws >> dummy;
                 }
                 // first talk with the driver
-                this->center->talkWithDriver();
+                for(int i = 0; i < option; i++) {
+                    this->center->talkWithDriver();
+                }
                 break;
             case 2:
                 center->addTrip(parser.readTrip());

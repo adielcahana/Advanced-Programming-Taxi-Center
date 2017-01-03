@@ -91,8 +91,8 @@ int DriverProtocol::translate(char* msg, int scenario){
 ******************************************************************************/
 string DriverProtocol::createMsg(int numOfMsg){
     stringstream str, str1;
-    str << this->driverId;
-    str1 << this->taxiId;
+    str << driverId;
+    str1 << taxiId;
     switch (numOfMsg){
         case 0:
             return "send again";
