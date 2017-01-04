@@ -98,14 +98,10 @@ string Trip::toString() {
     str << this->id;
     str << ",";
     // serialize start point
-    string str1 = this->start.toString();
-    const char* start = str1.c_str();
-    str << start;
+    str << this->start.toString();
     str << ",";
     // serialize end point
-    string str2 = this->end.toString();
-    const char* end = str2.c_str();
-    str << end;
+    str << this->end.toString();
     str << ",";
     // serialize trip num of passengers
     str << this->numOfPass;
@@ -115,5 +111,5 @@ string Trip::toString() {
     str << ",";
     // serialize trip time
     str << this->time;
-    return str1;
+    return str.str();
 }

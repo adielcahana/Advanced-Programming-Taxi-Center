@@ -1,9 +1,4 @@
 #include "TaxiCenterProtocol.h"
-//#include "boost/serialization/export.hpp"
-//#include "../src/LuxTaxi.h"
-
-//BOOST_CLASS_EXPORT_GUID(LuxTaxi,"LuxTaxi")
-
 
 /******************************************************************************
 * The Function Operation: this map = given map serialization
@@ -16,14 +11,7 @@ void TaxiCenterProtocol::setMap(Map* map) {
 * The Function Operation: this taxi = given taxi serialization
 ******************************************************************************/
 void TaxiCenterProtocol::setTaxi(Taxi* taxi) {
-//    std::string serial_str;
-//    boost::iostreams::back_insert_device<std::string> inserter(serial_str);
-//    boost::iostreams::stream<boost::iostreams::back_insert_device<std::string> > s(inserter);
-//    boost::archive::binary_oarchive oa(s);
-//    oa << *taxi;
-//    s.flush();
     this->taxi = taxi->toString();
-//    this->taxi = "taxi:" + serial_str;
 }
 
 /******************************************************************************
@@ -128,3 +116,4 @@ string TaxiCenterProtocol::createMsg(int numOfMsg){
     }
 }
 
+TaxiCenterProtocol::~TaxiCenterProtocol() {}

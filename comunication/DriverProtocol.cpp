@@ -90,14 +90,15 @@ int DriverProtocol::translate(char* msg, int scenario){
 * The Function Operation: get number of message and create the right message
 ******************************************************************************/
 string DriverProtocol::createMsg(int numOfMsg){
-    stringstream str, str1;
-    str << driverId;
-    str1 << taxiId;
+    stringstream driver_id, taxi_id;
+    driver_id << driverId;
+    taxi_id << taxiId;
     switch (numOfMsg){
         case 0:
             return "send again";
         case 1: // first message to taxi center
-            return "hello, I am a new driver, my Id is:" + str.str() + " my taxi id is:" + str.str();
+            return "hello, I am a new driver, my Id is:" + driver_id.str() +
+                    " my taxi id is:" + taxi_id.str();
         case 2: // wait for map
             return "ok, waiting for map";
         case 3: // wait for taxi

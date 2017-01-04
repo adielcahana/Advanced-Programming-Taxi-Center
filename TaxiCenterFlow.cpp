@@ -16,7 +16,7 @@ TaxiCenterFlow::~TaxiCenterFlow(){
 }
 /******************************************************************************
 * The Function Operation: initialize the game while getting input and
-* parsing it
+* parsing it. all the numbers that are sent are specified in taxiCenterProtocol
 ******************************************************************************/
 void TaxiCenterFlow::initialize(){
     int option;
@@ -34,7 +34,6 @@ void TaxiCenterFlow::initialize(){
                 if (!wasInitialize) {
                     // initialize the server
                     center->initialize();
-                    cout << "bind" << endl;
                     cin >> option;
                     cin >> noskipws >> dummy;
                 }
@@ -66,7 +65,7 @@ void TaxiCenterFlow::initialize(){
             case 7: // update the flow stop flag, and exit the loop
                 this->shouldStop = true;
                 shouldStop = true;
-                this->center->send(8);
+                this->center->send(8); // send finish the program
                 break;
             case 9:
                 // set time passed and check if add trip to driver

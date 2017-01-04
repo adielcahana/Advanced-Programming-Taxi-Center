@@ -49,7 +49,7 @@ int Udp::initialize() {
 		sin.sin_family = AF_INET;
 		sin.sin_addr.s_addr = INADDR_ANY;
 		sin.sin_port = htons(this->port_number);
-		this->ip_address = "127.0.0.1";
+		this->ip_address = "127.0.0.1"; //local host
 		//bind
 		if (bind(this->socketDescriptor,
 				 (struct sockaddr *) &sin, sizeof(sin)) < 0) {
@@ -79,7 +79,7 @@ int Udp::sendData(string data) {
 	//send
 	int sent_bytes = sendto(this->socketDescriptor,
 							datas, data_len, 0, (struct sockaddr *) &sin, sizeof(sin));
-	cout << "msg sent:" << datas << endl;
+
 	//check if send successfully
 	if (sent_bytes < 0) {
 		cout << "send error" << endl;
@@ -106,7 +106,7 @@ int Udp::reciveData(char* buffer, int size) {
 	if(isServer) {
 		this->port_number = ntohs(to.sin_port);
 	}
-	cout << "got msg:" << buffer << endl;
+
 	//check if receive successfully
 	if (bytes < 0) {
 		cout << "recive error" << endl;

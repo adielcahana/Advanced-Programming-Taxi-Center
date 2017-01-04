@@ -5,9 +5,10 @@
 #ifndef EX2_PARSE_H
 #define EX2_PARSE_H
 
-
 #include "Driver.h"
 #include "LuxTaxi.h"
+#include <stdexcept>
+
 /******************************************************************************
 * Parser: defines a parsing capability for the input.
 * the class can verify the input validity and create object accordingly

@@ -30,6 +30,7 @@ TaxiCenter::~TaxiCenter() {
     delete avaliableDrivers;
     avaliableCabs->clear();
     delete avaliableCabs;
+    delete (TaxiCenterProtocol *) this->protocol;
     delete map;
 }
 

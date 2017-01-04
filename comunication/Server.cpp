@@ -1,11 +1,10 @@
 #include "Server.h"
 
 /******************************************************************************
-* The function Operation: Server destructor - delete the udp and the protocol.
+* The function Operation: Server destructor - delete the udp.
 ******************************************************************************/
 Server::~Server() {
     delete this->udp;
-    delete this->protocol;
 }
 
 /******************************************************************************
