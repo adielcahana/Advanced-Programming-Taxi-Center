@@ -66,6 +66,8 @@ void TaxiCenterFlow::initialize(){
                 }
                 break;
             case 6: // stop getting input, and exit the loop
+                time++;
+                this->center->addTripToDriver(time);
                 shouldStop = true;
                 break;
             case 7: // update the flow stop flag, and exit the loop
@@ -88,7 +90,9 @@ void TaxiCenterFlow::initialize(){
 * The Function Operation: run the gmae step by step
 ******************************************************************************/
 void TaxiCenterFlow::run(){
+    int time = 0;
     while(!center->shouldStop()){
+        time++;
         center->timePassed();
     }
 }

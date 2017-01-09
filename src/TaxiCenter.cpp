@@ -71,6 +71,7 @@ Taxi* TaxiCenter::searchTaxiById(int id){
 * The function Operation: add a trip to the trip list
 ******************************************************************************/
 void TaxiCenter::addTrip(Trip* trip){
+
     this->trips->push_back(trip);
 }
 
