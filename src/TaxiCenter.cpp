@@ -68,11 +68,24 @@ Taxi* TaxiCenter::searchTaxiById(int id){
 }
 
 /******************************************************************************
-* The function Operation: get a trip create a route from it's start and end
-* points and check if some driver can get this trip
+* The function Operation: add a trip to the trip list
 ******************************************************************************/
 void TaxiCenter::addTrip(Trip* trip){
     this->trips->push_back(trip);
+}
+
+/******************************************************************************
+* The function Operation: get a trip  and create a route from it's start and end
+* points
+******************************************************************************/
+void TaxiCenter::createRoute(){
+    Trip* trip = this->trips->at(this->trips->size() - 1);
+    cout << "trip num: " << trip->id << " is calcaulated" << endl;
+    Point* start = new Point(trip->start);
+    Point* end = new Point(trip->end);
+    trip->route = map->getRoute(start, end);
+    delete end;
+    cout << "trip num: " << trip->id << " ended calcaulating" << endl;
 }
 
 /******************************************************************************
@@ -196,10 +209,18 @@ void TaxiCenter::talkWithDriver() {
 * The function Operation: send trip to the driver
 ******************************************************************************/
 void TaxiCenter::addTripToDriver(int time){
+    Trip* trip = NULL;
     for(int i = 0; i < this->trips->size(); i++){
         // if the time of the trip arrived
-        if (time >= this->trips->at(i)->time){
-            this->setProtocolTrip(this->trips->at(i));
+        trip = this->trips->at(i);
+        if (time >= trip->time){
+            if (trip->route == NULL){
+                pthread_t* thread = trip->getThread();
+                pthread_join(*thread, NULL);
+                delete thread;
+                trip->setThread(NULL);
+            }
+            this->setProtocolTrip(trip);
             // send trip to driver
             this->send(4);
             // get message that trip accepted

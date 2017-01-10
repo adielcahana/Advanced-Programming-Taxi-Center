@@ -19,10 +19,10 @@ TaxiCenterFlow::~TaxiCenterFlow(){
 * parsing it. all the numbers that are sent are specified in taxiCenterProtocol
 ******************************************************************************/
 void TaxiCenterFlow::initialize(){
-    int option;
-    int time = 0;
+    int option, status = 0, time = 0;
     char dummy; // variable for '\n'
     Point* p = NULL;
+    Trip* trip = NULL;
     bool shouldStop = false; // initialization stop flag
     bool wasInitialize = false;
     int id;
@@ -43,7 +43,13 @@ void TaxiCenterFlow::initialize(){
                 }
                 break;
             case 2:
-                center->addTrip(parser.readTrip());
+                trip = parser.readTrip();
+                center->addTrip(trip);
+                trip->setThread(new pthread_t());
+                status = pthread_create(trip->getThread(), NULL, TaxiCenterFlow::createRoute, this->center);
+                if (status) {
+                    cout << "error while trying to create trip" << endl;
+                }
                 break;
             case 3:
                 center->addAvaliableTaxi(parser.readTaxi());
@@ -85,6 +91,10 @@ void TaxiCenterFlow::run(){
     while(!center->shouldStop()){
         center->timePassed();
     }
+}
+
+void* TaxiCenterFlow::createRoute(void* center){
+    ((TaxiCenter*) center)->createRoute();
 }
 
 int main(int argc, char* argv[]){

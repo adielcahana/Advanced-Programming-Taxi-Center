@@ -77,17 +77,13 @@ int main(int argc, char** argv) {
                 driver->send(7);
                 continue;
             }
-            istringstream stream(driver->buffer);
-            streambuf *cin_backup = cin.rdbuf(stream.rdbuf());
-            cin.rdbuf(stream.rdbuf()); //redirect std::cin
             try {
                 // create trip that got from the taxi center
-                trip = pars.readTrip();
+                trip = Trip::fromString(string(driver->buffer));
                 driver->newTrip(trip);
             } catch (runtime_error) {
                 driver->send(0); // request data again
             }
-            cin.rdbuf(cin_backup);
         }
 
         driver->send(5);

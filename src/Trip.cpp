@@ -1,5 +1,4 @@
 #include "Trip.h"
-#include <sstream>
 
 /******************************************************************************
 * The function Operation: Trip constructor.
@@ -29,6 +28,17 @@ Trip::~Trip() {
     }
     passengers.clear();
 }
+/******************************************************************************
+* The function Operation: return the trip calculation thread object
+******************************************************************************/
+pthread_t* Trip::getThread(){
+    return this->thread;
+}
+
+void Trip::setThread(pthread_t* thread){
+    this->thread = thread;
+};
+
 
 /******************************************************************************
 * The function Operation: return the trip id
@@ -93,23 +103,78 @@ int Trip::sumOfSatisfaction() {
 * The function Operation: serialize a trip
 ******************************************************************************/
 string Trip::toString() {
-    stringstream str;
+    stringstream strs;
     // serialize trip id
-    str << this->id;
-    str << ",";
+    strs << this->id;
+    strs << " ";
     // serialize start point
-    str << this->start.toString();
-    str << ",";
+    strs << this->start.toString();
+    strs << " ";
     // serialize end point
-    str << this->end.toString();
-    str << ",";
+    strs << this->end.toString();
+    strs << " ";
+    //serialize the route
+    strs << route->size();
+    for (int i = 0; i < route->size(); i++) {
+        strs << " " << route->at(i)->toString();
+    }
+    strs << " ";
     // serialize trip num of passengers
-    str << this->numOfPass;
-    str << ",";
+    strs << this->numOfPass;
+    strs << " ";
     // serialize trip price
-    str << this->price;
-    str << ",";
+    strs << this->price;
+    strs << " ";
     // serialize trip time
-    str << this->time;
-    return str.str();
+    strs << this->time;
+    return strs.str();
+}
+/******************************************************************************
+* The function Operation: deserialize a trip
+******************************************************************************/
+Trip* Trip::fromString(string s) {
+    stringstream strs(s);
+    stringbuf buff;
+    int id = 0, numOfPass = 0, route_size = 0, time = 0;
+    char dummy;
+    double price = 0;
+    vector <Point*>* route = NULL;
+    strs >> id;
+    strs >> noskipws >> dummy;
+    // deserialize start point
+    strs.get(buff, ' ');
+    Point* start = Point::deserialize(buff.str());
+    buff.str("");
+    // serialize end point
+    strs >> noskipws >> dummy;
+    strs.get(buff, ' ');
+    Point* end = Point::deserialize(buff.str());
+    buff.str("");
+    //deserialize the route
+    strs >> noskipws >> dummy;
+    strs >> route_size;
+    if (route_size > 0) {
+        route = new vector <Point*>();
+        for (int i = 0; i < route_size; i++) {
+            strs >> noskipws >> dummy;
+            strs.get(buff, ' ');
+            Point* temp = Point::deserialize(buff.str());
+            route->push_back(temp);
+            buff.str("");
+        }
+    }
+    // deserialize trip num of passengers
+    strs >> noskipws >> dummy;
+    strs >> numOfPass;
+    // deserialize trip price
+    strs >> noskipws >> dummy;
+    strs >> price;
+    // serialize trip time
+    strs >> noskipws >> dummy;
+    strs >> time;
+    Trip* trip = new Trip(id, *start, *end, numOfPass, price, time);
+    delete start;
+    delete end;
+    trip->route = route;
+    return trip;
 }

@@ -21,6 +21,7 @@ public:
     TaxiCenterFlow(int port);
     ~TaxiCenterFlow();
     void initialize();
+    static void* createRoute(void* center);
     void run();
 };
 

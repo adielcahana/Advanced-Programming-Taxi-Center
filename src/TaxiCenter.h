@@ -3,6 +3,7 @@
 
 #include "Trip.h"
 #include "DriverInfo.h"
+#include <pthread.h>
 #include "../comunication/Server.h"
 
 /******************************************************************************
@@ -24,6 +25,7 @@ public:
     DriverInfo* createDriverInfo(string buffer);
     Taxi* searchTaxiById(int id);
     void addTrip(Trip* trip);
+    void createRoute();
     void timePassed();
 //    DriverInfo * findClosestDriver(Point start);
     void setProtocolMap();

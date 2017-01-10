@@ -1,8 +1,7 @@
 cmake_minimum_required(VERSION 3.3)
 project(ex4)
 
-set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -lpthread")
-set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Werror -std=c++11 -g")
+set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Werror -std=c++0x -g -pthread")
 
 #set(BOOST_ROOT CACHE PATH "/usr/include/boost/")
 #find_package(Boost 1.58.0 COMPONENTS serialization system)

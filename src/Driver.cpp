@@ -43,11 +43,7 @@ void Driver::addPassCount(int passengers){
 * driver is not available.
 ******************************************************************************/
 void Driver::newTrip(Trip* trip){
-    Point* start = new Point(trip->start);
-    Point* end = new Point(trip->end);
-    trip->route = map->getRoute(start, end);
     this->trip = trip;
-    delete end;
 }
 
 /******************************************************************************

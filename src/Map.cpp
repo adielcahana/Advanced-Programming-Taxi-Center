@@ -120,9 +120,13 @@ Map* Map::deserialize(string s){
 string Map::toString(){
     stringstream strs;
     strs << width << "," << length << " ";
-    strs << obstacles->size();
-    for (int i = 0; i < obstacles->size(); i++){
-        strs << " " << obstacles->at(i)->toString();
+    if (obstacles != NULL) {
+        strs << obstacles->size();
+        for (int i = 0; i < obstacles->size(); i++) {
+            strs << " " << obstacles->at(i)->toString();
+        }
+    } else {
+        strs << "0";
     }
     return strs.str();
 }
