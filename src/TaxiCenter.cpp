@@ -8,7 +8,11 @@ TaxiCenter::TaxiCenter(Protocol *protocol, Udp *udp, Map *map) : Server(protocol
     avaliableDrivers = new vector <DriverInfo*>;
     avaliableCabs = new vector <Taxi*>();
     trips = new vector <Trip*>();
+    uncalculatedtrips = new queue <Trip*>();
     this->map = map;
+    if (pthread_mutex_init(&lock, NULL) != 0) {
+        cout << "unable to init taxi center lock" << endl;
+    }
 }
 
 /******************************************************************************
@@ -32,6 +36,7 @@ TaxiCenter::~TaxiCenter() {
     delete avaliableCabs;
     delete (TaxiCenterProtocol *) this->protocol;
     delete map;
+    pthread_mutex_destroy(&lock);
 }
 
 /******************************************************************************
@@ -72,6 +77,7 @@ Taxi* TaxiCenter::searchTaxiById(int id){
 ******************************************************************************/
 void TaxiCenter::addTrip(Trip* trip){
     this->trips->push_back(trip);
+    this->uncalculatedtrips->push(trip);
 }
 
 /******************************************************************************
@@ -79,8 +85,11 @@ void TaxiCenter::addTrip(Trip* trip){
 * points
 ******************************************************************************/
 void TaxiCenter::createRoute(){
-    Trip* trip = this->trips->at(this->trips->size() - 1);
+    pthread_mutex_lock(&lock);
+    Trip* trip = this->uncalculatedtrips->front();
+    this->uncalculatedtrips->pop();
     cout << "trip num: " << trip->id << " is calcaulated" << endl;
+    pthread_mutex_unlock(&lock);
     Point* start = new Point(trip->start);
     Point* end = new Point(trip->end);
     trip->route = map->getRoute(start, end);
@@ -210,7 +219,7 @@ void TaxiCenter::talkWithDriver() {
 ******************************************************************************/
 void TaxiCenter::addTripToDriver(int time){
     Trip* trip = NULL;
-    for(int i = 0; i < this->trips->size(); i++){
+    for(unsigned long i = 0; i < this->trips->size(); i++){
         // if the time of the trip arrived
         trip = this->trips->at(i);
         if (time >= trip->time){

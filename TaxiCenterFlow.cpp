@@ -85,7 +85,7 @@ void TaxiCenterFlow::initialize(){
 }
 
 /******************************************************************************
-* The Function Operation: run the gmae step by step
+* The Function Operation: run the game step by step
 ******************************************************************************/
 void TaxiCenterFlow::run(){
     while(!center->shouldStop()){
@@ -95,9 +95,13 @@ void TaxiCenterFlow::run(){
 
 void* TaxiCenterFlow::createRoute(void* center){
     ((TaxiCenter*) center)->createRoute();
+    pthread_exit(NULL);
 }
 
 int main(int argc, char* argv[]){
+    std::ofstream out("taxi_center_log.txt");
+    std::streambuf *coutbuf = std::cout.rdbuf(); //save old buf
+    std::cout.rdbuf(out.rdbuf());
     // argv[1] = port number
     int port = atoi(argv[1]);
     TaxiCenterFlow flow(port);
@@ -105,4 +109,5 @@ int main(int argc, char* argv[]){
         flow.initialize();
         if (!flow.shouldStop) flow.run();
     }
+    std::cout.rdbuf(coutbuf);
 }

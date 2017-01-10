@@ -36,6 +36,6 @@ void Client::send(int numOfMsg) {
 * the server and send to protocol for translate
 ******************************************************************************/
 int Client::receive(int scenario){
-    this->udp->reciveData(buffer, 1024);
+    this->udp->reciveData(buffer, sizeof(buffer));
     return this->protocol->translate(buffer,scenario);
 }

@@ -16,7 +16,9 @@ private:
     vector <DriverInfo*>* avaliableDrivers;
     vector <Taxi*>* avaliableCabs;
     vector <Trip*>* trips;
+    queue <Trip*>* uncalculatedtrips;
     Map* map;
+    pthread_mutex_t lock;
 public:
     TaxiCenter(Protocol* protocol, Udp* udp, Map* map);
     ~TaxiCenter();

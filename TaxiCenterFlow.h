@@ -7,6 +7,7 @@
 
 #include "src/TaxiCenter.h"
 #include "src/Parser.h"
+#include <fstream>
 
 /******************************************************************************
 * Flow: handlesthe program flow. this class uses the input parser to
