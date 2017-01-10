@@ -161,6 +161,7 @@ Trip* Parser::readTrip(){
     char *c = new char[buffer.length() + 1];
     strcpy(c, buffer.c_str());
     int id = atoi(strtok(c, ","));
+    // extract point coordinates
     char *x = strtok(NULL, ",");
     char *y = strtok(NULL, ",");
     Point start(atoi(x),atoi(y));
