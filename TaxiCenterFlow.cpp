@@ -5,7 +5,7 @@
 ******************************************************************************/
 TaxiCenterFlow::TaxiCenterFlow(int port){
     Map* map = parser.readMap();
-    this->center = new TaxiCenter(new TaxiCenterProtocol(), new Udp(true, port), map);
+    this->center = new TaxiCenter(new TaxiCenterProtocol(), new Tcp(true, port), map);
     this->shouldStop = false;
 }
 /******************************************************************************
@@ -39,7 +39,7 @@ void TaxiCenterFlow::initialize(){
                 }
                 // first talk with the driver
                 for(int i = 0; i < option; i++) {
-                    this->center->talkWithDriver();
+                    this->center->acceptNewDriver();
                 }
                 break;
             case 2:
@@ -71,7 +71,7 @@ void TaxiCenterFlow::initialize(){
             case 7: // update the flow stop flag, and exit the loop
                 this->shouldStop = true;
                 shouldStop = true;
-                this->center->send(8); // send finish the program
+                this->center->sendFinish(); // send finish the program
                 break;
             case 9:
                 // set time passed and check if add trip to driver
@@ -85,7 +85,7 @@ void TaxiCenterFlow::initialize(){
 }
 
 /******************************************************************************
-* The Function Operation: run the gmae step by step
+* The Function Operation: run the game step by step
 ******************************************************************************/
 void TaxiCenterFlow::run(){
     while(!center->shouldStop()){
@@ -95,9 +95,17 @@ void TaxiCenterFlow::run(){
 
 void* TaxiCenterFlow::createRoute(void* center){
     ((TaxiCenter*) center)->createRoute();
+    pthread_exit(NULL);
 }
 
-int main(int argc, char* argv[]){
+int main(int argc, char* argv[]) {
+    std::ifstream in("server.txt");
+    std::streambuf *cinbuf = std::cin.rdbuf(); //save old buf
+    std::cin.rdbuf(in.rdbuf());
+
+    std::ofstream out("taxi_center_log.txt");
+    std::streambuf *coutbuf = std::cout.rdbuf(); //save old buf
+    std::cout.rdbuf(out.rdbuf());
     // argv[1] = port number
     int port = atoi(argv[1]);
     TaxiCenterFlow flow(port);
@@ -105,4 +113,6 @@ int main(int argc, char* argv[]){
         flow.initialize();
         if (!flow.shouldStop) flow.run();
     }
+    std::cout.rdbuf(coutbuf);
+    std::cin.rdbuf(cinbuf);
 }

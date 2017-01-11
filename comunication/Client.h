@@ -6,7 +6,7 @@
 #define EX4_CLIENT_H
 
 #include "Protocol.h"
-#include "Udp.h"
+#include "Tcp.h"
 
 /******************************************************************************
 * Client: the class for the client has a protocol and udp. client class manage
@@ -15,9 +15,9 @@
 class Client {
 private:
     Protocol* protocol;
-    Udp* udp;
+    Tcp* tcp;
 public:
-    char buffer[1024];
+    char buffer[65536];
     Client(Protocol* protocol): protocol(protocol){};
     ~Client();
     void initialize(const char* ip_address, const int port_num);

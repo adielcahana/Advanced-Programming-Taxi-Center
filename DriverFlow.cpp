@@ -1,3 +1,4 @@
+#include <fstream>
 #include "DriverFlow.h"
 
 
@@ -6,6 +7,9 @@
 ******************************************************************************/
 int main(int argc, char** argv) {
     Parser pars;
+    std::ofstream out("driver_log.txt");
+    std::streambuf *coutbuf = std::cout.rdbuf(); //save old buf
+    std::cout.rdbuf(out.rdbuf());
     // create driver from input
     Driver *driver = pars.readDriver();
     driver->initialize(argv[1], atoi(argv[2])); //set the Client connection
@@ -63,6 +67,7 @@ int main(int argc, char** argv) {
         while (trip == NULL) {
             operation = driver->receive(4); //recieve trip or time passed
             if(operation == 9){ // finish the program
+                std::cout.rdbuf(coutbuf);
                 delete driver;
                 return 0;
             }
@@ -90,7 +95,8 @@ int main(int argc, char** argv) {
         // run until the driver finish the trip or the program end
         while (!driver->isAvaliable()) {
             operation = driver->receive(5);
-            if(operation == 9){ // finish the program
+            if (operation == 9){ // finish the program
+                std::cout.rdbuf(coutbuf);
                 delete driver;
                 return 0;
             }

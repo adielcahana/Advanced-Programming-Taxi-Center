@@ -1,12 +1,9 @@
-//
-// Created by ori on 28/11/16.
-//
-
 #ifndef ASS2_FLOW_H
 #define ASS2_FLOW_H
 
 #include "src/TaxiCenter.h"
 #include "src/Parser.h"
+#include <fstream>
 
 /******************************************************************************
 * Flow: handlesthe program flow. this class uses the input parser to
