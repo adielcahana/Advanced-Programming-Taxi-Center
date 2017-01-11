@@ -10,7 +10,7 @@ using namespace std;
 * The function Operation: Client destructor - delete the udp and the protocol.
 ******************************************************************************/
 Client::~Client(){
-    delete this->tcp;
+    delete this->udp;
     delete this->protocol;
 }
 
@@ -18,8 +18,8 @@ Client::~Client(){
 * The function Operation: initialize the Client create new Udp and initilize it
 ******************************************************************************/
 void Client::initialize(const char* ip_address, const int port_num){
-    this->tcp = new Tcp(false, port_num, ip_address);
-    this->tcp->initialize();
+    this->udp = new Udp(false, port_num, ip_address);
+    this->udp->initialize();
 }
 
 /******************************************************************************
@@ -28,7 +28,7 @@ void Client::initialize(const char* ip_address, const int port_num){
 ******************************************************************************/
 void Client::send(int numOfMsg) {
     string msg = protocol->createMsg(numOfMsg);
-    this->tcp->sendData(msg);
+    this->udp->sendData(msg);
 }
 
 /******************************************************************************
@@ -36,6 +36,6 @@ void Client::send(int numOfMsg) {
 * the server and send to protocol for translate
 ******************************************************************************/
 int Client::receive(int scenario){
-    this->tcp->reciveData(buffer, sizeof(buffer));
+    this->udp->reciveData(buffer, sizeof(buffer));
     return this->protocol->translate(buffer,scenario);
 }

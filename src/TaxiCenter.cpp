@@ -3,9 +3,9 @@
 /******************************************************************************
 * The function Operation: TaxiCenter constructor.
 ******************************************************************************/
-TaxiCenter::TaxiCenter(Protocol *protocol, Tcp *tcp, Map *map) : Server(protocol, tcp) {
-    drivers = new vector <Comunicator*>;
-    avaliableDrivers = new vector <Comunicator*>;
+TaxiCenter::TaxiCenter(Protocol *protocol, Udp *udp, Map *map) : Server(protocol, udp) {
+    drivers = new vector <DriverInfo*>;
+    avaliableDrivers = new vector <DriverInfo*>;
     avaliableCabs = new vector <Taxi*>();
     trips = new vector <Trip*>();
     uncalculatedtrips = new queue <Trip*>();
@@ -37,6 +37,15 @@ TaxiCenter::~TaxiCenter() {
     delete (TaxiCenterProtocol *) this->protocol;
     delete map;
     pthread_mutex_destroy(&lock);
+}
+
+/******************************************************************************
+* The function Operation: get a driver and add him to the driver's vector
+* give the driver a cab by his taxi id
+******************************************************************************/
+void TaxiCenter::addDriverInfo(DriverInfo* driverInfo){
+    this->drivers->push_back(driverInfo);
+    this->avaliableDrivers->push_back(driverInfo);
 }
 
 /******************************************************************************
@@ -88,20 +97,35 @@ void TaxiCenter::createRoute(){
     cout << "trip num: " << trip->id << " ended calcaulating" << endl;
 }
 
+/******************************************************************************
+* The function Operation: take the map and set it in the protocol
+******************************************************************************/
+void TaxiCenter::setProtocolMap() {
+    ((TaxiCenterProtocol *) this->protocol)->setMap(this->map);
+}
 
-//void TaxiCenter::setProtocolTaxi(int taxiId) {
-//    for(int i = 0; i < this->avaliableCabs->size(); i++){
-//        // check for the right taxi
-//        if(taxiId == this->avaliableCabs->at(i)->getId()){
-//            ((TaxiCenterProtocol *) this->protocol)->setTaxi(this->avaliableCabs->at(i));
-//            // taxi no longer avaliable
-//            delete this->avaliableCabs->at(i);
-//            this->avaliableCabs->erase(avaliableCabs->begin() + i);
-//            return;
-//        }
-//    }
-//}
+/******************************************************************************
+* The function Operation: get a taxi and set it in the protocol
+******************************************************************************/
+void TaxiCenter::setProtocolTaxi(int taxiId) {
+    for(int i = 0; i < this->avaliableCabs->size(); i++){
+        // check for the right taxi
+        if(taxiId == this->avaliableCabs->at(i)->getId()){
+            ((TaxiCenterProtocol *) this->protocol)->setTaxi(this->avaliableCabs->at(i));
+            // taxi no longer avaliable
+            delete this->avaliableCabs->at(i);
+            this->avaliableCabs->erase(avaliableCabs->begin() + i);
+            return;
+        }
+    }
+}
 
+/******************************************************************************
+* The function Operation: get a trip and set it in the protocol
+******************************************************************************/
+void TaxiCenter::setProtocolTrip(Trip* trip) {
+            ((TaxiCenterProtocol *) this->protocol)->setTrip(trip);
+}
 
 /******************************************************************************
 * The function Operation: notify all the driver that time passed
@@ -109,12 +133,12 @@ void TaxiCenter::createRoute(){
 void TaxiCenter::timePassed(){
     int operation;
     for(int i = 0; i < drivers->size(); i++){
-        drivers->at(i)->send(5);
-        operation = drivers->at(0)->receive(7);
+        this->send(5);
+        operation = this->receive(7);
         if(operation == 7){
-            Comunicator* comunicator = drivers->at(i);
-            this->avaliableDrivers->push_back(comunicator);
-            drivers->at(0)->send(7);
+            DriverInfo* driverInfo = drivers->at(i);
+            this->avaliableDrivers->push_back(driverInfo);
+            this->send(7);
         }
     }
 }
@@ -129,12 +153,65 @@ bool TaxiCenter::shouldStop(){
 /******************************************************************************
 * The function Operation: ask for driver location and retrun it
 ******************************************************************************/
-Point* TaxiCenter::getDriverLocation() {
-    drivers->at(0)->send(6);
-    while (drivers->at(0)->receive(6) != 6){
-        drivers->at(0)->send(0);
+Point * TaxiCenter::getDriverLocation() {
+    this->send(6);
+    while (this->receive(6) != 6){
+        this->send(0);
     }
-    return Point::deserialize(drivers->at(0)->buffer);
+    return Point::deserialize(this->buffer);
+}
+
+/******************************************************************************
+* The function Operation: get string of Driver info and return Driver info
+******************************************************************************/
+DriverInfo *TaxiCenter::createDriverInfo(string buffer) {
+    char *c = new char[buffer.length() + 1];
+    strcpy(c, buffer.c_str());
+    string str = strtok(c, ":");
+    // get the driver id
+    int driverId  = atoi(strtok(NULL, " "));
+    string str1 = strtok(NULL, ":");
+    // get the taxi id
+    int taxiId = atoi(strtok(NULL, " "));
+    delete[](c);
+    return new DriverInfo(driverId, taxiId);
+}
+
+/******************************************************************************
+* The function Operation: the first talk with the driver, create driver info
+* and send to the driver the map and the taxi
+******************************************************************************/
+void TaxiCenter::talkWithDriver() {
+    int operation = 0;
+    DriverInfo* driverInfo = NULL;
+    do {
+        // first message from driver
+        operation = this->receive(++operation);
+//        cout << operation << endl;
+        switch (operation){
+            case 1:
+                // create driver info
+                driverInfo = this->createDriverInfo(this->buffer);
+                this->addDriverInfo(driverInfo);
+                // send hello to driver
+                this->send(1);
+                break;
+            case 2:
+                // send map to the driver
+                this->setProtocolMap();
+                this->send(2);
+                break;
+            case 3:
+                // send taxi to driver
+                this->setProtocolTaxi(driverInfo->getTaxiId());
+                this->send(3);
+                break;
+            case 4:
+                break;
+            default:
+                this->send(0);
+        }
+    }while(operation < 4);
 }
 
 /******************************************************************************
@@ -152,11 +229,11 @@ void TaxiCenter::addTripToDriver(int time){
                 delete thread;
                 trip->setThread(NULL);
             }
-            drivers->at(0)->setProtocolTrip(trip);
+            this->setProtocolTrip(trip);
             // send trip to driver
-            drivers->at(0)->send(4);
+            this->send(4);
             // get message that trip accepted
-            drivers->at(0)->receive(5);
+            this->receive(5);
             // delete the trip from the taxi center list
             delete this->trips->at(i);
             this->trips->erase(trips->begin() + i);
@@ -164,21 +241,4 @@ void TaxiCenter::addTripToDriver(int time){
             this->avaliableDrivers->pop_back();
         }
     }
-}
-
-void TaxiCenter::addComunicator(Comunicator *comunicator) {
-    this->drivers->push_back(comunicator);
-    this->avaliableDrivers->push_back(comunicator);
-}
-
-void TaxiCenter::acceptNewDriver() {
-    Tcp* tcp = this->accept();
-    Taxi* taxi = this->avaliableCabs->at(0);
-    Comunicator* comunicator = new Comunicator(new TaxiCenterProtocol(), tcp);
-    this->addComunicator(comunicator);
-    comunicator->talkWithDriver(this->map, taxi);
-}
-
-void TaxiCenter::sendFinish() {
-    drivers->at(0)->send(8);
 }
