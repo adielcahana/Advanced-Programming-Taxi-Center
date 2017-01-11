@@ -99,6 +99,10 @@ void* TaxiCenterFlow::createRoute(void* center){
 }
 
 int main(int argc, char* argv[]){
+    std::ifstream in("server.txt");
+    std::streambuf *cinbuf = std::cin.rdbuf(); //save old buf
+    std::cin.rdbuf(in.rdbuf());
+
     std::ofstream out("taxi_center_log.txt");
     std::streambuf *coutbuf = std::cout.rdbuf(); //save old buf
     std::cout.rdbuf(out.rdbuf());
@@ -110,4 +114,5 @@ int main(int argc, char* argv[]){
         if (!flow.shouldStop) flow.run();
     }
     std::cout.rdbuf(coutbuf);
+    std::cin.rdbuf(cinbuf);
 }
