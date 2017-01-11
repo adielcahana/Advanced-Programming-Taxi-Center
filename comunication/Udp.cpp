@@ -85,7 +85,6 @@ int Udp::sendData(string data) {
 		cout << "send error" << endl;
 		return ERROR_SEND;
 	}
-	cout <<"msg sent: " << data <<endl;
 	//return correct if there were no problems
 	return CORRECT;
 }
@@ -114,7 +113,7 @@ int Udp::reciveData(char* buffer, int size) {
 		return -1;
 	}
 	//print the data
-	cout<<"msg recived: " << buffer <<endl;
+//	cout<<buffer<<endl;
 	//return correct if there were no error
 	return bytes;
 }

@@ -1,0 +1,124 @@
+* commit 373e48487724e29292a62d963447367afbe00063
+| Author: orie50 <turht50@gmail.com>
+| Date:   Tue Jan 3 01:34:01 2017 +0200
+| 
+|     comments
+|  
+* commit c96b00b37dc343d70edfebb269fd5e01abdf6abb
+| Author: adielcahana <adielcahana@gmail.com>
+| Date:   Mon Jan 2 22:53:20 2017 +0200
+| 
+|     toString+ fromString
+|  
+* commit 8fb3c4a41ff36635f89ae68f229edd65843ff5cc
+| Author: orie50 <turht50@gmail.com>
+| Date:   Mon Jan 2 22:29:57 2017 +0200
+| 
+|     integrate projects 11
+|  
+* commit bd920c5ef043e160649b0fe447f8fc74265edd0b
+| Author: orie50 <turht50@gmail.com>
+| Date:   Mon Jan 2 21:58:02 2017 +0200
+| 
+|     integrate projects 10
+|  
+* commit 284712b910cc10cc9fa7044cefe1b156e351feef
+| Author: orie50 <turht50@gmail.com>
+| Date:   Mon Jan 2 21:47:41 2017 +0200
+| 
+|     integrate projects 9
+|  
+* commit acd1f3d8cb7c2617b078db0c58eadf0982660982
+| Author: orie50 <turht50@gmail.com>
+| Date:   Mon Jan 2 19:46:10 2017 +0200
+| 
+|     integrate projects 8
+|  
+* commit 7ea263a22f752b92075dae45536dbe0da4a8cfdd
+| Author: adielcahana <adielcahana@gmail.com>
+| Date:   Sun Jan 1 05:51:49 2017 +0200
+| 
+|     timing and flow
+|  
+* commit 92733b3b7c799cbca0798bed2002beea1ac0d059
+| Author: orie50 <turht50@gmail.com>
+| Date:   Fri Dec 30 15:09:51 2016 +0200
+| 
+|     integrate projects 7
+|    
+*   commit 206693b505ca7e6ee97654c315885287a5046bab
+|\  Merge: 7f9ece0 77948cb
+| | Author: orie50 <turht50@gmail.com>
+| | Date:   Fri Dec 30 10:28:13 2016 +0200
+| | 
+| |     Merge remote-tracking branch 'origin/master'
+| |     
+| |     # Conflicts:
+| |     #	comunication/DriverProtocol.cpp
+| |     #	comunication/Udp.cpp
+| |   
+| * commit 77948cbcb584a63c2770e1b52c932e7ea9b5d3dd
+| | Author: adielcahana <adielcahana@gmail.com>
+| | Date:   Fri Dec 30 02:58:19 2016 +0200
+| | 
+| |     integrate 3
+| |   
+* | commit 7f9ece00f738506ef0cee62812df1d119c310bf2
+|/  Author: orie50 <turht50@gmail.com>
+|   Date:   Fri Dec 30 10:27:15 2016 +0200
+|   
+|       integrate projects 6
+|  
+* commit 1addfa5a93036c25224b5a5460149077cd06e342
+| Author: adielcahana <adielcahana@gmail.com>
+| Date:   Fri Dec 30 01:55:59 2016 +0200
+| 
+|     integrate 3
+|  
+* commit 2fe43dc673225b69c9c95f5c21ecec91f343bd0c
+| Author: orie50 <turht50@gmail.com>
+| Date:   Fri Dec 30 01:42:12 2016 +0200
+| 
+|     integrate projects 5
+|  
+* commit 0ab2a950162d87f064631aa1054c287955290077
+| Author: orie50 <turht50@gmail.com>
+| Date:   Fri Dec 30 01:22:29 2016 +0200
+| 
+|     integrate projects 4
+|  
+* commit 12fd254335d96145c590648ad04996bea90e973c
+| Author: orie50 <turht50@gmail.com>
+| Date:   Fri Dec 30 01:18:17 2016 +0200
+| 
+|     integrate projects 2
+|  
+* commit 400960479ad9b947c90706cfbe27a9e1a8555e5d
+| Author: orie50 <turht50@gmail.com>
+| Date:   Fri Dec 30 01:08:34 2016 +0200
+| 
+|     parser
+|  
+* commit b0038a3dd2dae1ce8e79c4da1ac858677a6dff7a
+| Author: adielcahana <adielcahana@gmail.com>
+| Date:   Fri Dec 30 01:02:46 2016 +0200
+| 
+|     integrate 3
+|  
+* commit 7ee27a2c8a5ac6063ecd40b6dd6c1d180a703f56
+| Author: orie50 <turht50@gmail.com>
+| Date:   Fri Dec 30 00:28:29 2016 +0200
+| 
+|     integrate projects 2
+|  
+* commit 9d5e0a6c815537ed24078938c629ad5f5b60a8b8
+| Author: orie50 <turht50@gmail.com>
+| Date:   Fri Dec 30 00:26:21 2016 +0200
+| 
+|     integrate projects 1
+|  
+* commit 4841762abf35c0a81bf0666e9f95dcc7b9a5731b
+  Author: adielcahana <adielcahana@gmail.com>
+  Date:   Fri Dec 30 00:07:53 2016 +0200
+  
+      Initial commit

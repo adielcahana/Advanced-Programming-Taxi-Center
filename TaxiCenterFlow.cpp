@@ -5,7 +5,7 @@
 ******************************************************************************/
 TaxiCenterFlow::TaxiCenterFlow(int port){
     Map* map = parser.readMap();
-    this->center = new TaxiCenter(new TaxiCenterProtocol(), new Udp(true, port), map);
+    this->center = new TaxiCenter(new TaxiCenterProtocol(), new Tcp(true, port), map);
     this->shouldStop = false;
 }
 /******************************************************************************
@@ -39,7 +39,7 @@ void TaxiCenterFlow::initialize(){
                 }
                 // first talk with the driver
                 for(int i = 0; i < option; i++) {
-                    this->center->talkWithDriver();
+                    this->center->acceptNewDriver();
                 }
                 break;
             case 2:
@@ -71,7 +71,7 @@ void TaxiCenterFlow::initialize(){
             case 7: // update the flow stop flag, and exit the loop
                 this->shouldStop = true;
                 shouldStop = true;
-                this->center->send(8); // send finish the program
+                this->center->sendFinish(); // send finish the program
                 break;
             case 9:
                 // set time passed and check if add trip to driver
@@ -98,7 +98,7 @@ void* TaxiCenterFlow::createRoute(void* center){
     pthread_exit(NULL);
 }
 
-int main(int argc, char* argv[]){
+int main(int argc, char* argv[]) {
     std::ifstream in("server.txt");
     std::streambuf *cinbuf = std::cin.rdbuf(); //save old buf
     std::cin.rdbuf(in.rdbuf());
