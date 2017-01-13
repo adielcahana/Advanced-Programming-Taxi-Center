@@ -1,9 +1,7 @@
 #include <unistd.h>
 #include "Comunicator.h"
-#include "TaxiCenter.h"
-#include "../TaxiCenterFlow.h"
 
-using namespace global;
+bool can_continue = true;
 /******************************************************************************
 * The function Operation: the first talk with the driver, create driver info
 * and send to the driver the map and the taxi
@@ -13,7 +11,7 @@ void Comunicator::talkWithDriver() {
     while (nextMission != 7) {
         if (nextMission == 0) {
             sleep(1);
-        } else if (global::can_continue == true){
+        } else if (can_continue == true){
             switch (nextMission) {
                 case 1:
                     // first message from driver

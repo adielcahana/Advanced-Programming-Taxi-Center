@@ -1,8 +1,5 @@
 #include <unistd.h>
 #include "TaxiCenter.h"
-#include "../TaxiCenterFlow.h"
-
-using namespace global;
 
 /******************************************************************************
 * The function Operation: TaxiCenter constructor.
@@ -105,11 +102,11 @@ void TaxiCenter::timePassed(){
     while(avaliableDrivers->size() != numOfDrivers){
         sleep(1);
     }
-    global::can_continue = false;
+    can_continue = false;
     for(int i = 0; i < avaliableDrivers->size(); i++){
         avaliableDrivers->at(i)->setNextMission(5);
     }
-    global::can_continue = true;
+    can_continue = true;
 }
 
 /******************************************************************************
@@ -119,12 +116,12 @@ Point* TaxiCenter::getDriverLocation(int driverId) {
     while(avaliableDrivers->size() != numOfDrivers){
         sleep(1);
     }
-    global::can_continue = false;
+    can_continue = false;
     for(int i = 0; i < avaliableDrivers->size(); i++){
         Comunicator* driver = avaliableDrivers->at(i);
         if(driver->getDriverId() == driverId) {
             avaliableDrivers->at(i)->setNextMission(6);
-            global::can_continue = true;
+            can_continue = true;
             while(avaliableDrivers->size() != numOfDrivers){
                 sleep(1);
             }
@@ -189,11 +186,11 @@ void TaxiCenter::sendFinish() {
     while(avaliableDrivers->size() != numOfDrivers){
         sleep(1);
     }
-    global::can_continue = false;
+    can_continue = false;
     for(int i = 0; i < avaliableDrivers->size(); i++){
         avaliableDrivers->at(i)->setNextMission(7);
     }
-    global::can_continue = true;
+    can_continue = true;
     while(avaliableDrivers->size() != numOfDrivers){
         sleep(1);
     }

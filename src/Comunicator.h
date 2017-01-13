@@ -7,6 +7,8 @@
 #include "AvaliableNotifier.h"
 #include <pthread.h>
 
+extern bool can_continue;
+
 class Comunicator: public Server, public AvaliableNotifier {
 private:
     DriverInfo* driverInfo;
