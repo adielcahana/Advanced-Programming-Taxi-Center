@@ -19,7 +19,7 @@ TaxiCenterFlow::~TaxiCenterFlow(){
 * parsing it. all the numbers that are sent are specified in taxiCenterProtocol
 ******************************************************************************/
 void TaxiCenterFlow::initialize(){
-    int option, status = 0, time = 0;
+    int option, time = 0;
     char dummy; // variable for '\n'
     Point* p = NULL;
     Trip* trip = NULL;
@@ -45,11 +45,7 @@ void TaxiCenterFlow::initialize(){
             case 2:
                 trip = parser.readTrip();
                 center->addTrip(trip);
-                trip->setThread(new pthread_t());
-                status = pthread_create(trip->getThread(), NULL, TaxiCenterFlow::createRoute, this->center);
-                if (status) {
-                    cout << "error while trying to create trip" << endl;
-                }
+
                 break;
             case 3:
                 center->addAvaliableTaxi(parser.readTaxi());
@@ -57,7 +53,7 @@ void TaxiCenterFlow::initialize(){
             case 4:
                 cin >> id;
                 cin >> noskipws >> dummy;
-                p = center->getDriverLocation();
+                p = center->getDriverLocation(id);
                 if(p != NULL){
                     cout << *p << endl;
                     delete p;
@@ -88,14 +84,6 @@ void TaxiCenterFlow::initialize(){
 * The Function Operation: run the game step by step
 ******************************************************************************/
 void TaxiCenterFlow::run(){
-    while(!center->shouldStop()){
-        center->timePassed();
-    }
-}
-
-void* TaxiCenterFlow::createRoute(void* center){
-    ((TaxiCenter*) center)->createRoute();
-    pthread_exit(NULL);
 }
 
 int main(int argc, char* argv[]) {

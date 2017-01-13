@@ -66,7 +66,6 @@ int Tcp::initialize() {
             return ERROR_LISTEN;
         }
 
-
 	//if client
 	} else {
 		struct sockaddr_in sin;

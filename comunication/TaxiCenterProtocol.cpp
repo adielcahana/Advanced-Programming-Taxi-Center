@@ -43,21 +43,21 @@ int TaxiCenterProtocol::translate(char* msg, int scenario){
             break;
         case 3: // the driver wait for taxi
             if (strcmp(msg, "ok, waiting for taxi") == 0){
-                return 3;
+                return 0;
             } else if(strcmp(msg, "send again") == 0){
                 return scenario;
             }
             break;
         case 4: // the driver get taxi (wait for trip)
             if(strcmp(msg, "taxi accepted") == 0){
-                return 4;
+                return 0;
             } else if(strcmp(msg, "send again") == 0){
                 return scenario;
             }
             break;
         case 5: // the driver get a trip
             if(strcmp(msg, "trip accepted") == 0){
-                return 5;
+                return 0;
             } else if(strcmp(msg, "send again") == 0){
                 return scenario;
             }
@@ -74,7 +74,7 @@ int TaxiCenterProtocol::translate(char* msg, int scenario){
             break;
         case 7: // the driver return that he got that time passed
             if (strcmp(msg, "time passed") == 0) {
-                return 5;
+                return 0;
             } else if(strcmp(msg, "done") == 0){
                 // if the driver finish his trip
                 return 7;
@@ -108,8 +108,6 @@ string TaxiCenterProtocol::createMsg(int numOfMsg){
         case 6: // ask for location
             return "send your location";
         case 7: // return to driver that got that he finish trip
-            return "done";
-        case 8: // send finish program
             return "finish";
         default:
             return "send again";

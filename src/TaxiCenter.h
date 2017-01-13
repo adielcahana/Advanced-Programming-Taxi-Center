@@ -10,14 +10,15 @@
 * TaxiCenter: have information about all the drivers the cabs and the trip.
 * know to connect between new trip to avaliable driver, also know the map.
 ******************************************************************************/
+
 class TaxiCenter: public Server{
 private:
-    vector <Comunicator*>* drivers;
     vector <Comunicator*>* avaliableDrivers;
     vector <Taxi*>* avaliableCabs;
     vector <Trip*>* trips;
     queue <Trip*>* uncalculatedtrips;
     Map* map;
+    int numOfDrivers;
     pthread_mutex_t lock;
 public:
     TaxiCenter(Protocol* protocol, Tcp* tcp, Map* map);
@@ -25,15 +26,16 @@ public:
     void acceptNewDriver();
     void addComunicator(Comunicator* comunicator);
     void addAvaliableTaxi(Taxi *taxi);
-    Taxi* searchTaxiById(int id);
+    Comunicator* getClosestDriver(Point location);
+    Taxi* getTaxiById(int id);
     void addTrip(Trip* trip);
     void createRoute();
     void timePassed();
 //    DriverInfo * findClosestDriver(Point start);
-    Point *getDriverLocation();
-    bool shouldStop();
+    Point *getDriverLocation(int driverId);
     void addTripToDriver(int time);
     void sendFinish();
+    static void* wrapCreateRoute(void* center);
 };
 
 #endif //ASS2_TAXICENTER_H

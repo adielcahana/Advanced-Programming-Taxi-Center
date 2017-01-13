@@ -5,6 +5,12 @@
 #include "src/Parser.h"
 #include <fstream>
 
+#ifndef CAN_CONTINUE
+#define CAN_CONTINUE
+namespace global {
+    bool can_continue = false;
+}
+#endif
 /******************************************************************************
 * Flow: handlesthe program flow. this class uses the input parser to
 * initialize and update the taxi center.
@@ -18,7 +24,6 @@ public:
     TaxiCenterFlow(int port);
     ~TaxiCenterFlow();
     void initialize();
-    static void* createRoute(void* center);
     void run();
 };
 

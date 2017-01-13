@@ -8,6 +8,8 @@ set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Werror -std=c++0x -g -pthread")
 #include_directories(${Boost_INCLUDE_DIR})
 
 set(SOURCE_FILES
+        src/CommunicatorListener.cpp src/CommunicatorListener.h
+        src/AvaliableListener.h src/AvaliableNotifier.h
         src/Driver.h src/Driver.cpp src/Trip.cpp src/Trip.h
         TaxiCenterFlow.h DriverFlow.h src/Comunicator.cpp src/Comunicator.h
         src/Passenger.cpp src/Passenger.h src/TaxiCenter.cpp src/TaxiCenter.h
