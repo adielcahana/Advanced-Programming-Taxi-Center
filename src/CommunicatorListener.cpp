@@ -5,11 +5,12 @@
 #include "CommunicatorListener.h"
 
 CommunicatorListener::CommunicatorListener(vector <Comunicator*>* avaliableCommunicators) {
-    this->avaliableCommunicators =avaliableCommunicators;
+    this->avaliableCommunicators = avaliableCommunicators;
     if (pthread_mutex_init(&lock, NULL) != 0) {
         cout << "unable to init CommunicatorListener lock" << endl;
     }
 }
+
 CommunicatorListener::~CommunicatorListener(){
     pthread_mutex_destroy(&lock);
 }
@@ -19,9 +20,11 @@ CommunicatorListener::~CommunicatorListener(){
 ******************************************************************************/
 void CommunicatorListener::avaliableEvent(AvaliableNotifier* avaliable) {
     pthread_mutex_lock(&lock);
-    this->avaliableCommunicators->push_back((Comunicator*) avaliable);
+    Comunicator* comunicator = (Comunicator*) avaliable;
+    this->avaliableCommunicators->push_back(comunicator);
     pthread_mutex_unlock(&lock);
 }
+
 /******************************************************************************
 * The function Operation: removes the notifyer driver from the driver list
 ******************************************************************************/

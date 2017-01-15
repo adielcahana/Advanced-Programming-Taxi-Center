@@ -5,6 +5,7 @@
 #include "Comunicator.h"
 #include <pthread.h>
 #include "../comunication/Server.h"
+#include "CommunicatorListener.h"
 
 /******************************************************************************
 * TaxiCenter: have information about all the drivers the cabs and the trip.
@@ -17,6 +18,7 @@ private:
     vector <Taxi*>* avaliableCabs;
     vector <Trip*>* trips;
     queue <Trip*>* uncalculatedtrips;
+    CommunicatorListener* listener;
     Map* map;
     int numOfDrivers;
     pthread_mutex_t lock;

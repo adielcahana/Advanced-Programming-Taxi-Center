@@ -7,6 +7,8 @@
 #include "AvaliableNotifier.h"
 #include <pthread.h>
 
+#define SLEEP 0.01
+
 extern bool can_continue;
 
 class Comunicator: public Server, public AvaliableNotifier {
@@ -18,11 +20,11 @@ private:
     bool avaliable;
     AvaliableListener* comunicaorListener;
     void setProtocolMap(Map* map);
-    void addAvaliableListener(AvaliableListener* al);
-    void removeAvaliableListener(AvaliableListener* al);
 public:
     Comunicator(Protocol* protocol, Tcp* tcp, Map* map): Server(protocol, tcp){
         setProtocolMap(map);
+        this->nextMission = 1;
+        this->avaliable = true;
     }
     ~Comunicator();
     pthread_t* getThread();
@@ -37,6 +39,8 @@ public:
     Point* getLocation();
     bool isAvaliable();
     static void* wrapTalkWithDriver(void* comunicator);
+    void addAvaliableListener(AvaliableListener* al);
+    void removeAvaliableListener(AvaliableListener* al);
 };
 
 #endif //EX4_COMUNICATOR_H

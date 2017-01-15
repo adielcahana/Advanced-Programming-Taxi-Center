@@ -10,8 +10,8 @@ void Comunicator::talkWithDriver() {
     DriverInfo* driverInfo = NULL;
     while (nextMission != 7) {
         if (nextMission == 0) {
-            sleep(1);
-        } else if (can_continue == true){
+            sleep(SLEEP);
+        } else if (can_continue == true) {
             switch (nextMission) {
                 case 1:
                     // first message from driver
@@ -45,11 +45,11 @@ void Comunicator::talkWithDriver() {
                 case 5: // tell the driver that time passed (time++)
                     this->send(5);
                     nextMission = this->receive(7);
-                    if(nextMission == 7){
+                    if (nextMission == 7) {
                         //todo: notify that driver is free for new trip
                         nextMission = 0;
+                        this->avaliable = true;
                     }
-                    this->avaliable = true;
                     this->comunicaorListener->avaliableEvent(this);
                     break;
                 case 6: // ask for location
@@ -57,13 +57,16 @@ void Comunicator::talkWithDriver() {
                     nextMission = this->receive(6);
                     this->location = Point::deserialize(this->buffer);
                     this->comunicaorListener->avaliableEvent(this);
+                    break;
                 default: // send again
                     this->send(0);
             }
-            if (nextMission != 0){
-                ++nextMission;
-            }
+        }else{
+            sleep(SLEEP);
         }
+//        if (nextMission != 0){
+//            ++nextMission;
+//        }
     }
     this->send(7);
     this->comunicaorListener->avaliableEvent(this);
@@ -106,6 +109,7 @@ void Comunicator::setTaxi(Taxi* taxi){
 
 void Comunicator::setTrip(Trip* trip){
     ((TaxiCenterProtocol *) this->protocol)->setTrip(trip);
+    this->avaliable = false;
     delete trip;
 }
 
@@ -134,8 +138,12 @@ void Comunicator::removeAvaliableListener(AvaliableListener* al){
 }
 
 Point* Comunicator::getLocation(){
+    setNextMission(6);
+    while(nextMission != 0){
+        sleep(SLEEP);
+    }
     Point* loc = this->location;
-    this->location =NULL;
+    this->location = NULL;
     return loc;
 }
 

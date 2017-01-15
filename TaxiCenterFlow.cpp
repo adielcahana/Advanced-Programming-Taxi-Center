@@ -26,6 +26,7 @@ void TaxiCenterFlow::initialize(){
     bool shouldStop = false; // initialization stop flag
     bool wasInitialize = false;
     int id;
+    int numOfDrivers;
     while(!shouldStop) {
         cin >> option;
         cin >> noskipws >> dummy; //read '\n'
@@ -34,18 +35,18 @@ void TaxiCenterFlow::initialize(){
                 if (!wasInitialize) {
                     // initialize the server
                     center->initialize();
-                    cin >> option;
+                    cin >> numOfDrivers;
                     cin >> noskipws >> dummy;
                 }
                 // first talk with the driver
-                for(int i = 0; i < option; i++) {
+                for(int i = 0; i < numOfDrivers; i++) {
                     this->center->acceptNewDriver();
+
                 }
                 break;
             case 2:
                 trip = parser.readTrip();
                 center->addTrip(trip);
-
                 break;
             case 3:
                 center->addAvaliableTaxi(parser.readTaxi());
@@ -87,7 +88,7 @@ void TaxiCenterFlow::run(){
 }
 
 int main(int argc, char* argv[]) {
-    std::ifstream in("server.txt");
+    std::ifstream in("input.txt");
     std::streambuf *cinbuf = std::cin.rdbuf(); //save old buf
     std::cin.rdbuf(in.rdbuf());
 

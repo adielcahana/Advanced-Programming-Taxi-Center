@@ -67,7 +67,7 @@ int TaxiCenterProtocol::translate(char* msg, int scenario){
                 string str = string(msg);
                 str.erase(0, 7);
                 strcpy(msg, str.c_str());
-                return 6;
+                return 0;
             } else if(strcmp(msg, "send again") == 0){
                 return scenario;
             }

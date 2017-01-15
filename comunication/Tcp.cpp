@@ -4,6 +4,7 @@
 * methods of tcp socket type								*
 ************************************************************/
 
+#include <unistd.h>
 #include "Tcp.h"
 
 /***********************************************************************
@@ -30,7 +31,8 @@ Tcp::Tcp(int descriptor) {
 * The Function operation: default destructor					       *
 ***********************************************************************/
 Tcp::~Tcp() {
-	// TODO Auto-generated destructor stub
+	close(this->socketDescriptor);
+		// TODO Auto-generated destructor stub
 }
 
 /***********************************************************************

@@ -104,7 +104,7 @@ int main(int argc, char** argv) {
                 driver->timePassed();
                 if(driver->isAvaliable()){ // if the driver finish the trip
                     driver->send(8);
-                    driver->receive(6);
+//                    driver->receive(6);
                     break;
                 }
                 driver->send(6);
