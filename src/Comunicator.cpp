@@ -143,7 +143,7 @@ Point* Comunicator::getLocation(){
         sleep(SLEEP);
     }
     Point* loc = this->location;
-    this->location = NULL;
+//    this->location = NULL;
     return loc;
 }
 

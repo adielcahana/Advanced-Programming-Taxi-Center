@@ -14,6 +14,7 @@
 
 class TaxiCenter: public Server{
 private:
+    vector <Comunicator*>* drivers;
     vector <Comunicator*>* avaliableDrivers;
     vector <Taxi*>* avaliableCabs;
     vector <Trip*>* trips;

@@ -7,6 +7,7 @@
 #include <unistd.h>
 #include "Tcp.h"
 
+
 /***********************************************************************
 * function name: Tcp												   *
 * The Input: Boolean, true - if server, false if client	and port number*
@@ -31,7 +32,6 @@ Tcp::Tcp(int descriptor) {
 * The Function operation: default destructor					       *
 ***********************************************************************/
 Tcp::~Tcp() {
-	close(this->socketDescriptor);
 		// TODO Auto-generated destructor stub
 }
 
@@ -108,7 +108,11 @@ Tcp* Tcp::TcpAccept(){
 int Tcp::sendData(string data) {
 	int data_len = data.length();
 	const char * datas = data.c_str();
-	cout << "send msg:" << data << endl;
+//	cout << "send msg:" << data << endl;
+//	stringstream str;
+//	str << "send msg:" << datas;
+    LDEBUG << "send msg:";
+	LDEBUG << data;
 	int sent_bytes = send(this->socketDescriptor, datas, data_len, 0);
 	if (sent_bytes < 0) {
 		//return an error represent error at this method
@@ -128,8 +132,9 @@ int Tcp::sendData(string data) {
 int Tcp::reciveData(char* buffer, int size) {
 	memset(buffer, 0, size);
 	int read_bytes = recv(this->socketDescriptor, buffer, size, 0);
-	cout << "rcv msg:" << buffer << endl;
-	//checking the errors
+//	cout << "rcv msg:" << buffer << endl;
+    LDEBUG << "rcv msg:" << buffer;
+    //checking the errors
 	if (read_bytes == 0) {
 		return CONNECTION_CLOSED;
 	}

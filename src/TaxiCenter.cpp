@@ -6,6 +6,7 @@
 ******************************************************************************/
 TaxiCenter::TaxiCenter(Protocol *protocol, Tcp *tcp, Map *map) : Server(protocol, tcp) {
     avaliableDrivers = new vector <Comunicator*>;
+    drivers = new vector <Comunicator*>;
     avaliableCabs = new vector <Taxi*>();
     trips = new vector <Trip*>();
     uncalculatedtrips = new queue <Trip*>();
@@ -35,6 +36,7 @@ TaxiCenter::~TaxiCenter() {
     }
     delete trips;
     delete avaliableDrivers;
+    delete drivers;
     avaliableCabs->clear();
     delete avaliableCabs;
     delete (TaxiCenterProtocol *) this->protocol;
@@ -72,7 +74,7 @@ Taxi* TaxiCenter::getTaxiById(int id){
 void TaxiCenter::addTrip(Trip* trip){
     this->trips->push_back(trip);
     this->uncalculatedtrips->push(trip);
-    trip->setThread(new pthread_t());
+//    trip->setThread(new pthread_t());
     int status = pthread_create(trip->getThread(), NULL, TaxiCenter::wrapCreateRoute, this);
     if (status) {
         cout << "error while trying to create trip" << endl;
@@ -87,13 +89,13 @@ void TaxiCenter::createRoute(){
     pthread_mutex_lock(&lock);
     Trip* trip = this->uncalculatedtrips->front();
     this->uncalculatedtrips->pop();
-    cout << "trip num: " << trip->id << " is calcaulated" << endl;
+//    cout << "trip num: " << trip->id << " is calcaulated" << endl;
     pthread_mutex_unlock(&lock);
     Point* start = new Point(trip->start);
     Point* end = new Point(trip->end);
     trip->route = map->getRoute(start, end);
     delete end;
-    cout << "trip num: " << trip->id << " ended calcaulating" << endl;
+//    cout << "trip num: " << trip->id << " ended calcaulating" << endl;
 }
 
 /******************************************************************************
@@ -104,9 +106,8 @@ void TaxiCenter::timePassed(){
         sleep(SLEEP);
     }
     can_continue = false;
-    for(int i = 0; i < avaliableDrivers->size(); i++){
-        avaliableDrivers->at(i)->setNextMission(5);
-        i--;
+    for(int i = 0; i < drivers->size(); i++){
+        drivers->at(i)->setNextMission(5);
     }
     can_continue = true;
 }
@@ -119,15 +120,19 @@ Point* TaxiCenter::getDriverLocation(int driverId) {
         sleep(SLEEP);
     }
     can_continue = false;
-    for(int i = 0; i < avaliableDrivers->size(); i++){
-        Comunicator* driver = avaliableDrivers->at(i);
+    for(int i = 0; i < drivers->size(); i++){
+        Comunicator* driver = drivers->at(i);
         if(driver->getDriverId() == driverId) {
 //            driver->setNextMission(6);
             can_continue = true;
-//            while(avaliableDrivers->size() != numOfDrivers){
-//                sleep(1);
-//            }
-            return driver->getLocation();
+            Point* location = driver->getLocation();
+            stringstream str;
+            str << *location;
+            LDEBUG << str.str();
+            while(avaliableDrivers->size() != numOfDrivers){
+                sleep(SLEEP);
+            }
+            return location;
         }
     }
 }
@@ -142,14 +147,17 @@ void TaxiCenter::addTripToDriver(int time){
         trip = this->trips->at(i);
         if (time >= trip->time) {
             if (trip->route == NULL) {
-                pthread_t *thread = trip->getThread();
-                pthread_join(*thread, NULL);
-                delete thread;
-                trip->setThread(NULL);
+                pthread_t* thread = trip->getThread();
+                int x = pthread_join(*thread, NULL);
+//                delete thread;
+//                trip->setThread(NULL);
             }
             this->trips->erase(trips->begin() + i);
             i--;
             if (trip != NULL){
+//                while(trip->route == NULL){
+//                    sleep(SLEEP);
+//                }
                 Comunicator* driver = this->getClosestDriver(trip->start);
                 driver->setTrip(trip);
                 // send trip to driver
@@ -161,7 +169,7 @@ void TaxiCenter::addTripToDriver(int time){
 }
 
 void TaxiCenter::addComunicator(Comunicator *comunicator) {
-    this->avaliableDrivers->push_back(comunicator);
+    this->drivers->push_back(comunicator);
 }
 
 void TaxiCenter::acceptNewDriver() {
@@ -169,6 +177,7 @@ void TaxiCenter::acceptNewDriver() {
     this->numOfDrivers++;
     Comunicator* comunicator = new Comunicator(new TaxiCenterProtocol(), tcp, this->map);
     //run communicatio in seperate thread
+    this->addComunicator(comunicator);
     comunicator->addAvaliableListener(this->listener);
     comunicator->setThread(new pthread_t());
     int status = pthread_create(comunicator->getThread(), NULL, Comunicator::wrapTalkWithDriver, comunicator);
@@ -190,9 +199,8 @@ void TaxiCenter::sendFinish() {
         sleep(SLEEP);
     }
     can_continue = false;
-    for(int i = 0; i < avaliableDrivers->size(); i++){
-        avaliableDrivers->at(i)->setNextMission(7);
-        i--;
+    for(int i = 0; i < drivers->size(); i++){
+        drivers->at(i)->setNextMission(7);
     }
     can_continue = true;
     while(avaliableDrivers->size() != numOfDrivers){
@@ -205,12 +213,15 @@ Comunicator* TaxiCenter::getClosestDriver(Point location){
         sleep(SLEEP);
     }
     Comunicator* driver = NULL;
-    for(unsigned int i = 0; i < avaliableDrivers->size(); i++ ){
-        driver = avaliableDrivers->at(i);
+    for(unsigned int i = 0; i < drivers->size(); i++ ){
+        driver = drivers->at(i);
         if (driver->isAvaliable()){
-            if (location == *driver->getLocation()){
+            Point* driverLocation = driver->getLocation();
+            if (location == *driverLocation){
+                delete driverLocation;
                 return driver;
             }
+            delete driverLocation;
         }
     }
 }

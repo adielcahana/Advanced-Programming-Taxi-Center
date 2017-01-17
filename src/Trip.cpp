@@ -32,12 +32,12 @@ Trip::~Trip() {
 * The function Operation: return the trip calculation thread object
 ******************************************************************************/
 pthread_t* Trip::getThread(){
-    return this->thread;
+    return &this->thread;
 }
 
-void Trip::setThread(pthread_t* thread){
-    this->thread = thread;
-};
+//void Trip::setThread(pthread_t* thread){
+//    this->thread = thread;
+//};
 
 
 /******************************************************************************

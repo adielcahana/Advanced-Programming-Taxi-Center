@@ -25,7 +25,10 @@ set(COMUNICATION_FILES
         comunication/Client.h comunication/Client.cpp comunication/Tcp.cpp
         comunication/Tcp.h)
 
-add_executable(client DriverFlow.cpp ${SOURCE_FILES} ${COMUNICATION_FILES} ${Boost_LIBRARIES})
-add_executable(server TaxiCenterFlow.cpp ${SOURCE_FILES} ${COMUNICATION_FILES} ${Boost_LIBRARIES})
+set(LOGGING
+        logging/easylogging++.h)
+
+add_executable(client DriverFlow.cpp ${SOURCE_FILES} ${COMUNICATION_FILES} ${LOGGING} ${Boost_LIBRARIES})
+add_executable(server TaxiCenterFlow.cpp ${SOURCE_FILES} ${COMUNICATION_FILES} ${LOGGING} ${Boost_LIBRARIES})
 #target_link_libraries(server ${Boost_LIBRARIES})
 #target_link_libraries(client ${Boost_LIBRARIES})
