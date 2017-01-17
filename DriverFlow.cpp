@@ -14,7 +14,7 @@ int main(int argc, char** argv) {
     fileName << "driver_" << driver->getId() << "_log.txt";
     driver->initialize(argv[1], atoi(argv[2])); //set the Client connection
 
-    std::ofstream out(fileName.str());
+    std::ofstream out(fileName.str().c_str());
     std::streambuf *coutbuf = std::cout.rdbuf(); //save old buf
     std::cout.rdbuf(out.rdbuf());
 

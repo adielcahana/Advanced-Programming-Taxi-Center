@@ -99,6 +99,7 @@ void Comunicator::setProtocolMap(Map* map) {
 
 Comunicator::~Comunicator() {
     delete ((TaxiCenterProtocol *) this->protocol);
+    pthread_join(*this->thread, NULL);
     delete thread;
     delete driverInfo;
 }

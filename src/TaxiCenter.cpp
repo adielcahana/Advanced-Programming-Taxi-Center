@@ -39,8 +39,10 @@ TaxiCenter::~TaxiCenter() {
     delete drivers;
     avaliableCabs->clear();
     delete avaliableCabs;
+    delete uncalculatedtrips;
     delete (TaxiCenterProtocol *) this->protocol;
     delete map;
+    delete listener;
     pthread_mutex_destroy(&lock);
 }
 
@@ -72,6 +74,7 @@ Taxi* TaxiCenter::getTaxiById(int id){
 * The function Operation: add a trip to the trip list
 ******************************************************************************/
 void TaxiCenter::addTrip(Trip* trip){
+
     this->trips->push_back(trip);
     this->uncalculatedtrips->push(trip);
 //    trip->setThread(new pthread_t());
@@ -89,13 +92,13 @@ void TaxiCenter::createRoute(){
     pthread_mutex_lock(&lock);
     Trip* trip = this->uncalculatedtrips->front();
     this->uncalculatedtrips->pop();
-//    cout << "trip num: " << trip->id << " is calcaulated" << endl;
+    cout << "trip num: " << trip->id << " is calcaulated" << endl;
     pthread_mutex_unlock(&lock);
     Point* start = new Point(trip->start);
     Point* end = new Point(trip->end);
     trip->route = map->getRoute(start, end);
     delete end;
-//    cout << "trip num: " << trip->id << " ended calcaulating" << endl;
+    cout << "trip num: " << trip->id << " ended calcaulating" << endl;
 }
 
 /******************************************************************************

@@ -9,7 +9,7 @@
 #include "src/Parser.h"
 #include <sstream>
 #include <stdexcept>
-#include "logging/easylogging++.h"
+//#include "logging/easylogging++.h"
 
 /******************************************************************************
 * Flow: handlesthe program flow. this class uses the input parser for driver

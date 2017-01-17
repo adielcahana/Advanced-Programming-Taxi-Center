@@ -34,7 +34,6 @@ public:
     void addTrip(Trip* trip);
     void createRoute();
     void timePassed();
-//    DriverInfo * findClosestDriver(Point start);
     Point *getDriverLocation(int driverId);
     void addTripToDriver(int time);
     void sendFinish();
