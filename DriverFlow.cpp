@@ -1,24 +1,25 @@
 #include <fstream>
 #include "DriverFlow.h"
-_INITIALIZE_EASYLOGGINGPP
+//_INITIALIZE_EASYLOGGINGPP
 
 /******************************************************************************
 * The function Operation: run the driver (client) program
 ******************************************************************************/
 int main(int argc, char** argv) {
     Parser pars;
-//    std::ofstream out("driver_log.txt");
     stringstream fileName;
-//
-//    std::streambuf *coutbuf = std::cout.rdbuf(); //save old buf
-//    std::cout.rdbuf(out.rdbuf());
+
     // create driver from input
     Driver *driver = pars.readDriver();
     fileName << "driver_" << driver->getId() << "_log.txt";
     driver->initialize(argv[1], atoi(argv[2])); //set the Client connection
 
-    easyloggingpp::Loggers::setFilename(fileName.str());
-    LDEBUG << "This is log for: " << driver->getId();
+    std::ofstream out(fileName.str());
+    std::streambuf *coutbuf = std::cout.rdbuf(); //save old buf
+    std::cout.rdbuf(out.rdbuf());
+
+//    easyloggingpp::Loggers::setFilename(fileName.str());
+//    LDEBUG << "This is log for: " << driver->getId();
 
     int operation = 1;
     driver->send(operation); //send driver id
@@ -74,7 +75,7 @@ int main(int argc, char** argv) {
         while (trip == NULL) {
             operation = driver->receive(4); //recieve trip or time passed
             if(operation == 9){ // finish the program
-//                std::cout.rdbuf(coutbuf);
+                std::cout.rdbuf(coutbuf);
                 delete driver;
                 return 0;
             }
@@ -103,7 +104,7 @@ int main(int argc, char** argv) {
         while (!driver->isAvaliable()) {
             operation = driver->receive(5);
             if (operation == 9){ // finish the program
-//                std::cout.rdbuf(coutbuf);
+                std::cout.rdbuf(coutbuf);
                 delete driver;
                 return 0;
             }

@@ -106,10 +106,14 @@ void TaxiCenter::timePassed(){
         sleep(SLEEP);
     }
     can_continue = false;
-    for(int i = 0; i < drivers->size(); i++){
+    for(int i = 0; i < numOfDrivers; i++){
         drivers->at(i)->setNextMission(5);
     }
     can_continue = true;
+    //wait for all drivers to finish
+    while(avaliableDrivers->size() != numOfDrivers){
+        sleep(SLEEP);
+    }
 }
 
 /******************************************************************************
@@ -120,18 +124,15 @@ Point* TaxiCenter::getDriverLocation(int driverId) {
         sleep(SLEEP);
     }
     can_continue = false;
-    for(int i = 0; i < drivers->size(); i++){
+    for(int i = 0; i < numOfDrivers; i++){
         Comunicator* driver = drivers->at(i);
         if(driver->getDriverId() == driverId) {
-//            driver->setNextMission(6);
+            driver->setNextMission(6);
             can_continue = true;
             Point* location = driver->getLocation();
-            stringstream str;
-            str << *location;
-            LDEBUG << str.str();
-            while(avaliableDrivers->size() != numOfDrivers){
-                sleep(SLEEP);
-            }
+//            stringstream str;
+//            str << *location;
+//            LDEBUG << str.str();
             return location;
         }
     }
@@ -141,6 +142,9 @@ Point* TaxiCenter::getDriverLocation(int driverId) {
 * The function Operation: send trip to the driver
 ******************************************************************************/
 void TaxiCenter::addTripToDriver(int time){
+    while(avaliableDrivers->size() != numOfDrivers){
+        sleep(SLEEP);
+    }
     Trip* trip = NULL;
     for(unsigned long i = 0; i < this->trips->size(); i++) {
         // if the time of the trip arrived
@@ -148,23 +152,20 @@ void TaxiCenter::addTripToDriver(int time){
         if (time >= trip->time) {
             if (trip->route == NULL) {
                 pthread_t* thread = trip->getThread();
-                int x = pthread_join(*thread, NULL);
-//                delete thread;
-//                trip->setThread(NULL);
+                pthread_join(*thread, NULL);
             }
+            Comunicator* driver = this->getClosestDriver(trip->start);
+            driver->setTrip(trip);
             this->trips->erase(trips->begin() + i);
             i--;
-            if (trip != NULL){
-//                while(trip->route == NULL){
-//                    sleep(SLEEP);
-//                }
-                Comunicator* driver = this->getClosestDriver(trip->start);
-                driver->setTrip(trip);
-                // send trip to driver
-                driver->setNextMission(4);
-                // get message that trip accepted
-            }
+            // send trip to driver
+            driver->setNextMission(4);
+            // get message that trip accepted
         }
+    }
+    //wait for all drivers to get their trips
+    while(avaliableDrivers->size() != numOfDrivers){
+        sleep(SLEEP);
     }
 }
 
@@ -199,7 +200,7 @@ void TaxiCenter::sendFinish() {
         sleep(SLEEP);
     }
     can_continue = false;
-    for(int i = 0; i < drivers->size(); i++){
+    for(int i = 0; i < numOfDrivers; i++){
         drivers->at(i)->setNextMission(7);
     }
     can_continue = true;
@@ -209,13 +210,11 @@ void TaxiCenter::sendFinish() {
 }
 
 Comunicator* TaxiCenter::getClosestDriver(Point location){
-    while(avaliableDrivers->size() != numOfDrivers){
-        sleep(SLEEP);
-    }
     Comunicator* driver = NULL;
     for(unsigned int i = 0; i < drivers->size(); i++ ){
         driver = drivers->at(i);
         if (driver->isAvaliable()){
+            driver->setNextMission(6);
             Point* driverLocation = driver->getLocation();
             if (location == *driverLocation){
                 delete driverLocation;

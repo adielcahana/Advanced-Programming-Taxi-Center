@@ -7,7 +7,6 @@ bool can_continue = true;
 * and send to the driver the map and the taxi
 ******************************************************************************/
 void Comunicator::talkWithDriver() {
-    DriverInfo* driverInfo = NULL;
     while (nextMission != 7) {
         if (nextMission == 0) {
             sleep(SLEEP);
@@ -47,16 +46,21 @@ void Comunicator::talkWithDriver() {
                     nextMission = this->receive(7);
                     if (nextMission == 7) {
                         //todo: notify that driver is free for new trip
-                        nextMission = 0;
                         this->avaliable = true;
+                        nextMission = 0;
                     }
                     this->comunicaorListener->avaliableEvent(this);
                     break;
                 case 6: // ask for location
                     this->send(6);
-                    nextMission = this->receive(6);
-                    this->location = Point::deserialize(this->buffer);
-                    this->comunicaorListener->avaliableEvent(this);
+                    if (this->receive(6) == 0) {
+                        this->location = Point::deserialize(this->buffer);
+//                        cout << *this->location << endl;
+                        this->comunicaorListener->avaliableEvent(this);
+                        nextMission = 0;
+                    } else {
+                        cout << "something  bad happend" << endl;
+                    }
                     break;
                 default: // send again
                     this->send(0);
@@ -64,11 +68,8 @@ void Comunicator::talkWithDriver() {
         }else{
             sleep(SLEEP);
         }
-//        if (nextMission != 0){
-//            ++nextMission;
-//        }
     }
-    this->send(7);
+    this->send(7); //send "finish"
     this->comunicaorListener->avaliableEvent(this);
 }
 
@@ -138,12 +139,11 @@ void Comunicator::removeAvaliableListener(AvaliableListener* al){
 }
 
 Point* Comunicator::getLocation(){
-    setNextMission(6);
-    while(nextMission != 0){
+    while(this->location == NULL){
         sleep(SLEEP);
     }
     Point* loc = this->location;
-//    this->location = NULL;
+    this->location = NULL;
     return loc;
 }
 
