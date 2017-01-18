@@ -172,7 +172,7 @@ void Comunicator::removeAvaliableListener() {
 ******************************************************************************/
 Point* Comunicator::getLocation(){
     // sleep until the the driver not return the location
-    while(this->location == NULL){
+    while(nextMission != 0){
         sleep(SLEEP);
     }
     Point* loc = this->location;

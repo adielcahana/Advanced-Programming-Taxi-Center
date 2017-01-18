@@ -158,6 +158,9 @@ void TaxiCenter::addTripToDriver(int time){
         if (time >= trip->time) {
             pthread_t* thread = trip->getThread();
             pthread_join(*thread, NULL);
+            while (trip->route == NULL){
+                sleep(SLEEP);
+            }
             Comunicator* driver = this->getClosestDriver(trip->start);
             driver->setTrip(trip);
             tripToDelete.push_back(i);

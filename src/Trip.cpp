@@ -5,7 +5,7 @@
 ******************************************************************************/
 Trip::Trip(int id, Point start, Point end, int numOfPass, double price, int time):
         id(id), start(start), end(end), numOfPass(numOfPass), price(price),
-        time(time), route(NULL), totalMeterPassed(0) {
+        time(time), route(NULL), totalMeterPassed(0), thread(NULL) {
     for (int i = 0; i < this->numOfPass; i++) {
         passengers.push_back(new Passenger());
     }
