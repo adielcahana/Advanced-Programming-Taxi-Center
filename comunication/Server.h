@@ -2,7 +2,7 @@
 #define EX4_SERVER_H
 
 #include <iostream>
-#include "Udp.h"
+#include "Tcp.h"
 #include "TaxiCenterProtocol.h"
 
 /******************************************************************************
@@ -12,12 +12,13 @@
 class Server {
 protected:
     Protocol* protocol;
-    Udp* udp;
+    Tcp* tcp;
 public:
-    char buffer[1024];
-    Server(Protocol* protocol, Udp* udp): udp(udp), protocol(protocol){};
+    char buffer[65536];
+    Server(Protocol* protocol, Tcp* tcp): tcp(tcp), protocol(protocol){};
     ~Server();
     void initialize();
+    Tcp* accept();
     void send(int numOfMsg);
     int receive(int scenario);
 };

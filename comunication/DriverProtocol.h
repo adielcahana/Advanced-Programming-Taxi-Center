@@ -23,7 +23,7 @@ private:
     int taxiId;
     Point** location;
 public:
-    DriverProtocol(int id, int taxiId, Point** location): driverId(driverId), taxiId(taxiId), location(location){};
+    DriverProtocol(int id, int taxiId, Point** location): driverId(id), taxiId(taxiId), location(location){};
     virtual int translate(char* msg, int scenario);
     virtual string createMsg(int numOfMsg);
 };

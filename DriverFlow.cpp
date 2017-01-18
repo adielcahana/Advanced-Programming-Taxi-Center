@@ -1,14 +1,23 @@
+#include <fstream>
 #include "DriverFlow.h"
-
+//_INITIALIZE_EASYLOGGINGPP
 
 /******************************************************************************
 * The function Operation: run the driver (client) program
 ******************************************************************************/
 int main(int argc, char** argv) {
     Parser pars;
+    stringstream fileName;
+
     // create driver from input
     Driver *driver = pars.readDriver();
+    fileName << "driver_" << driver->getId() << "_log.txt";
     driver->initialize(argv[1], atoi(argv[2])); //set the Client connection
+
+    std::ofstream out(fileName.str().c_str());
+    std::streambuf *coutbuf = std::cout.rdbuf(); //save old buf
+    std::cout.rdbuf(out.rdbuf());
+
     int operation = 1;
     driver->send(operation); //send driver id
     do {
@@ -63,6 +72,7 @@ int main(int argc, char** argv) {
         while (trip == NULL) {
             operation = driver->receive(4); //recieve trip or time passed
             if(operation == 9){ // finish the program
+                std::cout.rdbuf(coutbuf);
                 delete driver;
                 return 0;
             }
@@ -77,24 +87,21 @@ int main(int argc, char** argv) {
                 driver->send(7);
                 continue;
             }
-            istringstream stream(driver->buffer);
-            streambuf *cin_backup = cin.rdbuf(stream.rdbuf());
-            cin.rdbuf(stream.rdbuf()); //redirect std::cin
             try {
                 // create trip that got from the taxi center
-                trip = pars.readTrip();
+                trip = Trip::fromString(string(driver->buffer));
                 driver->newTrip(trip);
             } catch (runtime_error) {
                 driver->send(0); // request data again
             }
-            cin.rdbuf(cin_backup);
         }
 
         driver->send(5);
         // run until the driver finish the trip or the program end
         while (!driver->isAvaliable()) {
             operation = driver->receive(5);
-            if(operation == 9){ // finish the program
+            if (operation == 9){ // finish the program
+                std::cout.rdbuf(coutbuf);
                 delete driver;
                 return 0;
             }
@@ -102,7 +109,7 @@ int main(int argc, char** argv) {
                 driver->timePassed();
                 if(driver->isAvaliable()){ // if the driver finish the trip
                     driver->send(8);
-                    driver->receive(6);
+//                    driver->receive(6);
                     break;
                 }
                 driver->send(6);
