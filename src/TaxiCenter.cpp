@@ -15,6 +15,7 @@ TaxiCenter::TaxiCenter(Protocol *protocol, Tcp *tcp, Map *map) : Server(protocol
         cout << "unable to init taxi center lock" << endl;
     }
     listener = new CommunicatorListener(this->avaliableDrivers );
+    this->numOfDrivers = 0;
 }
 
 /******************************************************************************
