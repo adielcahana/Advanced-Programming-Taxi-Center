@@ -114,10 +114,7 @@ int Tcp::sendData(string data) {
 	int data_len = data.length();
 	const char * datas = data.c_str();
 	cout << "send msg:" << data << endl;
-//	stringstream str;
-//	str << "send msg:" << datas;
-//    LDEBUG << "send msg:";
-//	LDEBUG << data;
+
 	int sent_bytes = send(this->socketDescriptor, datas, data_len, 0);
 	if (sent_bytes < 0) {
 		//return an error represent error at this method
