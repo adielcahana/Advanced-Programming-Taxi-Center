@@ -83,6 +83,13 @@ int Tcp::initialize() {
 	return CORRECT;
 }
 
+/***********************************************************************
+* function name: initialize											   *
+* The Input: none              										   *
+* The output: int number representing the client socket descriptor     *
+* The Function operation: accept for client connect and create socket  *
+* with connection to the client                                 	   *
+***********************************************************************/
 Tcp* Tcp::TcpAccept(){
     //accept
     struct sockaddr_in client_sin;
@@ -131,7 +138,6 @@ int Tcp::reciveData(char* buffer, int size) {
 	memset(buffer, 0, size);
 	int read_bytes = recv(this->socketDescriptor, buffer, size, 0);
 	cout << "rcv msg:" << buffer << endl;
-//    LDEBUG << "rcv msg:" << buffer;
     //checking the errors
 	if (read_bytes == 0) {
 		return CONNECTION_CLOSED;
@@ -139,9 +145,6 @@ int Tcp::reciveData(char* buffer, int size) {
 	else if (read_bytes < 0) {
 		//return an error represent error at this method
 		return ERROR_RECIVE;
-	} else {
-		//prinrting the massege
-//		cout<<buffer<<endl;
 	}
 	//return correct if there were no problem
 	return read_bytes;

@@ -9,8 +9,14 @@
 
 #define SLEEP 0.01
 
+// global boolean valiable
 extern bool can_continue;
 
+/******************************************************************************
+* Comunicator: created by the taxi center to comunicate with the driver in a
+* different thread contain the driver info and the socket that connect to the
+* client
+******************************************************************************/
 class Comunicator: public Server, public AvaliableNotifier {
 private:
     DriverInfo* driverInfo;
@@ -40,7 +46,7 @@ public:
     bool isAvaliable();
     static void* wrapTalkWithDriver(void* comunicator);
     void addAvaliableListener(AvaliableListener* al);
-    void removeAvaliableListener(AvaliableListener* al);
+    void removeAvaliableListener();
 };
 
 #endif //EX4_COMUNICATOR_H

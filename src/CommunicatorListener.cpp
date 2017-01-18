@@ -1,9 +1,8 @@
-//
-// Created by adi on 15/12/16.
-//
-
 #include "CommunicatorListener.h"
 
+/******************************************************************************
+* The function Operation: CommunicatorListener constructor
+******************************************************************************/
 CommunicatorListener::CommunicatorListener(vector <Comunicator*>* avaliableCommunicators) {
     this->avaliableCommunicators = avaliableCommunicators;
     if (pthread_mutex_init(&lock, NULL) != 0) {
@@ -11,6 +10,9 @@ CommunicatorListener::CommunicatorListener(vector <Comunicator*>* avaliableCommu
     }
 }
 
+/******************************************************************************
+* The function Operation: CommunicatorListener destructor
+******************************************************************************/
 CommunicatorListener::~CommunicatorListener(){
     pthread_mutex_destroy(&lock);
 }

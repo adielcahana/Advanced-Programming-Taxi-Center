@@ -1,5 +1,4 @@
 #include "TaxiCenterFlow.h"
-//_INITIALIZE_EASYLOGGINGPP
 
 /******************************************************************************
 * The Function Operation: flow ctor
@@ -57,9 +56,6 @@ void TaxiCenterFlow::initialize(){
                 p = center->getDriverLocation(id);
                 if(p != NULL){
                     cout << *p << endl;
-//                    stringstream str;
-//                    str << *p;
-//                    LDEBUG << str.str();
                     delete p;
                 } else {
                     cout << "driver id doesn't exist" << endl;
@@ -94,10 +90,6 @@ int main(int argc, char* argv[]) {
     std::ifstream in("input.txt");
     std::streambuf *cinbuf = std::cin.rdbuf(); //save old buf
     std::cin.rdbuf(in.rdbuf());
-//    easyloggingpp::Loggers::setFilename("taxi_center_log.txt");
-
-//    LINFO << "This is my first log";
-//    LDEBUG << "this is first debug";
 
     std::ofstream out("taxi_center_log.txt");
     std::streambuf *coutbuf = std::cout.rdbuf(); //save old buf

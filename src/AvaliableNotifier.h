@@ -13,7 +13,7 @@
 class AvaliableNotifier{
 public:
     virtual void addAvaliableListener(AvaliableListener* al) = 0;
-    virtual void removeAvaliableListener(AvaliableListener* al) = 0;
+    virtual void removeAvaliableListener() = 0;
 };
 
 #endif //EX2_AVALIABLENOTIFIER_H

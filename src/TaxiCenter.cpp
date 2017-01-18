@@ -18,7 +18,7 @@ TaxiCenter::TaxiCenter(Protocol *protocol, Tcp *tcp, Map *map) : Server(protocol
 }
 
 /******************************************************************************
-* The function Operation: TaxiCenter destructor - delete all the drivers
+* The function Operation: TaxiCenter destructor - delete all the comunicators
 * delete the avaliable cabs, delete the listeners and the map
 ******************************************************************************/
 TaxiCenter::~TaxiCenter() {
@@ -172,10 +172,17 @@ void TaxiCenter::addTripToDriver(int time){
     }
 }
 
+/******************************************************************************
+* The function Operation: add given comunicator to driver's list
+******************************************************************************/
 void TaxiCenter::addComunicator(Comunicator *comunicator) {
     this->drivers->push_back(comunicator);
 }
 
+/******************************************************************************
+* The function Operation: get new Tcp from the taxi canter server create new
+* comunicator and start to comunicate this driver in a different thread
+******************************************************************************/
 void TaxiCenter::acceptNewDriver() {
     Tcp* tcp = this->accept();
     this->numOfDrivers++;
@@ -184,10 +191,12 @@ void TaxiCenter::acceptNewDriver() {
     this->addComunicator(comunicator);
     comunicator->addAvaliableListener(this->listener);
     comunicator->setThread(new pthread_t());
+    // start comunicate with the driver in different thread
     int status = pthread_create(comunicator->getThread(), NULL, Comunicator::wrapTalkWithDriver, comunicator);
     if (status) {
         cout << "error while trying to comunicate" << endl;
     }
+    // sleep until all drivers avaliable
     while(avaliableDrivers->size() != numOfDrivers){
         sleep(SLEEP);
     }
@@ -198,7 +207,12 @@ void TaxiCenter::acceptNewDriver() {
     can_continue = true;
 }
 
+/******************************************************************************
+* The function Operation: tell to all threads to send finish message to the
+* drivers
+******************************************************************************/
 void TaxiCenter::sendFinish() {
+    // sleep until all drivers avaliable
     while(avaliableDrivers->size() != numOfDrivers){
         sleep(SLEEP);
     }
@@ -207,18 +221,24 @@ void TaxiCenter::sendFinish() {
         drivers->at(i)->setNextMission(7);
     }
     can_continue = true;
+    // sleep until all drivers avaliable
     while(avaliableDrivers->size() != numOfDrivers){
         sleep(SLEEP);
     }
 }
 
+/******************************************************************************
+* The function Operation: find the closest driver to send him the earlier trip
+******************************************************************************/
 Comunicator* TaxiCenter::getClosestDriver(Point location){
     Comunicator* driver = NULL;
     for(unsigned int i = 0; i < drivers->size(); i++ ){
         driver = drivers->at(i);
         if (driver->isAvaliable()){
+            // ask for driver's location
             driver->setNextMission(6);
             Point* driverLocation = driver->getLocation();
+            // if the location is the same as trip start point
             if (location == *driverLocation){
                 delete driverLocation;
                 return driver;
@@ -228,7 +248,12 @@ Comunicator* TaxiCenter::getClosestDriver(Point location){
     }
 }
 
+/******************************************************************************
+* The function Operation: static function that called to createRoute function
+* that the thread could run this function
+******************************************************************************/
 void* TaxiCenter::wrapCreateRoute(void* center){
     ((TaxiCenter*) center)->createRoute();
+    // finish the thread
     pthread_exit(NULL);
 }
