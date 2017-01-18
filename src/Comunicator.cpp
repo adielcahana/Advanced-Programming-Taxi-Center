@@ -1,6 +1,6 @@
 #include <unistd.h>
 #include "Comunicator.h"
-
+int curr_time = 0;
 bool can_continue = true;
 /******************************************************************************
 * The function Operation: the first talk with the driver, create driver info
@@ -48,6 +48,7 @@ void Comunicator::talkWithDriver() {
                     if (nextMission == 7) {
                         this->avaliable = true;
                         nextMission = 0;
+                        time = curr_time;
                     }
                     this->comunicaorListener->avaliableEvent(this);
                     break;
@@ -191,6 +192,13 @@ pthread_t* Comunicator::getThread(){
 ******************************************************************************/
 void Comunicator::setThread(pthread_t* thread){
     this->thread = thread;
+};
+
+/******************************************************************************
+* The function Operation: get the time when the driver got to its position
+******************************************************************************/
+int Comunicator::getTime(){
+    return this->time;
 };
 
 /******************************************************************************

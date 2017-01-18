@@ -11,6 +11,7 @@
 
 // global boolean valiable
 extern bool can_continue;
+extern int curr_time;
 
 /******************************************************************************
 * Comunicator: created by the taxi center to comunicate with the driver in a
@@ -21,14 +22,16 @@ class Comunicator: public Server, public AvaliableNotifier {
 private:
     DriverInfo* driverInfo;
     pthread_t* thread;
-    int nextMission;
     Point* location;
+    int nextMission;
+    int time;
     bool avaliable;
     AvaliableListener* comunicaorListener;
     void setProtocolMap(Map* map);
 public:
     Comunicator(Protocol* protocol, Tcp* tcp, Map* map): Server(protocol, tcp){
         setProtocolMap(map);
+        time = 0;
         this->nextMission = 1;
         this->avaliable = true;
     }
@@ -42,6 +45,7 @@ public:
     void setNextMission(int mission);
     int getDriverId();
     int getTaxiId();
+    int getTime();
     Point* getLocation();
     bool isAvaliable();
     static void* wrapTalkWithDriver(void* comunicator);

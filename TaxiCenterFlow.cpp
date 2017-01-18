@@ -19,7 +19,7 @@ TaxiCenterFlow::~TaxiCenterFlow(){
 * parsing it. all the numbers that are sent are specified in taxiCenterProtocol
 ******************************************************************************/
 void TaxiCenterFlow::initialize(){
-    int option, time = 0;
+    int option;
     char dummy; // variable for '\n'
     Point* p = NULL;
     Trip* trip = NULL;
@@ -71,8 +71,8 @@ void TaxiCenterFlow::initialize(){
                 break;
             case 9:
                 // set time passed and check if add trip to driver
-                time++;
-                this->center->addTripToDriver(time);
+                curr_time++;
+                this->center->addTripToDriver(curr_time);
                 this->center->timePassed();
             default:
                 break;

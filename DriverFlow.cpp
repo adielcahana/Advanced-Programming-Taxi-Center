@@ -18,9 +18,6 @@ int main(int argc, char** argv) {
     std::streambuf *coutbuf = std::cout.rdbuf(); //save old buf
     std::cout.rdbuf(out.rdbuf());
 
-//    easyloggingpp::Loggers::setFilename(fileName.str());
-//    LDEBUG << "This is log for: " << driver->getId();
-
     int operation = 1;
     driver->send(operation); //send driver id
     do {

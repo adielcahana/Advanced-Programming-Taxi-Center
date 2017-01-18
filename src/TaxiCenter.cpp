@@ -1,4 +1,5 @@
 #include <unistd.h>
+#include <climits>
 #include "TaxiCenter.h"
 
 /******************************************************************************
@@ -154,10 +155,8 @@ void TaxiCenter::addTripToDriver(int time){
         // if the time of the trip arrived
         trip = this->trips->at(i);
         if (time >= trip->time) {
-            if (trip->route == NULL) {
-                pthread_t* thread = trip->getThread();
-                pthread_join(*thread, NULL);
-            }
+            pthread_t* thread = trip->getThread();
+            while(pthread_join(*thread, NULL) != 0);
             Comunicator* driver = this->getClosestDriver(trip->start);
             driver->setTrip(trip);
             this->trips->erase(trips->begin() + i);
@@ -233,6 +232,9 @@ void TaxiCenter::sendFinish() {
 ******************************************************************************/
 Comunicator* TaxiCenter::getClosestDriver(Point location){
     Comunicator* driver = NULL;
+    Comunicator* firstDriver = NULL;
+    int min_time = INT_MAX;
+    int driver_time;
     for(unsigned int i = 0; i < drivers->size(); i++ ){
         driver = drivers->at(i);
         if (driver->isAvaliable()){
@@ -241,12 +243,17 @@ Comunicator* TaxiCenter::getClosestDriver(Point location){
             Point* driverLocation = driver->getLocation();
             // if the location is the same as trip start point
             if (location == *driverLocation){
-                delete driverLocation;
-                return driver;
+                //find the first driver who got to the point
+                driver_time = driver->getTime();
+                if (driver_time < min_time){
+                    min_time = driver_time;
+                    firstDriver = driver;
+                }
             }
             delete driverLocation;
         }
     }
+    return firstDriver;
 }
 
 /******************************************************************************

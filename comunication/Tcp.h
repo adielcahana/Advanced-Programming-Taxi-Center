@@ -7,7 +7,6 @@
 #define TCP_H_
 
 #include "Socket.h"
-//#include "../logging/easylogging++.h"
 #include <unistd.h>
 
 class Tcp: public Socket {

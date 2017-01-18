@@ -23,7 +23,7 @@ Trip::~Trip() {
         route->clear();
         delete route;
     }
-    pthread_join(this->thread, NULL);
+//    pthread_join(this->thread, NULL);
     for(int j = 0; j < passengers.size(); j++){
         delete passengers.at(j);
     }
