@@ -5,7 +5,7 @@
 ******************************************************************************/
 Trip::Trip(int id, Point start, Point end, int numOfPass, double price, int time):
         id(id), start(start), end(end), numOfPass(numOfPass), price(price),
-        time(time), route(NULL), totalMeterPassed(0) {
+        time(time), route(NULL), totalMeterPassed(0), thread(NULL) {
     for (int i = 0; i < this->numOfPass; i++) {
         passengers.push_back(new Passenger());
     }
@@ -23,11 +23,16 @@ Trip::~Trip() {
         route->clear();
         delete route;
     }
+    if(this->thread != NULL){
+        delete thread;
+    }
+
     for(int j = 0; j < passengers.size(); j++){
         delete passengers.at(j);
     }
     passengers.clear();
 }
+
 /******************************************************************************
 * The function Operation: return the trip calculation thread object
 ******************************************************************************/
@@ -35,9 +40,12 @@ pthread_t* Trip::getThread(){
     return this->thread;
 }
 
+/******************************************************************************
+* The function Operation: set to trip given thread
+******************************************************************************/
 void Trip::setThread(pthread_t* thread){
     this->thread = thread;
-};
+}
 
 
 /******************************************************************************

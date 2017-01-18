@@ -4,7 +4,7 @@
 * The function Operation: Server destructor - delete the udp.
 ******************************************************************************/
 Server::~Server() {
-    delete this->udp;
+    delete this->tcp;
 }
 
 /******************************************************************************
@@ -12,7 +12,11 @@ Server::~Server() {
 ******************************************************************************/
 void Server::initialize(){
     // initilize the udp (to do bind)
-    this->udp->initialize();
+    this->tcp->initialize();
+}
+
+Tcp* Server::accept(){
+    return this->tcp->TcpAccept();
 }
 
 /******************************************************************************
@@ -21,7 +25,7 @@ void Server::initialize(){
 ******************************************************************************/
 void Server::send(int numOfMsg){
     string msg = protocol->createMsg(numOfMsg);
-    this->udp->sendData(msg);
+    this->tcp->sendData(msg);
 }
 
 /******************************************************************************
@@ -29,6 +33,6 @@ void Server::send(int numOfMsg){
 * the client and send to protocol for translate
 ******************************************************************************/
 int Server::receive(int scenario){
-    this->udp->reciveData(buffer, 1024);
+    this->tcp->reciveData(buffer, sizeof(buffer));
     return this->protocol->translate(buffer,scenario);
 }

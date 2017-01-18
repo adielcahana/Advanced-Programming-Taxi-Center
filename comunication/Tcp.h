@@ -1,30 +1,34 @@
 /************************************************************
-* File description: UDP header file. the class inherit from	*
-* socket. methods of udp socket type						*
+* File description: TCP header file. the class inherit from	*
+* socket. methods of tcp socket type						*
 ************************************************************/
 
-#ifndef UDP_H_
-#define UDP_H_
+#ifndef TCP_H_
+#define TCP_H_
 
 #include "Socket.h"
+#include <unistd.h>
 
-class Udp: public Socket {
+class Tcp: public Socket {
 public:
 	/***********************************************************************
-	* function name: Udp												   *
+	* function name: Tcp												   *
 	* The Input: Boolean, true - if server, false if client and port number*
 	* The output: none										               *
-	* The Function operation: creating new Udp						       *
+	* The Function operation: creating new Tcp						       *
 	***********************************************************************/
-	Udp(bool isServers, int port_num, string ip_address = "");
-	/***********************************************************************
-	* function name: ~Udp												   *
-	* The Input: none													   *
-	* The output: none										               *
-	* The Function operation: default destructor					       *
-	***********************************************************************/
-	virtual ~Udp();
-	/***********************************************************************
+	Tcp(bool isServers, int port_num, string ip_address = "");
+    Tcp(int descriptor);
+    Tcp();
+
+    /***********************************************************************
+    * function name: ~Tcp												   *
+    * The Input: none													   *
+    * The output: none										               *
+    * The Function operation: default destructor					       *
+    ***********************************************************************/
+	virtual ~Tcp();
+/***********************************************************************
 	* function name: initialize											   *
 	* The Input: none              										   *
 	* The output: int number representing the return status		           *
@@ -32,12 +36,13 @@ public:
 	* socket descriptor.												   *
 	***********************************************************************/
 	int initialize();
+    Tcp* TcpAccept();
 	/***********************************************************************
 	* function name: sendData											   *
 	* The Input: string representing the data to send		               *
 	* The output: int number representing the return status		           *
 	* The Function operation: sending the input data to the socket         *
-	* who connect to this socket.										   *
+	* who connect to this socket. 										   *
 	***********************************************************************/
 	int sendData(string data);
 	/***********************************************************************
@@ -50,4 +55,4 @@ public:
 	int reciveData(char* buffer, int size);
 };
 
-#endif /* UDP_H_ */
+#endif /* TCP_H_ */

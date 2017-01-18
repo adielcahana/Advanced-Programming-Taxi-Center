@@ -5,7 +5,7 @@
 ******************************************************************************/
 TaxiCenterFlow::TaxiCenterFlow(int port){
     Map* map = parser.readMap();
-    this->center = new TaxiCenter(new TaxiCenterProtocol(), new Udp(true, port), map);
+    this->center = new TaxiCenter(new TaxiCenterProtocol(), new Tcp(true, port), map);
     this->shouldStop = false;
 }
 /******************************************************************************
@@ -19,13 +19,14 @@ TaxiCenterFlow::~TaxiCenterFlow(){
 * parsing it. all the numbers that are sent are specified in taxiCenterProtocol
 ******************************************************************************/
 void TaxiCenterFlow::initialize(){
-    int option, status = 0, time = 0;
+    int option;
     char dummy; // variable for '\n'
     Point* p = NULL;
     Trip* trip = NULL;
     bool shouldStop = false; // initialization stop flag
     bool wasInitialize = false;
     int id;
+    int numOfDrivers;
     while(!shouldStop) {
         cin >> option;
         cin >> noskipws >> dummy; //read '\n'
@@ -34,22 +35,17 @@ void TaxiCenterFlow::initialize(){
                 if (!wasInitialize) {
                     // initialize the server
                     center->initialize();
-                    cin >> option;
+                    cin >> numOfDrivers;
                     cin >> noskipws >> dummy;
                 }
                 // first talk with the driver
-                for(int i = 0; i < option; i++) {
-                    this->center->talkWithDriver();
+                for(int i = 0; i < numOfDrivers; i++) {
+                    this->center->acceptNewDriver();
                 }
                 break;
             case 2:
                 trip = parser.readTrip();
                 center->addTrip(trip);
-                trip->setThread(new pthread_t());
-                status = pthread_create(trip->getThread(), NULL, TaxiCenterFlow::createRoute, this->center);
-                if (status) {
-                    cout << "error while trying to create trip" << endl;
-                }
                 break;
             case 3:
                 center->addAvaliableTaxi(parser.readTaxi());
@@ -57,7 +53,7 @@ void TaxiCenterFlow::initialize(){
             case 4:
                 cin >> id;
                 cin >> noskipws >> dummy;
-                p = center->getDriverLocation();
+                p = center->getDriverLocation(id);
                 if(p != NULL){
                     cout << *p << endl;
                     delete p;
@@ -66,19 +62,17 @@ void TaxiCenterFlow::initialize(){
                 }
                 break;
             case 6: // stop getting input, and exit the loop
-                time++;
-                this->center->addTripToDriver(time);
                 shouldStop = true;
                 break;
             case 7: // update the flow stop flag, and exit the loop
                 this->shouldStop = true;
                 shouldStop = true;
-                this->center->send(8); // send finish the program
+                this->center->sendFinish(); // send finish the program
                 break;
             case 9:
                 // set time passed and check if add trip to driver
-                time++;
-                this->center->addTripToDriver(time);
+                curr_time++;
+                this->center->addTripToDriver(curr_time);
                 this->center->timePassed();
             default:
                 break;
@@ -87,21 +81,19 @@ void TaxiCenterFlow::initialize(){
 }
 
 /******************************************************************************
-* The Function Operation: run the gmae step by step
+* The Function Operation: run the game step by step
 ******************************************************************************/
 void TaxiCenterFlow::run(){
-    int time = 0;
-    while(!center->shouldStop()){
-        time++;
-        center->timePassed();
-    }
 }
 
-void* TaxiCenterFlow::createRoute(void* center){
-    ((TaxiCenter*) center)->createRoute();
-}
+int main(int argc, char* argv[]) {
+    std::ifstream in("input.txt");
+    std::streambuf *cinbuf = std::cin.rdbuf(); //save old buf
+    std::cin.rdbuf(in.rdbuf());
 
-int main(int argc, char* argv[]){
+    std::ofstream out("taxi_center_log.txt");
+    std::streambuf *coutbuf = std::cout.rdbuf(); //save old buf
+    std::cout.rdbuf(out.rdbuf());
     // argv[1] = port number
     int port = atoi(argv[1]);
     TaxiCenterFlow flow(port);
@@ -109,4 +101,6 @@ int main(int argc, char* argv[]){
         flow.initialize();
         if (!flow.shouldStop) flow.run();
     }
+    std::cout.rdbuf(coutbuf);
+    std::cin.rdbuf(cinbuf);
 }

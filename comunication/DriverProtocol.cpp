@@ -75,11 +75,11 @@ int DriverProtocol::translate(char* msg, int scenario){
                 return scenario;
             }
             break;
-        case 6:
-            if (strcmp(msg, "done") == 0) {
-                // the taxi center got message that driver finish
-                return 8;
-            }
+//        case 6:
+//            if (strcmp(msg, "done") == 0) {
+//                // the taxi center got message that driver finish
+//                return 8;
+//            }
         default:
             return 0;
     }

@@ -34,8 +34,12 @@ private:
     void addPassCount(int passengers);
 public:
     Driver(int id, int age, Status status, int exp, int taxiId):
-            id(id), age(age), time(0), maritalStat(status), exp(exp), taxiId(taxiId),
-            trip(NULL), location(new Point(0,0)),Client((Protocol*) new DriverProtocol(id, taxiId, &location)){};
+            Client((Protocol*) new DriverProtocol(id, taxiId, &location)),
+            id(id), age(age), time(0), maritalStat(status), exp(exp), taxiId(taxiId){
+        this->trip = NULL;
+        this-> location = new Point(0,0);
+    }
+
     ~Driver();
     int getId();
     void setMap(Map* map);
