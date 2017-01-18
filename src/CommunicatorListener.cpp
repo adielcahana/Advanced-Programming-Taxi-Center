@@ -18,7 +18,7 @@ CommunicatorListener::~CommunicatorListener(){
 }
 
 /******************************************************************************
-* The function Operation: adds the notifyer driver to the driver list
+* The function Operation: adds the notifyer Comunicator to the driver list
 ******************************************************************************/
 void CommunicatorListener::avaliableEvent(AvaliableNotifier* avaliable) {
     pthread_mutex_lock(&lock);
@@ -28,7 +28,7 @@ void CommunicatorListener::avaliableEvent(AvaliableNotifier* avaliable) {
 }
 
 /******************************************************************************
-* The function Operation: removes the notifyer driver from the driver list
+* The function Operation: removes the notifyer Comunicator from the driver list
 ******************************************************************************/
 void CommunicatorListener::unavaliableEvent(AvaliableNotifier *unavaliable){
     pthread_mutex_lock(&lock);
