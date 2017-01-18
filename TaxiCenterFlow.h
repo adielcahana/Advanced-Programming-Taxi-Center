@@ -5,6 +5,8 @@
 #include "src/Parser.h"
 #include <fstream>
 
+//#include "logging/easylogging++.h"
+
 /******************************************************************************
 * Flow: handlesthe program flow. this class uses the input parser to
 * initialize and update the taxi center.
@@ -18,7 +20,6 @@ public:
     TaxiCenterFlow(int port);
     ~TaxiCenterFlow();
     void initialize();
-    static void* createRoute(void* center);
     void run();
 };
 

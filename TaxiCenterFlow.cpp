@@ -19,13 +19,14 @@ TaxiCenterFlow::~TaxiCenterFlow(){
 * parsing it. all the numbers that are sent are specified in taxiCenterProtocol
 ******************************************************************************/
 void TaxiCenterFlow::initialize(){
-    int option, status = 0, time = 0;
+    int option;
     char dummy; // variable for '\n'
     Point* p = NULL;
     Trip* trip = NULL;
     bool shouldStop = false; // initialization stop flag
     bool wasInitialize = false;
     int id;
+    int numOfDrivers;
     while(!shouldStop) {
         cin >> option;
         cin >> noskipws >> dummy; //read '\n'
@@ -34,22 +35,17 @@ void TaxiCenterFlow::initialize(){
                 if (!wasInitialize) {
                     // initialize the server
                     center->initialize();
-                    cin >> option;
+                    cin >> numOfDrivers;
                     cin >> noskipws >> dummy;
                 }
                 // first talk with the driver
-                for(int i = 0; i < option; i++) {
+                for(int i = 0; i < numOfDrivers; i++) {
                     this->center->acceptNewDriver();
                 }
                 break;
             case 2:
                 trip = parser.readTrip();
                 center->addTrip(trip);
-                trip->setThread(new pthread_t());
-                status = pthread_create(trip->getThread(), NULL, TaxiCenterFlow::createRoute, this->center);
-                if (status) {
-                    cout << "error while trying to create trip" << endl;
-                }
                 break;
             case 3:
                 center->addAvaliableTaxi(parser.readTaxi());
@@ -57,7 +53,7 @@ void TaxiCenterFlow::initialize(){
             case 4:
                 cin >> id;
                 cin >> noskipws >> dummy;
-                p = center->getDriverLocation();
+                p = center->getDriverLocation(id);
                 if(p != NULL){
                     cout << *p << endl;
                     delete p;
@@ -75,8 +71,8 @@ void TaxiCenterFlow::initialize(){
                 break;
             case 9:
                 // set time passed and check if add trip to driver
-                time++;
-                this->center->addTripToDriver(time);
+                curr_time++;
+                this->center->addTripToDriver(curr_time);
                 this->center->timePassed();
             default:
                 break;
@@ -88,18 +84,10 @@ void TaxiCenterFlow::initialize(){
 * The Function Operation: run the game step by step
 ******************************************************************************/
 void TaxiCenterFlow::run(){
-    while(!center->shouldStop()){
-        center->timePassed();
-    }
-}
-
-void* TaxiCenterFlow::createRoute(void* center){
-    ((TaxiCenter*) center)->createRoute();
-    pthread_exit(NULL);
 }
 
 int main(int argc, char* argv[]) {
-    std::ifstream in("server.txt");
+    std::ifstream in("input.txt");
     std::streambuf *cinbuf = std::cin.rdbuf(); //save old buf
     std::cin.rdbuf(in.rdbuf());
 

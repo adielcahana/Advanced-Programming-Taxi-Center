@@ -1,18 +1,23 @@
 #include <fstream>
 #include "DriverFlow.h"
-
+//_INITIALIZE_EASYLOGGINGPP
 
 /******************************************************************************
 * The function Operation: run the driver (client) program
 ******************************************************************************/
 int main(int argc, char** argv) {
     Parser pars;
-    std::ofstream out("driver_log.txt");
-    std::streambuf *coutbuf = std::cout.rdbuf(); //save old buf
-    std::cout.rdbuf(out.rdbuf());
+    stringstream fileName;
+
     // create driver from input
     Driver *driver = pars.readDriver();
+    fileName << "driver_" << driver->getId() << "_log.txt";
     driver->initialize(argv[1], atoi(argv[2])); //set the Client connection
+
+    std::ofstream out(fileName.str().c_str());
+    std::streambuf *coutbuf = std::cout.rdbuf(); //save old buf
+    std::cout.rdbuf(out.rdbuf());
+
     int operation = 1;
     driver->send(operation); //send driver id
     do {
@@ -104,7 +109,7 @@ int main(int argc, char** argv) {
                 driver->timePassed();
                 if(driver->isAvaliable()){ // if the driver finish the trip
                     driver->send(8);
-                    driver->receive(6);
+//                    driver->receive(6);
                     break;
                 }
                 driver->send(6);

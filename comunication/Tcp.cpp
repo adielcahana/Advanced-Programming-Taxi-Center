@@ -30,7 +30,7 @@ Tcp::Tcp(int descriptor) {
 * The Function operation: default destructor					       *
 ***********************************************************************/
 Tcp::~Tcp() {
-	// TODO Auto-generated destructor stub
+		// TODO Auto-generated destructor stub
 }
 
 /***********************************************************************
@@ -66,7 +66,6 @@ int Tcp::initialize() {
             return ERROR_LISTEN;
         }
 
-
 	//if client
 	} else {
 		struct sockaddr_in sin;
@@ -84,6 +83,13 @@ int Tcp::initialize() {
 	return CORRECT;
 }
 
+/***********************************************************************
+* function name: initialize											   *
+* The Input: none              										   *
+* The output: int number representing the client socket descriptor     *
+* The Function operation: accept for client connect and create socket  *
+* with connection to the client                                 	   *
+***********************************************************************/
 Tcp* Tcp::TcpAccept(){
     //accept
     struct sockaddr_in client_sin;
@@ -108,6 +114,7 @@ int Tcp::sendData(string data) {
 	int data_len = data.length();
 	const char * datas = data.c_str();
 	cout << "send msg:" << data << endl;
+
 	int sent_bytes = send(this->socketDescriptor, datas, data_len, 0);
 	if (sent_bytes < 0) {
 		//return an error represent error at this method
@@ -128,16 +135,13 @@ int Tcp::reciveData(char* buffer, int size) {
 	memset(buffer, 0, size);
 	int read_bytes = recv(this->socketDescriptor, buffer, size, 0);
 	cout << "rcv msg:" << buffer << endl;
-	//checking the errors
+    //checking the errors
 	if (read_bytes == 0) {
 		return CONNECTION_CLOSED;
 	}
 	else if (read_bytes < 0) {
 		//return an error represent error at this method
 		return ERROR_RECIVE;
-	} else {
-		//prinrting the massege
-//		cout<<buffer<<endl;
 	}
 	//return correct if there were no problem
 	return read_bytes;
