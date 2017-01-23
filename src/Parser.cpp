@@ -107,7 +107,10 @@ Map* Parser::readMap() {
         //convert x,y to int
         width = atoi(x);
         length = atoi(y);
-        obstacles = this->readObstacles();
+        if (x <= 0 || y <= 0){
+            throw runtime_error("bad arguments for map");
+        }
+        obstacles = this->readObstacles(width, length);
     }
     catch (exception){
         delete[](c);
@@ -116,6 +119,7 @@ Map* Parser::readMap() {
     delete[](c);
     return new Map(width, length, obstacles);
 }
+
 /******************************************************************************
 * The Function Operation: read driver input
 ******************************************************************************/
@@ -149,12 +153,16 @@ Driver* Parser::readDriver(){
     exp = atoi(strtok(NULL, ","));
     vehicle_id = atoi(strtok(NULL, ","));
     delete[](c);
+    if(id < 0 || age < 0 || exp < 0 || vehicle_id < 0){
+        throw runtime_error("bad argument for new driver");
+    }
     return new Driver(id,age,stat,exp,vehicle_id);
 }
+
 /******************************************************************************
 * The Function Operation: read trip input
 ******************************************************************************/
-Trip* Parser::readTrip(){
+Trip* Parser::readTrip(Map* map){
     getline(cin, buffer);
     if (!isValidTripInput()) throw runtime_error("bad argument for new Trip");
     //create c-string from buffer
@@ -172,6 +180,10 @@ Trip* Parser::readTrip(){
     float tariff = atof(strtok(NULL, ","));
     int time = atoi(strtok(NULL, " "));
     delete[] (c);
+    if(id < 0 || numOfPassengers < 0 || tariff < 0 || time <= 0 ||
+            isTripOutOfRange(start, end, map->getWidth(), map->getLength())){
+        throw runtime_error("bad argument for new Trip");
+    }
     return new Trip(id, start, end, numOfPassengers, tariff, time);
 }
 /******************************************************************************
@@ -189,6 +201,9 @@ Taxi* Parser::readTaxi(){
     try {
         id = atoi(strtok(c, ","));
         taxiType = atoi(strtok(NULL, ","));
+        if (id < 0 || (taxiType != 1 && taxiType != 2)){
+            throw runtime_error("bad argument for new taxi");
+        }
         //switch case for correct manufacturer input
         switch (strtok(NULL, ",")[0]) {
             case 'H':
@@ -243,7 +258,7 @@ Taxi* Parser::readTaxi(){
 /******************************************************************************
 * The Function Operation: read Obstacles input, point by point
 ******************************************************************************/
-vector<Point*>* Parser::readObstacles(){
+vector<Point*>* Parser::readObstacles(int width, int length){
     vector<Point*>* obstacles = new vector<Point*>();
     //get number of obstacles
     getline(cin, buffer);
@@ -257,12 +272,20 @@ vector<Point*>* Parser::readObstacles(){
         }
     }
     int numOfObsatcles = atoi(c);
+    if(numOfObsatcles < 0){
+        throw runtime_error("bad arguments for obstacles");
+    }
     delete[](c);
+    Point* point = NULL;
     for(int i = 0; i < numOfObsatcles; i++) {
         try {
             //get point line
             getline(cin, buffer);
-            obstacles->push_back(Point::deserialize(buffer));
+            point = Point::deserialize(buffer);
+            if(point->getX() >= width || point->getX() < 0 || point->getY() >= length || point->getY() < 0){
+                throw runtime_error("bad arguments for obstacles");
+            }
+            obstacles->push_back(point);
         }
         catch (exception) {
             // deallocate all points
@@ -274,4 +297,9 @@ vector<Point*>* Parser::readObstacles(){
         }
     }
     return obstacles;
+}
+
+bool Parser::isTripOutOfRange(Point start, Point end, int width, int length) {
+    return start.getX() < 0 || start.getX() >= width || start.getY() < 0 || start.getY() >= length
+            || end.getX() < 0 || end.getX() >= width || end.getY() < 0 || end.getY() >= length;
 }

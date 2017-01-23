@@ -4,7 +4,15 @@
 * The Function Operation: flow ctor
 ******************************************************************************/
 TaxiCenterFlow::TaxiCenterFlow(int port){
-    Map* map = parser.readMap();
+    Map* map = NULL;
+    while(map == NULL) {
+        try {
+            map = parser.readMap();
+        }
+        catch (runtime_error) {
+            cout << "-1" << endl;
+        }
+    }
     this->center = new TaxiCenter(new TaxiCenterProtocol(), new Tcp(true, port), map);
     this->shouldStop = false;
 }
@@ -23,6 +31,7 @@ void TaxiCenterFlow::initialize(){
     char dummy; // variable for '\n'
     Point* p = NULL;
     Trip* trip = NULL;
+    Taxi* taxi = NULL;
     bool shouldStop = false; // initialization stop flag
     bool wasInitialize = false;
     int id;
@@ -44,11 +53,22 @@ void TaxiCenterFlow::initialize(){
                 }
                 break;
             case 2:
-                trip = parser.readTrip();
-                center->addTrip(trip);
+                    try {
+                        trip = parser.readTrip(this->center->getMap());
+                        center->addTrip(trip);
+                    }
+                    catch (runtime_error) {
+                        cout << "-1" << endl;
+                    }
                 break;
             case 3:
-                center->addAvaliableTaxi(parser.readTaxi());
+                    try {
+                        taxi = parser.readTaxi();
+                        center->addAvaliableTaxi(taxi);
+                    }
+                    catch (runtime_error) {
+                        cout << "-1" << endl;
+                    }
                 break;
             case 4:
                 cin >> id;

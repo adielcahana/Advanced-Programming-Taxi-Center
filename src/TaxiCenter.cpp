@@ -271,3 +271,7 @@ void* TaxiCenter::wrapCreateRoute(void* center){
     // finish the thread
     pthread_exit(NULL);
 }
+
+Map *TaxiCenter::getMap() {
+    return this->map;
+}
