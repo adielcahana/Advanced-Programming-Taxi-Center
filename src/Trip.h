@@ -13,7 +13,7 @@ class Trip {
 private:
     friend class TaxiCenter;
     friend class Driver;
-    pthread_t* thread;
+//    pthread_t* thread;
     int id;
     int totalMeterPassed;
     Point start;
@@ -27,8 +27,8 @@ private:
 public:
     Trip(int id, Point start, Point end, int numOfPass, double price, int time);
     ~Trip();
-    pthread_t* getThread();
-    void setThread(pthread_t* thread);
+//    pthread_t* getThread();
+//    void setThread(pthread_t* thread);
     int getId();
     Point* getNextPoint();
     double getPrice();

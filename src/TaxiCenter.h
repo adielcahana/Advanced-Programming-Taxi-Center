@@ -6,6 +6,7 @@
 #include <pthread.h>
 #include "../comunication/Server.h"
 #include "CommunicatorListener.h"
+#include "ThreadPool.h"
 
 /******************************************************************************
 * TaxiCenter: have information about all the drivers the cabs and the trip.
@@ -22,7 +23,10 @@ private:
     CommunicatorListener* listener;
     Map* map;
     int numOfDrivers;
+    ThreadPool* tp;
     pthread_mutex_t lock;
+    void createRoute();
+    static void wrapCreateRoute(void* center);
 public:
     TaxiCenter(Protocol* protocol, Tcp* tcp, Map* map);
     ~TaxiCenter();
@@ -32,12 +36,10 @@ public:
     Comunicator* getClosestDriver(Point location);
     Taxi* getTaxiById(int id);
     void addTrip(Trip* trip);
-    void createRoute();
     void timePassed();
     Point *getDriverLocation(int driverId);
     void addTripToDriver(int time);
     void sendFinish();
-    static void* wrapCreateRoute(void* center);
 };
 
 #endif //ASS2_TAXICENTER_H

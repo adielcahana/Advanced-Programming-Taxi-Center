@@ -11,7 +11,8 @@ set(SOURCE_FILES
         src/Passenger.cpp src/Passenger.h src/TaxiCenter.cpp src/TaxiCenter.h
         src/LuxTaxi.cpp src/LuxTaxi.h src/Map.cpp src/Map.h src/Bfs.cpp src/Bfs.h
         src/Taxi.cpp src/Taxi.h src/Parser.cpp src/Parser.h
-        src/DriverInfo.cpp src/DriverInfo.h)
+        src/DriverInfo.cpp src/DriverInfo.h
+        src/ThreadPool.cpp src/ThreadPool.h)
 
 set(COMUNICATION_FILES
         comunication/TaxiCenterProtocol.cpp comunication/TaxiCenterProtocol.h
@@ -22,4 +23,4 @@ set(COMUNICATION_FILES
         comunication/Tcp.h)
 
 add_executable(client DriverFlow.cpp ${SOURCE_FILES} ${COMUNICATION_FILES})
-add_executable(server TaxiCenterFlow.cpp ${SOURCE_FILES} ${COMUNICATION_FILES})
+add_executable(server TaxiCenterFlow.cpp ${SOURCE_FILES} ${COMUNICATION_FILES} )

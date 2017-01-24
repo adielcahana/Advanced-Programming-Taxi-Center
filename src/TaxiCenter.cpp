@@ -6,6 +6,7 @@
 * The function Operation: TaxiCenter constructor.
 ******************************************************************************/
 TaxiCenter::TaxiCenter(Protocol *protocol, Tcp *tcp, Map *map) : Server(protocol, tcp) {
+    tp = new ThreadPool(5);
     avaliableDrivers = new vector <Comunicator*>;
     drivers = new vector <Comunicator*>;
     avaliableCabs = new vector <Taxi*>();
@@ -36,6 +37,7 @@ TaxiCenter::~TaxiCenter() {
     for(int i = 0; i < avaliableDrivers->size(); i++){
         delete avaliableDrivers->at(i);
     }
+    delete tp;
     delete trips;
     delete avaliableDrivers;
     delete drivers;
@@ -76,17 +78,12 @@ Taxi* TaxiCenter::getTaxiById(int id){
 * The function Operation: add a trip to the trip list
 ******************************************************************************/
 void TaxiCenter::addTrip(Trip* trip){
-    pthread_attr_t attr;
-    pthread_attr_init(&attr);
-    pthread_attr_setdetachstate(&attr, PTHREAD_CREATE_JOINABLE);
     this->trips->push_back(trip);
     this->uncalculatedtrips->push(trip);
-    trip->setThread(new pthread_t);
-    int status = pthread_create(trip->getThread(), &attr, TaxiCenter::wrapCreateRoute, this);
-    if (status) {
-        cout << "error while trying to create trip" << endl;
-    }
-    pthread_attr_destroy(&attr);
+    tp->add_task(new Task(TaxiCenter::wrapCreateRoute, this));
+//    pthread_attr_t attr;
+//    pthread_attr_init(&attr);
+//    pthread_attr_setdetachstate(&attr, PTHREAD_CREATE_JOINABLE);
 }
 
 /******************************************************************************
@@ -97,13 +94,13 @@ void TaxiCenter::createRoute(){
     pthread_mutex_lock(&lock);
     Trip* trip = this->uncalculatedtrips->front();
     this->uncalculatedtrips->pop();
-    cout << "trip num: " << trip->id << " is calcaulated" << endl;
+//    cout << "trip num: " << trip->id << " is calcaulated" << endl;
     pthread_mutex_unlock(&lock);
     Point* start = new Point(trip->start);
     Point* end = new Point(trip->end);
     trip->route = map->getRoute(start, end);
     delete end;
-    cout << "trip num: " << trip->id << " ended calcaulating" << endl;
+//    cout << "trip num: " << trip->id << " ended calcaulating" << endl;
 }
 
 /******************************************************************************
@@ -156,8 +153,6 @@ void TaxiCenter::addTripToDriver(int time){
         // if the time of the trip arrived
         trip = this->trips->at(i);
         if (time >= trip->time) {
-            pthread_t* thread = trip->getThread();
-            pthread_join(*thread, NULL);
             while (trip->route == NULL){
                 sleep(SLEEP);
             }
@@ -266,8 +261,6 @@ Comunicator* TaxiCenter::getClosestDriver(Point location){
 * The function Operation: static function that called to createRoute function
 * that the thread could run this function
 ******************************************************************************/
-void* TaxiCenter::wrapCreateRoute(void* center){
+void TaxiCenter::wrapCreateRoute(void* center){
     ((TaxiCenter*) center)->createRoute();
-    // finish the thread
-    pthread_exit(NULL);
 }
