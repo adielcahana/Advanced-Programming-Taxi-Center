@@ -18,13 +18,14 @@ class Parser {
 public:
     Map* readMap();
     Driver* readDriver();
-    Trip* readTrip();
+    Trip* readTrip(Map* map);
     Taxi* readTaxi();
 private:
     bool isValidDriverInput();
     bool isValidTaxiInput();
     bool isValidTripInput();
-    vector<Point*>* readObstacles();
+    bool isTripOutOfRange(Point start, Point end, int width, int length);
+    vector<Point*>* readObstacles(int width, int length);
 };
 
 

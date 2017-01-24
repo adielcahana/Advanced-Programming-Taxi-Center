@@ -10,7 +10,13 @@ int main(int argc, char** argv) {
     stringstream fileName;
 
     // create driver from input
-    Driver *driver = pars.readDriver();
+    Driver *driver = NULL;
+    try {
+         driver = pars.readDriver();
+    }
+    catch (runtime_error){
+        return 0;
+    }
     fileName << "driver_" << driver->getId() << "_log.txt";
     driver->initialize(argv[1], atoi(argv[2])); //set the Client connection
 

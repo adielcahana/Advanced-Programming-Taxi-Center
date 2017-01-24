@@ -30,6 +30,7 @@ private:
 public:
     TaxiCenter(Protocol* protocol, Tcp* tcp, Map* map);
     ~TaxiCenter();
+    Map* getMap();
     void acceptNewDriver();
     void addComunicator(Comunicator* comunicator);
     void addAvaliableTaxi(Taxi *taxi);

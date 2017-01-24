@@ -138,6 +138,14 @@ Map::~Map() {
     delete this->obstacles;
 }
 
+int Map::getWidth() {
+    return this->width;
+}
+
+int Map::getLength() {
+    return this->length;
+}
+
 /******************************************************************************
 * The Function Operation: copy ctor
 ******************************************************************************/
