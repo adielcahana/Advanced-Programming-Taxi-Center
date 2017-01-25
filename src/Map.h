@@ -72,6 +72,7 @@ class Map: public Graph{
 		queue<Node*>* getAdjacent(const Node *point);
         static Map* deserialize(string s);
         string toString();
+		void isTripInMap(Point* start, Point* end);
         /**********************************************************************
         * The Function Operation: print a represantation of a 2d map
         * we were unable to locate the function in the .cpp file

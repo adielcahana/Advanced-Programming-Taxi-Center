@@ -78,6 +78,18 @@ Taxi* TaxiCenter::getTaxiById(int id){
 * The function Operation: add a trip to the trip list
 ******************************************************************************/
 void TaxiCenter::addTrip(Trip* trip){
+    Point* start = new Point(trip->start);
+    Point* end = new Point(trip->end);
+    try{
+        this->map->isTripInMap(start, end);
+        delete start;
+        delete end;
+    }
+    catch (out_of_range){
+        delete start;
+        delete end;
+        throw out_of_range("getRoute args are out of bounds!");
+    }
     this->trips->push_back(trip);
     this->uncalculatedtrips->push(trip);
     tp->add_task(new Task(TaxiCenter::wrapCreateRoute, this));

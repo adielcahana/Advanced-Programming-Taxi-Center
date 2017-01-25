@@ -162,7 +162,7 @@ Driver* Parser::readDriver(){
 /******************************************************************************
 * The Function Operation: read trip input
 ******************************************************************************/
-Trip* Parser::readTrip(Map* map){
+Trip* Parser::readTrip(){
     getline(cin, buffer);
     if (!isValidTripInput()) throw runtime_error("bad argument for new Trip");
     //create c-string from buffer
@@ -180,8 +180,7 @@ Trip* Parser::readTrip(Map* map){
     float tariff = atof(strtok(NULL, ","));
     int time = atoi(strtok(NULL, " "));
     delete[] (c);
-    if(id < 0 || numOfPassengers < 0 || tariff < 0 || time <= 0 ||
-            isTripOutOfRange(start, end, map->getWidth(), map->getLength())){
+    if(id < 0 || numOfPassengers < 0 || tariff < 0 || time <= 0){
         throw runtime_error("bad argument for new Trip");
     }
     return new Trip(id, start, end, numOfPassengers, tariff, time);
@@ -297,9 +296,4 @@ vector<Point*>* Parser::readObstacles(int width, int length){
         }
     }
     return obstacles;
-}
-
-bool Parser::isTripOutOfRange(Point start, Point end, int width, int length) {
-    return start.getX() < 0 || start.getX() >= width || start.getY() < 0 || start.getY() >= length
-            || end.getX() < 0 || end.getX() >= width || end.getY() < 0 || end.getY() >= length;
 }

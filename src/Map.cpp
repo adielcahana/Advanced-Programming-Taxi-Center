@@ -70,9 +70,6 @@ queue<Node*>* Map::getAdjacent(const Node *point) {
 * between two points in the map
 ******************************************************************************/
 vector<Point*>* Map::getRoute(Point *start, Point *end){
-    if (!isInMap(start) || !isInMap(end)) {
-        throw out_of_range("getRoute args are out of bounds!");
-    }
 	//create max point availble in the grid, which has the highest hash value
     Node* maxPoint = new Point(width, length);
 	//send max point to bfs, in order to allocate a large enough hash table
@@ -114,6 +111,7 @@ Map* Map::deserialize(string s){
     delete[](input);
     return map;
 }
+
 /******************************************************************************
 * The Function Operation: serialize a Map object to string
 ******************************************************************************/
@@ -181,12 +179,14 @@ int Point::hash(){
 bool Point::operator==(const Point &other) const {
     return x == other.x && y == other.y;
 }
+
 /******************************************************************************
 * The Function Operation: evaluate if 2 points are not equal by their x,y values
 ******************************************************************************/
 bool Point::operator!=(const Point &other) const {
     return !(other == *this);
 }
+
 /******************************************************************************
 * The Function Operation: deserialize a Point object from text x,y
 ******************************************************************************/
@@ -230,4 +230,10 @@ string Point::toString() {
 bool PointComparator::equals(const Node *n1, const Node *n2) const {
     // downcast to Point, in order to use Point '==' operator
     return   *(Point*) n1 == *(Point*) n2;
+}
+
+void Map::isTripInMap(Point* start, Point* end){
+     if (!isInMap(start) || !isInMap(end)) {
+        throw out_of_range("getRoute args are out of bounds!");
+    }
 }

@@ -54,10 +54,13 @@ void TaxiCenterFlow::initialize(){
                 break;
             case 2:
                     try {
-                        trip = parser.readTrip(this->center->getMap());
+                        trip = parser.readTrip();
                         center->addTrip(trip);
                     }
                     catch (runtime_error) {
+                        cout << "-1" << endl;
+                    }
+                    catch (out_of_range){
                         cout << "-1" << endl;
                     }
                 break;
