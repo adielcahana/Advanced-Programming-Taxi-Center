@@ -9,18 +9,24 @@
 #include <pthread.h>
 #include <iostream>
 #include <queue>
-
+#include "../Taxi-Center/Comunicator.h"
 using namespace std;
+/******************************************************************************
+* Task: defines an object function for Threadpool use
+******************************************************************************/
 class Task{
 public:
     Task(void(*execute_fn)(void*), void* arg):execute(execute_fn), arg(arg){};
     ~Task(){};
-    void operator()();
+    void run();
 private:
     void (*execute)(void*);
     void* arg;
 };
-
+/******************************************************************************
+* ThreadPool: create and manages a predefined number of threads and
+* distributing tasks between them
+******************************************************************************/
 class ThreadPool {
 public:
     ThreadPool(int pool_size);

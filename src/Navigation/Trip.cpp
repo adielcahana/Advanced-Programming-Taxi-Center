@@ -186,19 +186,28 @@ Trip* Trip::fromString(string s) {
     trip->route = route;
     return trip;
 }
-
+/******************************************************************************
+* The function Operation: returns the trip start time
+******************************************************************************/
 int Trip::getTime() {
     return this->time;
 }
-
+/******************************************************************************
+* The function Operation: returns a copy of the trip start point
+******************************************************************************/
 Point* Trip::getStart(){
     return new Point(start);
 }
-
+/******************************************************************************
+* The function Operation: returns a copy of the trip destanation point
+******************************************************************************/
 Point* Trip::getEnd(){
     return new Point(end);
 }
-
+/******************************************************************************
+* The function Operation: returns the route size.
+* if there is no route, returns -1 (error)
+******************************************************************************/
 int Trip::size() {
     if (route != NULL){
         return route->size();
@@ -206,7 +215,10 @@ int Trip::size() {
     //error
     return -1;
 }
-
+/******************************************************************************
+* The function Operation: set the trip route. the function creates a safe
+* copy of the given route vector
+******************************************************************************/
 void Trip::setRoute(vector<Point *> *route) {
     this->route = new vector<Point *>(*route);
 }
