@@ -31,16 +31,22 @@ ThreadPool::ThreadPool(int pool_size){
 * The function Operation: ThreadPool dtor
 ******************************************************************************/
 ThreadPool::~ThreadPool(){
+    vector<Task*> killTasks;
     pthread_mutex_lock(&lock);
     //give a 'kill' task to all the active threads
     for (int i = 0; i < pool_size; i++) {
-        Task* task = new Task(exit_thread, task);
+        Task* task = new Task(exit_thread, NULL);
+        killTasks.push_back(task);
         tasks.push_front(task);
     }
     pthread_mutex_unlock(&lock);
     //wait for all the threads to exit
     for (int i = 0; i < pool_size; i++) {
         pthread_join(threads[i], NULL);
+    }
+    for (unsigned long i = 0; i < killTasks.size(); i++ ){
+        delete killTasks[i];
+
     }
     //delete all remaining tasks
     unsigned long tasks_size = tasks.size();
@@ -96,7 +102,6 @@ void* ThreadPool::start_thread(void* arg) {
 /******************************************************************************
 * The function Operation: a 'kill' task for the thraedpool dtor
 ******************************************************************************/
-void ThreadPool::exit_thread(void* task){
-    delete (Task*)task;
-    pthread_exit(NULL);
+void ThreadPool::exit_thread(void* arg){
+    pthread_exit(arg);
 }
