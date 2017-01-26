@@ -9,7 +9,7 @@ TaxiCenterFlow::TaxiCenterFlow(int port){
         try {
             map = parser.readMap();
         }
-        catch (runtime_error) {
+        catch (exception) {
             cout << "-1" << endl;
         }
     }

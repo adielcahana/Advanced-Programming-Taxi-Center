@@ -112,7 +112,7 @@ Map* Parser::readMap() {
         }
         obstacles = this->readObstacles(width, length);
     }
-    catch (exception){
+    catch (runtime_error){
         delete[](c);
         throw runtime_error("bad arguments for map");
     }
@@ -267,14 +267,17 @@ vector<Point*>* Parser::readObstacles(int width, int length){
     //verify that c is digits
     for (int i = 0; c[i] != 0; i++) {
         if (!isdigit(c[i])) {
+            delete obstacles;
+            delete[](c);
             throw runtime_error("bad arguments for obstacles");
         }
     }
     int numOfObsatcles = atoi(c);
     if(numOfObsatcles < 0){
+        delete obstacles;
+        delete[](c);
         throw runtime_error("bad arguments for obstacles");
     }
-    delete[](c);
     Point* point = NULL;
     for(int i = 0; i < numOfObsatcles; i++) {
         try {
@@ -295,5 +298,6 @@ vector<Point*>* Parser::readObstacles(int width, int length){
             throw runtime_error("bad arguments for obstacles");
         }
     }
+    delete[](c);
     return obstacles;
 }

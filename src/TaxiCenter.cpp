@@ -88,6 +88,7 @@ void TaxiCenter::addTrip(Trip* trip){
     catch (out_of_range){
         delete start;
         delete end;
+        delete trip;
         throw out_of_range("getRoute args are out of bounds!");
     }
     this->trips->push_back(trip);
@@ -106,13 +107,16 @@ void TaxiCenter::createRoute(){
     pthread_mutex_lock(&lock);
     Trip* trip = this->uncalculatedtrips->front();
     this->uncalculatedtrips->pop();
-//    cout << "trip num: " << trip->id << " is calcaulated" << endl;
+    cout << "trip num: " << trip->id << " is calcaulated" << endl;
     pthread_mutex_unlock(&lock);
     Point* start = new Point(trip->start);
     Point* end = new Point(trip->end);
     trip->route = map->getRoute(start, end);
     delete end;
-//    cout << "trip num: " << trip->id << " ended calcaulating" << endl;
+    cout << "trip num: " << trip->id << " ended calcaulating" << endl;
+    if(trip->route->size() == 0){
+        delete trip;
+    }
 }
 
 /******************************************************************************
@@ -163,6 +167,10 @@ void TaxiCenter::addTripToDriver(int time){
     Trip* trip = NULL;
     for(unsigned long i = 0; i < this->trips->size(); i++) {
         // if the time of the trip arrived
+        if(trip == NULL){
+            tripToDelete.push_back(i);
+            continue;
+        }
         trip = this->trips->at(i);
         if (time >= trip->time) {
             while (trip->route == NULL){

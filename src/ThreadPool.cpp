@@ -18,7 +18,6 @@ ThreadPool::ThreadPool(int pool_size){
         pthread_t tid;
         int ret = pthread_create(&tid, NULL, ThreadPool::start_thread, (void*) this);
         if (ret != 0) { /*todo: error handling */
-
         }
         threads.push_back(tid);
     }
@@ -29,9 +28,9 @@ ThreadPool::~ThreadPool(){
         Task* task = new Task(exit_thread, task);
         tasks.push_front(task);
     }
-//    for (int i = 0; i < pool_size; i++) {
-//        pthread_join(threads[i], NULL);
-//    }
+    for (int i = 0; i < pool_size; i++) {
+        pthread_join(threads[i], NULL);
+    }
     unsigned long tasks_size = tasks.size();
     for (unsigned long i = 0; i < tasks_size; i++ ){
         delete tasks.front();
