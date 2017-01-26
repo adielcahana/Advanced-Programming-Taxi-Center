@@ -110,13 +110,6 @@ void TaxiCenterFlow::run(){
 }
 
 int main(int argc, char* argv[]) {
-    std::ifstream in("input.txt");
-    std::streambuf *cinbuf = std::cin.rdbuf(); //save old buf
-    std::cin.rdbuf(in.rdbuf());
-
-    std::ofstream out("taxi_center_log.txt");
-    std::streambuf *coutbuf = std::cout.rdbuf(); //save old buf
-    std::cout.rdbuf(out.rdbuf());
     // argv[1] = port number
     int port = atoi(argv[1]);
     TaxiCenterFlow flow(port);
@@ -124,6 +117,4 @@ int main(int argc, char* argv[]) {
         flow.initialize();
         if (!flow.shouldStop) flow.run();
     }
-    std::cout.rdbuf(coutbuf);
-    std::cin.rdbuf(cinbuf);
 }

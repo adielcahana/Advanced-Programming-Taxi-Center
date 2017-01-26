@@ -1,15 +1,15 @@
 #ifndef EX4_COMUNICATOR_H
 #define EX4_COMUNICATOR_H
 
+#include <pthread.h>
 #include "../comunication/Server.h"
 #include "../comunication/TaxiCenterProtocol.h"
-#include "DriverInfo.h"
-#include "AvaliableNotifier.h"
-#include <pthread.h>
+#include "../Driver/DriverInfo.h"
+#include "../general/AvaliableNotifier.h"
 
 #define SLEEP 0.01
 
-// global boolean valiable
+// global boolean variable
 extern bool can_continue;
 extern int curr_time;
 

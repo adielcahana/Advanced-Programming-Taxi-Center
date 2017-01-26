@@ -4,7 +4,7 @@
 
 #include <unistd.h>
 #include "ThreadPool.h"
-#include "Comunicator.h"
+#include "../Taxi-Center/Comunicator.h"
 void Task::operator()() {
     execute(arg);
 }
@@ -24,10 +24,12 @@ ThreadPool::ThreadPool(int pool_size){
 }
 
 ThreadPool::~ThreadPool(){
+    pthread_mutex_lock(&lock);
     for (int i = 0; i < pool_size; i++) {
         Task* task = new Task(exit_thread, task);
         tasks.push_front(task);
     }
+    pthread_mutex_unlock(&lock);
     for (int i = 0; i < pool_size; i++) {
         pthread_join(threads[i], NULL);
     }

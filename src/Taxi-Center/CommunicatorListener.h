@@ -6,7 +6,7 @@
 #define EX2_NOTRIP_H
 
 
-#include "AvaliableListener.h"
+#include "../general/AvaliableListener.h"
 #include "Comunicator.h"
 
 /******************************************************************************

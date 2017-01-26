@@ -5,8 +5,8 @@
 #ifndef EX2_PARSE_H
 #define EX2_PARSE_H
 
-#include "Driver.h"
-#include "LuxTaxi.h"
+#include "../Driver/Driver.h"
+#include "../Driver/LuxTaxi.h"
 #include <stdexcept>
 
 /******************************************************************************

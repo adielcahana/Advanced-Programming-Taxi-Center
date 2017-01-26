@@ -6,7 +6,7 @@
 #define EX4_DRIVERPROTOCOL_H
 
 #include "Protocol.h"
-#include "../src/Map.h"
+#include "../Navigation/Point.h"
 #include <string.h>
 #include <iostream>
 

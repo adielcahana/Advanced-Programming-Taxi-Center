@@ -1,7 +1,8 @@
 #ifndef ASS2_TRIP_H
 #define ASS2_TRIP_H
 
-#include "Passenger.h"
+#include "../general/Passenger.h"
+#include "Point.h"
 #include <sstream>
 
 /******************************************************************************
@@ -11,8 +12,8 @@
 ******************************************************************************/
 class Trip {
 private:
-    friend class TaxiCenter;
-    friend class Driver;
+//    friend class TaxiCenter;
+//    friend class Driver;
 //    pthread_t* thread;
     int id;
     int totalMeterPassed;
@@ -30,7 +31,12 @@ public:
 //    pthread_t* getThread();
 //    void setThread(pthread_t* thread);
     int getId();
+    int getTime();
+    int size();
+    void setRoute(vector <Point*>* route);
     Point* getNextPoint();
+    Point* getStart();
+    Point* getEnd();
     double getPrice();
     int getNumPassengers();
     int sumOfSatisfaction();

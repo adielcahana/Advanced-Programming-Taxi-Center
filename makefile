@@ -1,5 +1,6 @@
 all:
 
-	g++ DriverFlow.cpp DriverFlow.h *src/*.cpp *src/*.h *comunication/*.cpp *comunication/*.h -pthread -std=c++0x -g -o client.out
+	g++ src/DriverFlow.cpp *src/Driver/*.cpp *src/Navigation/*.cpp *src/comunication/*.cpp *src/general/*.cpp -pthread -std=c++0x -g -o client.out
 
-	g++ TaxiCenterFlow.cpp TaxiCenterFlow.h *src/*.cpp *src/*.h *comunication/*.cpp *comunication/*.h -pthread -std=c++0x -g -o server.out
+	g++ src/TaxiCenterFlow.cpp *src/Taxi-Center/*.cpp *src/Driver/*.cpp *src/Navigation/*.cpp *src/comunication/*.cpp *src/general/*.cpp -pthread -std=c++0x -g -o server.out
+

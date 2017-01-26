@@ -5,8 +5,8 @@
 #ifndef EX4_DRIVERFLOW_H
 #define EX4_DRIVERFLOW_H
 
-#include "src/Driver.h"
-#include "src/Parser.h"
+#include "Driver/Driver.h"
+#include "general/Parser.h"
 #include <sstream>
 #include <stdexcept>
 //#include "logging/easylogging++.h"

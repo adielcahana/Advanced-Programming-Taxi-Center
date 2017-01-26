@@ -186,3 +186,27 @@ Trip* Trip::fromString(string s) {
     trip->route = route;
     return trip;
 }
+
+int Trip::getTime() {
+    return this->time;
+}
+
+Point* Trip::getStart(){
+    return new Point(start);
+}
+
+Point* Trip::getEnd(){
+    return new Point(end);
+}
+
+int Trip::size() {
+    if (route != NULL){
+        return route->size();
+    }
+    //error
+    return -1;
+}
+
+void Trip::setRoute(vector<Point *> *route) {
+    this->route = new vector<Point *>(*route);
+}

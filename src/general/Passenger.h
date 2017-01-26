@@ -4,9 +4,8 @@
 
 #ifndef ASS2_PASSENGER_H
 #define ASS2_PASSENGER_H
-
-#include "Map.h"
-
+#include <time.h>
+#include <cstdlib>
 /******************************************************************************
 * Passenger: the passengers of the trip, at the end ofthe trip give a
 * satisfication value

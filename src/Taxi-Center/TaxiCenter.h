@@ -1,13 +1,14 @@
 #ifndef ASS2_TAXICENTER_H
 #define ASS2_TAXICENTER_H
 
-#include "Trip.h"
-#include "Comunicator.h"
 #include <pthread.h>
+#include <unistd.h>
+#include <climits>
+#include "../Navigation/Trip.h"
+#include "Comunicator.h"
 #include "../comunication/Server.h"
 #include "CommunicatorListener.h"
-#include "ThreadPool.h"
-
+#include "../general/ThreadPool.h"
 /******************************************************************************
 * TaxiCenter: have information about all the drivers the cabs and the trip.
 * know to connect between new trip to avaliable driver, also know the map.
@@ -30,7 +31,6 @@ private:
 public:
     TaxiCenter(Protocol* protocol, Tcp* tcp, Map* map);
     ~TaxiCenter();
-    Map* getMap();
     void acceptNewDriver();
     void addComunicator(Comunicator* comunicator);
     void addAvaliableTaxi(Taxi *taxi);

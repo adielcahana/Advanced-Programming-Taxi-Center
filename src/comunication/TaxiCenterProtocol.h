@@ -2,9 +2,11 @@
 #define EX4_SERVERPROTOCOL_H
 
 #include <iostream>
-#include "Protocol.h"
 #include <string>
-#include "../src/Taxi.h"
+#include "Protocol.h"
+#include "../Driver/Taxi.h"
+#include "../Navigation/Map.h"
+#include "../Navigation/Trip.h"
 
 using namespace std;
 

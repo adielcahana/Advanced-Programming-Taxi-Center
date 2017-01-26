@@ -1,5 +1,3 @@
-#include <unistd.h>
-#include <climits>
 #include "TaxiCenter.h"
 
 /******************************************************************************
@@ -78,16 +76,9 @@ Taxi* TaxiCenter::getTaxiById(int id){
 * The function Operation: add a trip to the trip list
 ******************************************************************************/
 void TaxiCenter::addTrip(Trip* trip){
-    Point* start = new Point(trip->start);
-    Point* end = new Point(trip->end);
-    try{
-        this->map->isTripInMap(start, end);
-        delete start;
-        delete end;
-    }
-    catch (out_of_range){
-        delete start;
-        delete end;
+    Point* start = trip->getStart();
+    Point* end = trip->getEnd();
+    if(!this->map->isTripInMap(trip)){
         delete trip;
         throw out_of_range("getRoute args are out of bounds!");
     }
@@ -107,16 +98,18 @@ void TaxiCenter::createRoute(){
     pthread_mutex_lock(&lock);
     Trip* trip = this->uncalculatedtrips->front();
     this->uncalculatedtrips->pop();
-    cout << "trip num: " << trip->id << " is calcaulated" << endl;
+    cout << "trip num: " << trip->getId() << " is calcaulated" << endl;
     pthread_mutex_unlock(&lock);
-    Point* start = new Point(trip->start);
-    Point* end = new Point(trip->end);
-    trip->route = map->getRoute(start, end);
+    Point* start = trip->getStart();
+    Point* end = trip->getEnd();
+    vector<Point *> *route = map->getRoute(start, end);
+    trip->setRoute(route);
+    delete route;
     delete end;
-    cout << "trip num: " << trip->id << " ended calcaulating" << endl;
-    if(trip->route->size() == 0){
-        delete trip;
-    }
+    cout << "trip num: " << trip->getId() << " ended calcaulating" << endl;
+//    if(trip->size() == 0){
+//        delete trip;
+//    }
 }
 
 /******************************************************************************
@@ -166,18 +159,20 @@ void TaxiCenter::addTripToDriver(int time){
     vector <unsigned long> tripToDelete;
     Trip* trip = NULL;
     for(unsigned long i = 0; i < this->trips->size(); i++) {
+        trip = this->trips->at(i);
         // if the time of the trip arrived
         if(trip == NULL){
             tripToDelete.push_back(i);
             continue;
         }
-        trip = this->trips->at(i);
-        if (time >= trip->time) {
-            while (trip->route == NULL){
+        if (time >= trip->getTime()) {
+            while (trip->size() == -1){
                 sleep(SLEEP);
             }
-            if (!trip->route->empty()){
-                Comunicator* driver = this->getClosestDriver(trip->start);
+            if (!trip->size() == 0){
+                Point* trip_start = trip->getStart();
+                Comunicator* driver = this->getClosestDriver(*trip_start);
+                delete trip_start;
                 driver->setTrip(trip);
                 // send trip to driver
                 driver->setNextMission(4);

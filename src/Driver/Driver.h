@@ -2,7 +2,7 @@
 #define ASS2_DRIVER_H
 
 #include "Taxi.h"
-#include "Trip.h"
+#include "../Navigation/Map.h"
 #include "../comunication/Client.h"
 #include "../comunication/DriverProtocol.h"
 
@@ -16,7 +16,7 @@ enum Status {SINGLE, MARRIED, DIVORCED, WIDOWED};
 * of exprience. move on the map with taxi and get point from his trip.
 * have a satisfacation from the passengrs and know his location on the map
 ******************************************************************************/
-class Driver:  public Client{
+class Driver: public Client{
 private:
     int id;
     int age;
@@ -39,7 +39,6 @@ public:
         this->trip = NULL;
         this-> location = new Point(0,0);
     }
-
     ~Driver();
     int getId();
     void setMap(Map* map);

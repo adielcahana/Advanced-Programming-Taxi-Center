@@ -1,5 +1,4 @@
 #include "Driver.h"
-#include "Parser.h"
 
 /******************************************************************************
 * The function Operation: calculate the average stisfaction of the driver.
@@ -54,7 +53,7 @@ void Driver::timePassed(){
     if(trip == NULL){
         return;
     }
-    if (trip->time < time){
+    if (trip->getTime() < time){
         moveOneStep();
     }
 }
