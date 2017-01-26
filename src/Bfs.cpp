@@ -105,6 +105,10 @@ vector <Node*>* Bfs::find_shortest_route(Graph* graph, Node* start, Node* end,
             delete temp;
         }
     }
+    //if there is no route from start point to dst, return empty route
+    if (route == NULL){
+        route = new vector<Node*>();
+    }
     return route;
 }
 

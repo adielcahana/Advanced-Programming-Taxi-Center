@@ -168,12 +168,14 @@ void TaxiCenter::addTripToDriver(int time){
             while (trip->route == NULL){
                 sleep(SLEEP);
             }
-            Comunicator* driver = this->getClosestDriver(trip->start);
-            driver->setTrip(trip);
+            if (!trip->route->empty()){
+                Comunicator* driver = this->getClosestDriver(trip->start);
+                driver->setTrip(trip);
+                // send trip to driver
+                driver->setNextMission(4);
+                // get message that trip accepted
+            }
             tripToDelete.push_back(i);
-            // send trip to driver
-            driver->setNextMission(4);
-            // get message that trip accepted
         }
     }
     for(int i = tripToDelete.size() - 1; i >= 0; i--){
