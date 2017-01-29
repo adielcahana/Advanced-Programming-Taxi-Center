@@ -99,13 +99,13 @@ void TaxiCenter::createRoute(){
     pthread_mutex_lock(&lock);
     Trip* trip = this->uncalculatedtrips->front();
     this->uncalculatedtrips->pop();
-    cout << "trip num: " << trip->getId() << " is calcaulated" << endl;
+//    cout << "trip num: " << trip->getId() << " is calcaulated" << endl;
     pthread_mutex_unlock(&lock);
     Point* start = trip->getStart();
     Point* end = trip->getEnd();
     vector<Point *> *route = map->getRoute(start, end);
     trip->setRoute(route);
-    cout << "trip num: " << trip->getId() << " ended calcaulating" << endl;
+//    cout << "trip num: " << trip->getId() << " ended calcaulating" << endl;
     delete route;
     delete end;
 }

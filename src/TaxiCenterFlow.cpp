@@ -81,9 +81,6 @@ void TaxiCenterFlow::initialize(){
                     cout << "-1" << endl;
                 }
                 break;
-            case 6: // stop getting input, and exit the loop
-                shouldStop = true;
-                break;
             case 7: // update the flow stop flag, and exit the loop
                 this->shouldStop = true;
                 shouldStop = true;
@@ -94,6 +91,7 @@ void TaxiCenterFlow::initialize(){
                 curr_time++;
                 this->center->addTripToDriver(curr_time);
                 this->center->timePassed();
+                break;
             default:
                 cout << "-1" << endl;
                 break;
