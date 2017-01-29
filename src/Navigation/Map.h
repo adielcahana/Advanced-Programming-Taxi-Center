@@ -32,8 +32,6 @@ class Map: public Graph{
 	public:
         Map(int width, int length, vector<Point*>* obstacles = NULL);
 		~Map();
-		int getWidth();
-		int getLength();
 		vector<Point*>* getRoute(Point *start, Point *end);
 		queue<Node*>* getAdjacent(const Node *point);
         static Map* deserialize(string s);

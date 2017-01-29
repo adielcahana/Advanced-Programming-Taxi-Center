@@ -33,7 +33,6 @@ void TaxiCenterFlow::initialize(){
     Trip* trip = NULL;
     Taxi* taxi = NULL;
     bool shouldStop = false; // initialization stop flag
-    bool wasInitialize = false;
     int id;
     int numOfDrivers;
     while(!shouldStop) {
@@ -41,12 +40,10 @@ void TaxiCenterFlow::initialize(){
         cin >> noskipws >> dummy; //read '\n'
         switch (option) {
             case 1:
-                if (!wasInitialize) {
                     // initialize the server
                     center->initialize();
                     cin >> numOfDrivers;
                     cin >> noskipws >> dummy;
-                }
                 // first talk with the driver
                 for(int i = 0; i < numOfDrivers; i++) {
                     this->center->acceptNewDriver();
@@ -81,7 +78,7 @@ void TaxiCenterFlow::initialize(){
                     cout << *p << endl;
                     delete p;
                 } else {
-                    cout << "driver id doesn't exist" << endl;
+                    cout << "-1" << endl;
                 }
                 break;
             case 6: // stop getting input, and exit the loop
@@ -98,6 +95,7 @@ void TaxiCenterFlow::initialize(){
                 this->center->addTripToDriver(curr_time);
                 this->center->timePassed();
             default:
+                cout << "-1" << endl;
                 break;
         }
     }

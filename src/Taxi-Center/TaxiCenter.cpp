@@ -89,9 +89,6 @@ void TaxiCenter::addTrip(Trip* trip){
     this->trips->push_back(trip);
     this->uncalculatedtrips->push(trip);
     tp->add_task(new Task(TaxiCenter::wrapCreateRoute, this));
-//    pthread_attr_t attr;
-//    pthread_attr_init(&attr);
-//    pthread_attr_setdetachstate(&attr, PTHREAD_CREATE_JOINABLE);
 }
 
 /******************************************************************************
@@ -148,6 +145,8 @@ Point* TaxiCenter::getDriverLocation(int driverId) {
             return location;
         }
     }
+    // if driver id doesn't exist
+    return NULL;
 }
 
 /******************************************************************************
@@ -157,32 +156,33 @@ void TaxiCenter::addTripToDriver(int time){
     while(avaliableDrivers->size() != numOfDrivers){
         sleep(SLEEP);
     }
+    // vector of all the trips that need to delete
     vector <unsigned long> tripToDelete;
     Trip* trip = NULL;
     for(unsigned long i = 0; i < this->trips->size(); i++) {
         trip = this->trips->at(i);
-        // if the time of the trip arrived
+        // if the trip have no route
         if(trip->size() == 0){
             delete trip;
             tripToDelete.push_back(i);
             continue;
         }
+        // if the time of the trip arrived
         if (time >= trip->getTime()) {
-            while (trip->size() == -1){
+            while (trip->size() == -1) {
                 sleep(SLEEP);
             }
-            if (!trip->size() == 0){
-                Point* trip_start = trip->getStart();
-                Comunicator* driver = this->getClosestDriver(*trip_start);
-                delete trip_start;
-                driver->setTrip(trip);
-                // send trip to driver
-                driver->setNextMission(4);
-                // get message that trip accepted
-            }
+            Point *trip_start = trip->getStart();
+            Comunicator *driver = this->getClosestDriver(*trip_start);
+            delete trip_start;
+            driver->setTrip(trip);
+            // send trip to driver
+            driver->setNextMission(4);
+            // get message that trip accepted
             tripToDelete.push_back(i);
         }
     }
+    // delete all trips that sent or not legal
     for(int i = tripToDelete.size() - 1; i >= 0; i--){
         trips->erase(trips->begin() + tripToDelete.at(i));
     }

@@ -23,30 +23,12 @@ Trip::~Trip() {
         route->clear();
         delete route;
     }
-//    if(this->thread != NULL){
-//        delete thread;
-//    }
 
     for(int j = 0; j < passengers.size(); j++){
         delete passengers.at(j);
     }
     passengers.clear();
 }
-
-///******************************************************************************
-//* The function Operation: return the trip calculation thread object
-//******************************************************************************/
-//pthread_t* Trip::getThread(){
-//    return this->thread;
-//}
-//
-///******************************************************************************
-//* The function Operation: set to trip given thread
-//******************************************************************************/
-//void Trip::setThread(pthread_t* thread){
-//    this->thread = thread;
-//}
-
 
 /******************************************************************************
 * The function Operation: return the trip id

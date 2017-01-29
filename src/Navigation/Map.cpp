@@ -128,6 +128,9 @@ string Map::toString(){
     return strs.str();
 }
 
+/******************************************************************************
+* The Function Operation: Map destructor
+******************************************************************************/
 Map::~Map() {
     for(int i = 0; i < obstacles->size(); i++){
         delete obstacles->at(i);
@@ -135,14 +138,9 @@ Map::~Map() {
     delete this->obstacles;
 }
 
-int Map::getWidth() {
-    return this->width;
-}
-
-int Map::getLength() {
-    return this->length;
-}
-
+/******************************************************************************
+* The Function Operation: check if given trip is in the map range
+******************************************************************************/
 bool Map::isTripInMap(Trip* trip){
     Point* start = trip->getStart();
     Point* end = trip->getEnd();
