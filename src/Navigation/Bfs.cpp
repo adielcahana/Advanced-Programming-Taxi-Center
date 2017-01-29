@@ -55,6 +55,11 @@ vector <Node*>* Bfs::find_shortest_route(Graph* graph, Node* start, Node* end,
                                          NodeComparator* comparator){
     resetVisited();
     vector <Node*> garbage;
+    // if the trip start and end in same point
+    if(comparator->equals(start,end)){
+        delete start;
+        return new vector<Node*>();
+    }
     Node* current = start;
     queue <Node*> nodes;
     queue <Node*>* adjacents = NULL;
