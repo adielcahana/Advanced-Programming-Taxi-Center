@@ -39,6 +39,7 @@ public:
     void addTrip(Trip* trip);
     void timePassed();
     Point *getDriverLocation(int driverId);
+    vector<Point*>* getAllDriversLocations();
     void addTripToDriver(int time);
     void sendFinish();
 };

@@ -18,8 +18,8 @@ class Parser {
 public:
     Map* readMap();
     Driver* readDriver();
-    Trip* readTrip();
-    Taxi* readTaxi();
+    Trip* readTrip(char* trip);
+    Taxi* readTaxi(char* taxi);
 private:
     bool isValidDriverInput();
     bool isValidTaxiInput();

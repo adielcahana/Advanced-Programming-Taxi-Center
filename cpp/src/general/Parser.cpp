@@ -64,7 +64,7 @@ bool Parser::isValidDriverInput() {
     int commaCounter = 0;
     // flag for reading letter
     bool readAlpha = false;
-    for(int i=0; i<buffer.size() && commaCounter <= 4; i++){
+    for(int i=0; i< buffer.size() && commaCounter <= 4; i++){
         if(commaCounter == 2 && !readAlpha){ // letter should appear only once, after the 2nd comma
             if(!isalpha(buffer[i])) {
                 return false;
@@ -162,8 +162,10 @@ Driver* Parser::readDriver(){
 /******************************************************************************
 * The Function Operation: read trip input
 ******************************************************************************/
-Trip* Parser::readTrip(){
-    getline(cin, buffer);
+Trip* Parser::readTrip(char* trip){
+//    getline(cin, buffer);
+    buffer.clear();
+    buffer.assign(trip);
     if (!isValidTripInput()) throw runtime_error("bad argument for new Trip");
     //create c-string from buffer
     char *c = new char[buffer.length() + 1];
@@ -188,8 +190,10 @@ Trip* Parser::readTrip(){
 /******************************************************************************
 * The Function Operation: read taxi input
 ******************************************************************************/
-Taxi* Parser::readTaxi(){
-    getline(cin, buffer);
+Taxi* Parser::readTaxi(char* taxi){
+//    getline(cin, buffer);
+    buffer.clear();
+    buffer.assign(taxi);
     if (!isValidTaxiInput()) throw runtime_error("bad argument for new taxi");
     //create c-string from buffer
     char *c = new char[buffer.length() + 1];

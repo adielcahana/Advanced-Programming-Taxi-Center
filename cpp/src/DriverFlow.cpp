@@ -15,7 +15,7 @@ int main(int argc, char** argv) {
          driver = pars.readDriver();
     }
     catch (runtime_error){
-        return 0;
+        return 1;
     }
     fileName << "driver_" << driver->getId() << "_log.txt";
     driver->initialize(argv[1], atoi(argv[2])); //set the Client connection
@@ -59,18 +59,18 @@ int main(int argc, char** argv) {
             driver->send(6);
             continue;
         }
-        istringstream stream(driver->buffer);
-        streambuf *cin_backup = cin.rdbuf(stream.rdbuf());
-        cin.rdbuf(stream.rdbuf()); //redirect std::cin
+//        istringstream stream(driver->buffer);
+//        streambuf *cin_backup = cin.rdbuf(stream.rdbuf());
+//        cin.rdbuf(stream.rdbuf()); //redirect std::cin
         try {
             // create taxi that got from the taxi center
-            taxi = pars.readTaxi();
+            taxi = pars.readTaxi(driver->buffer);
             driver->setTaxi(taxi);
             driver->send(4);
         } catch (runtime_error){
             driver->send(0); // request data again
         }
-        cin.rdbuf(cin_backup);
+//        cin.rdbuf(cin_backup);
     }
     // run until the program end
     while(true) {

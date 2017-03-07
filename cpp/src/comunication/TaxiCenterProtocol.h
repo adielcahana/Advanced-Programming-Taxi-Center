@@ -25,7 +25,7 @@ public:
     void setTaxi(Taxi* taxi);
     void setTrip(Trip* trip);
     TaxiCenterProtocol(): Protocol(){};
-    ~TaxiCenterProtocol();
+    ~TaxiCenterProtocol(){};
     string createMsg(int numOfMsg);
     int translate(char* msg, int scenario);
 };

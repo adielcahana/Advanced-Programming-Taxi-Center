@@ -4,24 +4,25 @@ project(ex4)
 set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Werror -std=c++0x -g -pthread")
 
 set(SOURCE_FILES
-        src/Taxi-Center/CommunicatorListener.cpp src/Taxi-Center/CommunicatorListener.h
-        src/general/AvaliableListener.h src/general/AvaliableNotifier.h
-        src/Driver/Driver.h src/Driver/Driver.cpp src/Navigation/Trip.cpp src/Navigation/Trip.h
-        src/TaxiCenterFlow.h src/DriverFlow.h src/Taxi-Center/Comunicator.cpp src/Taxi-Center/Comunicator.h
-        src/general/Passenger.cpp src/general/Passenger.h src/Taxi-Center/TaxiCenter.cpp src/Taxi-Center/TaxiCenter.h
-        src/Driver/LuxTaxi.cpp src/Driver/LuxTaxi.h src/Navigation/Map.cpp src/Navigation/Map.h src/Navigation/Bfs.cpp src/Navigation/Bfs.h
-        src/Driver/Taxi.cpp src/Driver/Taxi.h src/general/Parser.cpp src/general/Parser.h
-        src/Driver/DriverInfo.cpp src/Driver/DriverInfo.h
-        src/general/ThreadPool.cpp src/general/ThreadPool.h
-        src/Navigation/Point.cpp src/Navigation/Point.h)
+        cpp/src/Taxi-Center/CommunicatorListener.cpp cpp/src/Taxi-Center/CommunicatorListener.h
+        cpp/src/general/AvaliableListener.h cpp/src/general/AvaliableNotifier.h
+        cpp/src/Driver/Driver.h cpp/src/Driver/Driver.cpp cpp/src/Navigation/Trip.cpp cpp/src/Navigation/Trip.h
+        cpp/src/TaxiCenterFlow.h cpp/src/DriverFlow.h cpp/src/Taxi-Center/Comunicator.cpp cpp/src/Taxi-Center/Comunicator.h
+        cpp/src/general/Passenger.cpp cpp/src/general/Passenger.h cpp/src/Taxi-Center/TaxiCenter.cpp cpp/src/Taxi-Center/TaxiCenter.h
+        cpp/src/Driver/LuxTaxi.cpp cpp/src/Driver/LuxTaxi.h cpp/src/Navigation/Map.cpp cpp/src/Navigation/Map.h cpp/src/Navigation/Bfs.cpp cpp/src/Navigation/Bfs.h
+        cpp/src/Driver/Taxi.cpp cpp/src/Driver/Taxi.h cpp/src/general/Parser.cpp cpp/src/general/Parser.h
+        cpp/src/Driver/DriverInfo.cpp cpp/src/Driver/DriverInfo.h
+        cpp/src/general/ThreadPool.cpp cpp/src/general/ThreadPool.h
+        cpp/src/Navigation/Point.cpp cpp/src/Navigation/Point.h)
 
 set(COMUNICATION_FILES
-        src/comunication/TaxiCenterProtocol.cpp src/comunication/TaxiCenterProtocol.h
-        src/comunication/Server.cpp src/comunication/Server.h
-        src/comunication/Socket.cpp src/comunication/Protocol.h
-        src/comunication/DriverProtocol.h src/comunication/DriverProtocol.cpp
-        src/comunication/Client.h src/comunication/Client.cpp src/comunication/Tcp.cpp
-        src/comunication/Tcp.h)
+        cpp/src/comunication/TaxiCenterProtocol.cpp cpp/src/comunication/TaxiCenterProtocol.h
+        cpp/src/comunication/Server.cpp cpp/src/comunication/Server.h
+        cpp/src/comunication/Socket.cpp cpp/src/comunication/Protocol.h
+        cpp/src/comunication/DriverProtocol.h cpp/src/comunication/DriverProtocol.cpp
+        cpp/src/comunication/Client.h cpp/src/comunication/Client.cpp cpp/src/comunication/Tcp.cpp
+        cpp/src/comunication/GuiProtocol.cpp cpp/src/comunication/GuiProtocol.h
+        cpp/src/comunication/Tcp.h)
 
-add_executable(client src/DriverFlow.cpp ${SOURCE_FILES} ${COMUNICATION_FILES})
-add_executable(server src/TaxiCenterFlow.cpp ${SOURCE_FILES} ${COMUNICATION_FILES})
+add_executable(client cpp/src/DriverFlow.cpp ${SOURCE_FILES} ${COMUNICATION_FILES})
+add_executable(server cpp/src/TaxiCenterFlow.cpp ${SOURCE_FILES} ${COMUNICATION_FILES})

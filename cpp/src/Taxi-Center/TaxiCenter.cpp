@@ -150,6 +150,29 @@ Point* TaxiCenter::getDriverLocation(int driverId) {
 }
 
 /******************************************************************************
+* The function Operation: ask for driver location and retrun it
+******************************************************************************/
+vector<Point*>* TaxiCenter::getAllDriversLocations() {
+    vector<Point*>* locations = new vector<Point*>();
+    while(avaliableDrivers->size() != numOfDrivers){
+        sleep(SLEEP);
+    }
+    can_continue = false;
+    for(int i = 0; i < numOfDrivers; i++){
+        drivers->at(i)->setNextMission(6);
+    }
+    can_continue = true;
+    while(avaliableDrivers->size() != numOfDrivers){
+        sleep(SLEEP);
+    }
+    for(int i = 0; i < numOfDrivers; i++){
+        locations->push_back(drivers->at(i)->getLocation());
+    }
+    // if driver id doesn't exist
+    return locations;
+}
+
+/******************************************************************************
 * The function Operation: send trip to the driver
 ******************************************************************************/
 void TaxiCenter::addTripToDriver(int time){

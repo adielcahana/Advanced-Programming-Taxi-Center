@@ -113,5 +113,3 @@ string TaxiCenterProtocol::createMsg(int numOfMsg){
             return "send again";
     }
 }
-
-TaxiCenterProtocol::~TaxiCenterProtocol() {}

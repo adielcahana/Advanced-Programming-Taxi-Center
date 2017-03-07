@@ -2,24 +2,22 @@
 #define ASS2_FLOW_H
 
 #include "Taxi-Center/TaxiCenter.h"
+#include "comunication/GuiProtocol.h"
 #include "general/Parser.h"
 #include <fstream>
-
-//#include "logging/easylogging++.h"
 
 /******************************************************************************
 * Flow: handlesthe program flow. this class uses the input parser to
 * initialize and update the taxi center.
 ******************************************************************************/
-class TaxiCenterFlow {
+class TaxiCenterFlow: public Server {
 private:
     Parser parser;
     TaxiCenter* center;
 public:
     bool shouldStop;
-    TaxiCenterFlow(int port);
+    TaxiCenterFlow(Tcp* tcp);
     ~TaxiCenterFlow();
-    void initialize();
     void run();
 };
 
