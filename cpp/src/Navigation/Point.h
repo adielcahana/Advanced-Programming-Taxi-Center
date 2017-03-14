@@ -8,6 +8,7 @@
 #include "Bfs.h"
 #include <cstring>
 #include <sstream>
+#include <stdexcept>
 
 using namespace std;
 /******************************************************************************

@@ -42,14 +42,14 @@ int GuiProtocol::translate(char *msg, int scenario) {
         str = string(msg);
         str.erase(0,6);
         strcpy(msg, str.c_str() );
-        return 2;
+        return 3;
     }
     else if (strstr(msg, "trip:") != NULL) {
         // delete start of the trip message
         str = string(msg);
         str.erase(0,6);
         strcpy(msg, str.c_str());
-        return 3;
+        return 2;
     }
     else if (strstr(msg, "time passed") != NULL) {
         return 9;
