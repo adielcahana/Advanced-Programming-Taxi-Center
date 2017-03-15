@@ -10,6 +10,9 @@ bool Parser::isValidTripInput(){
     bool readDot = false;
     int commaCounter = 0;
     for(int i = 0; i < buffer.size() && commaCounter <= 7; i++){
+        if(buffer[i] == '\n') {
+            return commaCounter == 7;
+        }
         if(readComma){ // after a comma, there should be only digits
             if(!isdigit(buffer[i])){
                 return false;
@@ -38,6 +41,9 @@ bool Parser::isValidTripInput(){
 bool Parser::isValidTaxiInput(){
     int commaCounter = 0;
     for(int i=0; i<buffer.size() && commaCounter <= 3; i++){
+        if(buffer[i] == '\n'){
+            return commaCounter == 3;
+        }
         if(commaCounter < 2){ // digits should be before the 2nd comma
             if(buffer[i] == ','){
                 commaCounter++;

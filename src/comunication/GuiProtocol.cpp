@@ -9,9 +9,9 @@ string GuiProtocol::createMsg(int numOfMsg) {
     Point* location;
     switch (numOfMsg){
         case -1:
-            return "error";
+            return "error\n";
         case 0:
-            return "accepted";
+            return "accepted\n";
         case 1: // send the game map to the gui
             return this->map + "\n";
         case 2: //send the gui all the new locations
@@ -33,23 +33,29 @@ int GuiProtocol::translate(char *msg, int scenario) {
     string str;
     if (strstr(msg, "num of drivers:") != NULL) {
         string str = string(msg);
-        str.erase(0, 14);
+        str.erase(0, 15);
         strcpy(msg, str.c_str());
         return 1;
     }
-    else if (strstr(msg, "taxi")) {
+    else if (strstr(msg, "taxi") != NULL) {
         // delete start of the taxi message
+        str = string(msg);
+        str.erase(0,6);
+        strcpy(msg, str.c_str() );
+        return 3;
+    }
+    else if (strstr(msg, "trip:") != NULL) {
+        // delete start of the trip message
         str = string(msg);
         str.erase(0,6);
         strcpy(msg, str.c_str());
         return 2;
     }
-    else if (strstr(msg, "trip:")) {
-        // delete start of the trip message
-        str = string(msg);
-        str.erase(0,6);
-        strcpy(msg, str.c_str());
-        return 3;
+    else if (strstr(msg, "end") != NULL) {
+        return 7;
+    }
+    else if (strstr(msg, "time passed") != NULL) {
+        return 9;
     }
     return 0;
 }

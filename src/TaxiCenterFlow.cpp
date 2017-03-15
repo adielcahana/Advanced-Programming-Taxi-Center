@@ -41,18 +41,16 @@ void TaxiCenterFlow::run(){
     bool shouldStop = false; // initialization stop flag
     int id;
     int numOfDrivers;
-    string str;
+    stringstream str;
     while(!shouldStop) {
         option = receive(0);
 //        cin >> option;
 //        cin >> noskipws >> dummy; //read '\n'
         switch (option) {
             case 1:
-                str = strtok(buffer, ":");
+                str.str(buffer);
                 // get the driver id
-                numOfDrivers = atoi(strtok(NULL, " "));
-//                cin >> numOfDrivers;
-//                cin >> noskipws >> dummy;
+                str >> numOfDrivers;
                 // first talk with the driver
                 for(int i = 0; i < numOfDrivers; i++) {
                     this->center->acceptNewDriver();
