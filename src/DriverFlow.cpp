@@ -17,12 +17,12 @@ int main(int argc, char** argv) {
     catch (runtime_error){
         return 1;
     }
-    fileName << "driver_" << driver->getId() << "_log.txt";
+    //fileName << "driver_" << driver->getId() << "_log.txt";
     driver->initialize(argv[1], atoi(argv[2])); //set the Client connection
 
-    std::ofstream out(fileName.str().c_str());
-    std::streambuf *coutbuf = std::cout.rdbuf(); //save old buf
-    std::cout.rdbuf(out.rdbuf());
+    //std::ofstream out(fileName.str().c_str());
+    //std::streambuf *coutbuf = std::cout.rdbuf(); //save old buf
+    //std::cout.rdbuf(out.rdbuf());
 
     int operation = 1;
     driver->send(operation); //send driver id
@@ -78,7 +78,7 @@ int main(int argc, char** argv) {
         while (trip == NULL) {
             operation = driver->receive(4); //recieve trip or time passed
             if(operation == 9){ // finish the program
-                std::cout.rdbuf(coutbuf);
+      //          std::cout.rdbuf(coutbuf);
                 delete driver;
                 return 0;
             }
@@ -107,7 +107,7 @@ int main(int argc, char** argv) {
         while (!driver->isAvaliable()) {
             operation = driver->receive(5);
             if (operation == 9){ // finish the program
-                std::cout.rdbuf(coutbuf);
+        //        std::cout.rdbuf(coutbuf);
                 delete driver;
                 return 0;
             }
