@@ -51,6 +51,9 @@ int GuiProtocol::translate(char *msg, int scenario) {
         strcpy(msg, str.c_str());
         return 2;
     }
+    else if (strstr(msg, "end") != NULL) {
+        return 7;
+    }
     else if (strstr(msg, "time passed") != NULL) {
         return 9;
     }

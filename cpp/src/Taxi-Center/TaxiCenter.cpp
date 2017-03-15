@@ -198,11 +198,13 @@ void TaxiCenter::addTripToDriver(int time){
             Point *trip_start = trip->getStart();
             Comunicator *driver = this->getClosestDriver(*trip_start);
             delete trip_start;
-            driver->setTrip(trip);
-            // send trip to driver
-            driver->setNextMission(4);
-            // get message that trip accepted
-            tripToDelete.push_back(i);
+            if(driver != NULL) {
+                driver->setTrip(trip);
+                // send trip to driver
+                driver->setNextMission(4);
+                // get message that trip accepted
+                tripToDelete.push_back(i);
+            }
         }
     }
     // delete all trips that sent or not legal
